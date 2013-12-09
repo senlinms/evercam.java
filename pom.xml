@@ -21,6 +21,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>${project.artifactId}-${project.version}-Shaded</finalName>
                             <artifactSet>
                                 <includes>
                                     <include>com.mashape.unirest:unirest-java</include>
