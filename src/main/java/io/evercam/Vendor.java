@@ -41,6 +41,7 @@ public class Vendor
             {
                 try
                 {
+                    //here definitely only one object returned
                     vendorJSONObject = response.getBody().getObject().getJSONArray("vendors").getJSONObject(0);
                 } catch (JSONException e)
                 {
