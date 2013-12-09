@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.evercam</groupId>
-    <artifactId>JavaWrapper</artifactId>
+    <artifactId>evercam-java</artifactId>
     <version>1.0</version>
 
     <build>
