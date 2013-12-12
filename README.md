@@ -2,8 +2,6 @@
 
 A Java wrapper around Evercam API
 
-##Build
-
 ##Baisc Usage
 ```java
 import io.evercam.*;
