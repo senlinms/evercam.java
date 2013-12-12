@@ -1,0 +1,14 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Maven target folder
+/target
+dependency-reduced-pom.xml
+
+#IntelliJ
+.idea/
+*.iml
