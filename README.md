@@ -1,5 +1,5 @@
-## Evercam for Java
+# Evercam for Java
 
-A wrapper in Java to query Evercam API.
+A wrapper in Java to use Evercam API.
 
-#Usage
+##Build
