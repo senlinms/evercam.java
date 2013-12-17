@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class Vendor
 {
-    private static String URL_VENDORS = "http://api.evercam.io/v1/vendors/";
+    private static String URL_VENDORS = API.URL + "vendors/";
     private final static int CODE_SUCCESS = 200;
 
     private JSONObject vendorJSONObject;
