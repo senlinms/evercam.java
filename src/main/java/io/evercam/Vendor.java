@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class Vendor
 {
-    private static String URL_VENDORS = API.URL + "vendors/";
+    private static String URL_VENDORS = API.URL + "vendors";
     private final static int CODE_SUCCESS = 200;
 
     private JSONObject vendorJSONObject;
@@ -30,35 +30,6 @@ public class Vendor
         this.vendorJSONObject = vendorJSONObject;
     }
 
-    public Vendor(String id) throws EvercamException
-    {
-
-        HttpRequest request = Unirest.get(URL_VENDORS + id);
-        try
-        {
-            HttpResponse<JsonNode> response = request.header("accept", "application/jason").asJson();
-            if (response.getCode() == CODE_SUCCESS)
-            {
-                try
-                {
-                    //here definitely only one object returned
-                    vendorJSONObject = response.getBody().getObject().getJSONArray("vendors").getJSONObject(0);
-                } catch (JSONException e)
-                {
-                    throw new EvercamException(e);
-                }
-            }
-            else
-            {
-                throw new EvercamException("Unknown Vendor");
-            }
-        }
-        catch (UnirestException e)
-        {
-            throw new EvercamException(e);
-        }
-    }
-
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
         return getVendors(URL_VENDORS);
@@ -66,7 +37,7 @@ public class Vendor
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
-       return getVendors(URL_VENDORS + mac);
+       return getVendors(URL_VENDORS + '/' + mac);
     }
 
     public Firmware getFirmware(String name) throws EvercamException
@@ -122,6 +93,17 @@ public class Vendor
         }
     }
 
+    public boolean isSupported() throws EvercamException
+    {
+        try
+        {
+            return vendorJSONObject.getBoolean("is_supported");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
     public ArrayList<String> getKnownMacs() throws EvercamException
     {
         ArrayList<String> knownMacs = new ArrayList<String>();
@@ -165,7 +147,7 @@ public class Vendor
         HttpRequest request = Unirest.get(url);
         try
         {
-            HttpResponse<JsonNode> response = request.header("accept", "application/jason").asJson();
+            HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
             try
             {
                 JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
