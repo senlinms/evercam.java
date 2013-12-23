@@ -8,8 +8,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 public class Snapshot {
     private JSONObject snapshotJSONObject;
 

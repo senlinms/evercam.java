@@ -20,6 +20,46 @@ public class Model {
         this.modelJSONObject = modelJSONObject;
     }
 
+    public String getVendor() throws EvercamException
+    {
+        try
+        {
+            return modelJSONObject.getString("vendor");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getName() throws EvercamException
+    {
+        try
+        {
+            return modelJSONObject.getString("name");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public ArrayList<String> getKnownModels() throws EvercamException
+    {
+        ArrayList<String> models = new ArrayList<String>();
+        try
+        {
+            JSONArray modelsJSONArray = modelJSONObject.getJSONArray("known_models");
+            for(int i = 0; i< modelsJSONArray.length(); i++)
+            {
+                models.add(i, modelsJSONArray.getString(i));
+            }
+
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        return models;
+    }
+
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
         return getModels(URL);

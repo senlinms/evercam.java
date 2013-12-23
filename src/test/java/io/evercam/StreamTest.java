@@ -20,6 +20,11 @@ public class StreamTest {
     @Test
     public void testCreateStream() throws EvercamException, JSONException {
         Map<String, Object> streamMap = new HashMap<String, Object>();
-
+        streamMap.put("id", "teststream");
+        streamMap.put("is_public", true);
+        streamMap.put("auth", "{\"basic\": {\"username\": \"user1\",\"password\": \"abcde\"}}");
+        streamMap.put("snapshots", "{\"jpg\": \"/onvif/snapshot\"}");
+        streamMap.put("endpoints", "[\"http://127.0.0.1:8080\"]");
+        Stream.create(streamMap);
     }
 }

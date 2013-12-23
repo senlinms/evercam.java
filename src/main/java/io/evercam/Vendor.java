@@ -82,6 +82,25 @@ public class Vendor
         }
     }
 
+    public ArrayList<String> getModels() throws EvercamException
+    {
+        ArrayList<String> models = new ArrayList<String>();
+        try
+        {
+            JSONArray modelsJSONArray = vendorJSONObject.getJSONArray("models");
+            System.out.println(modelsJSONArray.toString());
+            for(int i = 0; i< modelsJSONArray.length(); i++)
+            {
+                models.add(i, modelsJSONArray.getString(i));
+            }
+
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        return models;
+    }
+
     public String getName() throws EvercamException
     {
         try
