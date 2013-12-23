@@ -16,6 +16,27 @@ public class User {
     private static String URL = API.URL + "users";
     private JSONObject userJSONObject;
 
+    public String getCountry() throws JSONException {
+        return userJSONObject.getString("country");
+    }
+
+    public String getId() throws JSONException  {
+        return userJSONObject.getString("id");
+    }
+
+    public String getEmail() throws JSONException  {
+        return userJSONObject.getString("email");
+    }
+
+    public String getLastname() throws JSONException {
+        return userJSONObject.getString("lastname");
+    }
+
+
+    public String getForename() throws JSONException {
+        return userJSONObject.getString("forename");
+    }
+
     User(JSONObject userJSONObject)
     {
         this.userJSONObject = userJSONObject;
