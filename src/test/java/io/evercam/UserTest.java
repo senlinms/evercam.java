@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,5 +30,11 @@ public class UserTest {
         assertEquals("joe.bloggs@example.org", user.getEmail());
         assertEquals("joeyb", user.getId());
         assertEquals("us", user.getCountry());
+    }
+
+    @Test
+    public void testGetStreams() throws EvercamException {
+        ArrayList<Stream> streams = User.getStreams("joeyb");
+        assertEquals(1, streams.size());
     }
 }

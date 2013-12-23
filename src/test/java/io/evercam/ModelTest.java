@@ -21,14 +21,16 @@ public class ModelTest {
     @Test
     public void testGetAll() throws EvercamException {
         ArrayList<Vendor> vendors = Model.getAll();
+        assertEquals(2, vendors.size());
     }
 
     @Test
     public void testGetByVendor() throws EvercamException {
         ArrayList<Vendor> vendors = Model.getByVendor("testid");
+        assertEquals(1, vendors.size());
     }
     @Test
     public void testGetByModel() throws EvercamException {
-        Model model = Model.getByModel("YCW005");
+        Model model = Model.getByModel("testid", "YCW005");
     }
 }

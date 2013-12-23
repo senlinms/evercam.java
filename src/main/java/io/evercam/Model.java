@@ -25,9 +25,9 @@ public class Model {
         return getModels(URL);
     }
 
-    public static ArrayList<Vendor> getByVendor(String vendor) throws EvercamException
+    public static ArrayList<Vendor> getByVendor(String vendorId) throws EvercamException
     {
-        return getModels(URL + '/' + vendor);
+        return getModels(URL + '/' + vendorId);
     }
 
     public static ArrayList<Vendor> getModels(String url) throws EvercamException
@@ -54,13 +54,12 @@ public class Model {
         return vendorList;
     }
 
-    public static Model getByModel(String url) throws EvercamException
+    public static Model getByModel(String vendorId, String modelId) throws EvercamException
     {
         Model model;
-        ArrayList<Vendor> vendorList = new ArrayList<Vendor>();
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(url).header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + modelId).header("accept", "application/json").asJson();
             JSONObject modelJSONObject = response.getBody().getObject().getJSONArray("models").getJSONObject(0);
             model = new Model(modelJSONObject);
         }

@@ -67,7 +67,7 @@ public class User {
         ArrayList<Stream> streamList = new ArrayList<Stream>();
         try
         {
-            HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response = Unirest.get(URL + "/" + userId + "/streams").header("accept", "application/json").asJson();
             JSONArray streamsJSONArray = response.getBody().getObject().getJSONArray("vendors");
             for(int vendorIndex = 0; vendorIndex < streamsJSONArray.length(); vendorIndex++)
             {
