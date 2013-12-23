@@ -25,7 +25,7 @@ public class Vendor
 
     private JSONObject vendorJSONObject;
 
-    private Vendor(JSONObject vendorJSONObject)
+    Vendor(JSONObject vendorJSONObject)
     {
         this.vendorJSONObject = vendorJSONObject;
     }

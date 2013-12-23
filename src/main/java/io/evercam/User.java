@@ -16,7 +16,7 @@ public class User {
     private static String URL = API.URL + "users";
     private JSONObject userJSONObject;
 
-    private User(JSONObject userJSONObject)
+    User(JSONObject userJSONObject)
     {
         this.userJSONObject = userJSONObject;
     }
