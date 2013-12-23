@@ -47,8 +47,8 @@ public class User {
         User user;
         try
         {
-            HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(params).asJson();
-            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("vendors").getJSONObject(0);
+            HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(params).field("parameter", "value").asJson();
+            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
             user = new User(userJSONObject);
         }
         catch (JSONException e)
@@ -68,10 +68,10 @@ public class User {
         try
         {
             HttpResponse<JsonNode> response = Unirest.get(URL + "/" + userId + "/streams").header("accept", "application/json").asJson();
-            JSONArray streamsJSONArray = response.getBody().getObject().getJSONArray("vendors");
-            for(int vendorIndex = 0; vendorIndex < streamsJSONArray.length(); vendorIndex++)
+            JSONArray streamsJSONArray = response.getBody().getObject().getJSONArray("streams");
+            for(int i = 0; i < streamsJSONArray.length(); i++)
             {
-                JSONObject streamJSONObject =  streamsJSONArray.getJSONObject(vendorIndex);
+                JSONObject streamJSONObject =  streamsJSONArray.getJSONObject(i);
                 streamList.add(new Stream(streamJSONObject));
             }
         }
