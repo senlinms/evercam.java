@@ -8,24 +8,23 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Snapshot {
-    private JSONObject snapshotJSONObject;
+public class Snapshot extends EvercamObject {
 
     Snapshot(JSONObject snapshotJSONObject)
     {
-        this.snapshotJSONObject = snapshotJSONObject;
+        this.jsonObject = snapshotJSONObject;
     }
 
     public JSONObject getUris() throws JSONException {
-        return snapshotJSONObject.getJSONObject("uris");
+        return jsonObject.getJSONObject("uris");
     }
 
     public JSONObject getFormats() throws JSONException {
-        return snapshotJSONObject.getJSONObject("formats");
+        return jsonObject.getJSONObject("formats");
     }
 
     public JSONObject getAuth() throws JSONException {
-        return snapshotJSONObject.getJSONObject("auth");
+        return jsonObject.getJSONObject("auth");
     }
 
     public static Snapshot getSnapshot(String stream) throws EvercamException {

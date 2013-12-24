@@ -11,23 +11,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Liuting
- * Date: 03/12/13
- * Time: 14:24
- * To change this template use File | Settings | File Templates.
- */
-public class Vendor
+
+public class Vendor extends EvercamObject
 {
     private static String URL_VENDORS = API.URL + "vendors";
-    private final static int CODE_SUCCESS = 200;
 
-    private JSONObject vendorJSONObject;
+    private JSONObject jsonObject;
 
     Vendor(JSONObject vendorJSONObject)
     {
-        this.vendorJSONObject = vendorJSONObject;
+        this.jsonObject = vendorJSONObject;
     }
 
     public static ArrayList<Vendor> getAll() throws EvercamException
@@ -46,7 +39,7 @@ public class Vendor
         Boolean matched = false;
         try
         {
-            JSONArray firmwareJSONArray = vendorJSONObject.getJSONArray("firmwares");
+            JSONArray firmwareJSONArray = jsonObject.getJSONArray("firmwares");
             for(int arrayIndex = 0; arrayIndex <firmwareJSONArray.length(); arrayIndex++)
             {
                 JSONObject firmwareJSONObject = firmwareJSONArray.getJSONObject(arrayIndex);
@@ -75,7 +68,7 @@ public class Vendor
     {
         try
         {
-            return vendorJSONObject.getString("id");
+            return jsonObject.getString("id");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -87,8 +80,7 @@ public class Vendor
         ArrayList<String> models = new ArrayList<String>();
         try
         {
-            JSONArray modelsJSONArray = vendorJSONObject.getJSONArray("models");
-            System.out.println(modelsJSONArray.toString());
+            JSONArray modelsJSONArray = jsonObject.getJSONArray("models");
             for(int i = 0; i< modelsJSONArray.length(); i++)
             {
                 models.add(i, modelsJSONArray.getString(i));
@@ -105,7 +97,7 @@ public class Vendor
     {
         try
         {
-            return vendorJSONObject.getString("name");
+            return jsonObject.getString("name");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -116,7 +108,7 @@ public class Vendor
     {
         try
         {
-            return vendorJSONObject.getBoolean("is_supported");
+            return jsonObject.getBoolean("is_supported");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -128,7 +120,7 @@ public class Vendor
         ArrayList<String> knownMacs = new ArrayList<String>();
         try
         {
-            JSONArray knownMacJSONArray = vendorJSONObject.getJSONArray("known_macs");
+            JSONArray knownMacJSONArray = jsonObject.getJSONArray("known_macs");
             for(int arrayIndex = 0; arrayIndex< knownMacJSONArray.length(); arrayIndex++)
             {
                 knownMacs.add(arrayIndex, knownMacJSONArray.getString(arrayIndex));
@@ -146,7 +138,7 @@ public class Vendor
         ArrayList<Firmware> firmwareList = new ArrayList<Firmware>();
         try
         {
-            JSONArray firmwareJSONArray = vendorJSONObject.getJSONArray("firmwares");
+            JSONArray firmwareJSONArray = jsonObject.getJSONArray("firmwares");
             for(int arrayIndex = 0; arrayIndex <firmwareJSONArray.length(); arrayIndex++)
             {
                 JSONObject firmwareJSONObject = firmwareJSONArray.getJSONObject(arrayIndex);

@@ -11,35 +11,34 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class User {
+public class User extends EvercamObject {
 
     private static String URL = API.URL + "users";
-    private JSONObject userJSONObject;
 
     public String getCountry() throws JSONException {
-        return userJSONObject.getString("country");
+        return jsonObject.getString("country");
     }
 
     public String getId() throws JSONException  {
-        return userJSONObject.getString("id");
+        return jsonObject.getString("id");
     }
 
     public String getEmail() throws JSONException  {
-        return userJSONObject.getString("email");
+        return jsonObject.getString("email");
     }
 
     public String getLastname() throws JSONException {
-        return userJSONObject.getString("lastname");
+        return jsonObject.getString("lastname");
     }
 
 
     public String getForename() throws JSONException {
-        return userJSONObject.getString("forename");
+        return jsonObject.getString("forename");
     }
 
     User(JSONObject userJSONObject)
     {
-        this.userJSONObject = userJSONObject;
+        this.jsonObject = userJSONObject;
     }
 
     public static User create(Map<String, Object> params) throws EvercamException

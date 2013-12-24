@@ -4,27 +4,25 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.HttpRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Model {
+public class Model extends EvercamObject {
     private static String URL = API.URL + "models";
-    private JSONObject modelJSONObject;
 
     Model(JSONObject modelJSONObject)
     {
-        this.modelJSONObject = modelJSONObject;
+        this.jsonObject = modelJSONObject;
     }
 
     public String getVendor() throws EvercamException
     {
         try
         {
-            return modelJSONObject.getString("vendor");
+            return jsonObject.getString("vendor");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -35,7 +33,7 @@ public class Model {
     {
         try
         {
-            return modelJSONObject.getString("name");
+            return jsonObject.getString("name");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -47,7 +45,7 @@ public class Model {
         ArrayList<String> models = new ArrayList<String>();
         try
         {
-            JSONArray modelsJSONArray = modelJSONObject.getJSONArray("known_models");
+            JSONArray modelsJSONArray = jsonObject.getJSONArray("known_models");
             for(int i = 0; i< modelsJSONArray.length(); i++)
             {
                 models.add(i, modelsJSONArray.getString(i));

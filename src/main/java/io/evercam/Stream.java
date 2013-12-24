@@ -10,13 +10,12 @@ import org.json.JSONObject;
 import java.util.Map;
 
 
-public class Stream {
+public class Stream extends EvercamObject {
     static String URL = API.URL + "streams";
-    private JSONObject streamJSONObject;
 
     Stream(JSONObject streamJSONObject)
     {
-        this.streamJSONObject = streamJSONObject;
+        this.jsonObject = streamJSONObject;
     }
 
     public static Stream create(Map<String, Object> params) throws EvercamException

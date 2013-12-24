@@ -1,13 +1,10 @@
 package io.evercam;
 
 
-import org.json.JSONException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -38,7 +35,7 @@ public class ModelTest {
         Model model = Model.getByModel("testid", "YCW005");
         ArrayList<String> models = model.getKnownModels();
         assertEquals(1, models.size());
-        assertEquals("ycam", model.getVendor());
+        assertEquals("testid", model.getVendor());
         assertEquals("YCW005", model.getName());
     }
 }
