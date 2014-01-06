@@ -1,8 +1,8 @@
-# evercam.java
+# evercam.java [![Build Status](https://travis-ci.org/evercam/evercam.java.png)](https://travis-ci.org/evercam/evercam.java)
 
 A Java wrapper around Evercam API
 
-##Baisc Usage
+## Basic Usage
 ```java
 import io.evercam.*;
 
