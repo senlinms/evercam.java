@@ -1,7 +1,6 @@
 package io.evercam;
 
 
-import org.json.JSONException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -16,7 +15,7 @@ public class StreamTest {
     }
 
     @Test
-    public void testCreateStream() throws EvercamException, JSONException {
+    public void testCreateStream() throws EvercamException {
         Map<String, Object> streamMap = new HashMap<String, Object>();
         streamMap.put("id", "teststream");
         streamMap.put("is_public", true);
