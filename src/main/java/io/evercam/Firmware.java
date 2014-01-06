@@ -8,12 +8,11 @@ import org.json.JSONObject;
  * Date: 04/12/13
  * Time: 08:49
  */
-public class Firmware
+public class Firmware extends EvercamObject
 {
-    protected JSONObject firmwareJSONObject = null;
     protected Firmware(JSONObject firmwareJSONObject)
     {
-       this.firmwareJSONObject = firmwareJSONObject;
+       this.jsonObject = firmwareJSONObject;
     }
 
     public Auth getAuth(String type) throws EvercamException
@@ -21,7 +20,7 @@ public class Firmware
         Auth auth;
         try
         {
-            JSONObject authJSONObject = firmwareJSONObject.getJSONObject("auth").getJSONObject(type);
+            JSONObject authJSONObject = jsonObject.getJSONObject("auth").getJSONObject(type);
             auth = new Auth(type,authJSONObject);
         }
         catch (JSONException e)
@@ -35,7 +34,7 @@ public class Firmware
     {
         try
         {
-            return firmwareJSONObject.getString("name");
+            return jsonObject.getString("name");
         } catch (JSONException e)
         {
             throw new EvercamException(e);

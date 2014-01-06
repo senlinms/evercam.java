@@ -11,52 +11,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Liuting
- * Date: 03/12/13
- * Time: 14:24
- * To change this template use File | Settings | File Templates.
- */
-public class Vendor
+
+public class Vendor extends EvercamObject
 {
-    private static String URL_VENDORS = "http://api.evercam.io/v1/vendors/";
-    private final static int CODE_SUCCESS = 200;
+    private static String URL_VENDORS = API.URL + "vendors";
 
-    private JSONObject vendorJSONObject;
+    private JSONObject jsonObject;
 
-    private Vendor(JSONObject vendorJSONObject)
+    Vendor(JSONObject vendorJSONObject)
     {
-        this.vendorJSONObject = vendorJSONObject;
-    }
-
-    public Vendor(String id) throws EvercamException
-    {
-
-        HttpRequest request = Unirest.get(URL_VENDORS + id);
-        try
-        {
-            HttpResponse<JsonNode> response = request.header("accept", "application/jason").asJson();
-            if (response.getCode() == CODE_SUCCESS)
-            {
-                try
-                {
-                    //here definitely only one object returned
-                    vendorJSONObject = response.getBody().getObject().getJSONArray("vendors").getJSONObject(0);
-                } catch (JSONException e)
-                {
-                    throw new EvercamException(e);
-                }
-            }
-            else
-            {
-                throw new EvercamException("Unknown Vendor");
-            }
-        }
-        catch (UnirestException e)
-        {
-            throw new EvercamException(e);
-        }
+        this.jsonObject = vendorJSONObject;
     }
 
     public static ArrayList<Vendor> getAll() throws EvercamException
@@ -66,7 +30,7 @@ public class Vendor
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
-       return getVendors(URL_VENDORS + mac);
+       return getVendors(URL_VENDORS + '/' + mac);
     }
 
     public Firmware getFirmware(String name) throws EvercamException
@@ -75,7 +39,7 @@ public class Vendor
         Boolean matched = false;
         try
         {
-            JSONArray firmwareJSONArray = vendorJSONObject.getJSONArray("firmwares");
+            JSONArray firmwareJSONArray = jsonObject.getJSONArray("firmwares");
             for(int arrayIndex = 0; arrayIndex <firmwareJSONArray.length(); arrayIndex++)
             {
                 JSONObject firmwareJSONObject = firmwareJSONArray.getJSONObject(arrayIndex);
@@ -104,18 +68,47 @@ public class Vendor
     {
         try
         {
-            return vendorJSONObject.getString("id");
+            return jsonObject.getString("id");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
         }
     }
 
+    public ArrayList<String> getModels() throws EvercamException
+    {
+        ArrayList<String> models = new ArrayList<String>();
+        try
+        {
+            JSONArray modelsJSONArray = jsonObject.getJSONArray("models");
+            for(int i = 0; i< modelsJSONArray.length(); i++)
+            {
+                models.add(i, modelsJSONArray.getString(i));
+            }
+
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        return models;
+    }
+
     public String getName() throws EvercamException
     {
         try
         {
-            return vendorJSONObject.getString("name");
+            return jsonObject.getString("name");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public boolean isSupported() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getBoolean("is_supported");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -127,7 +120,7 @@ public class Vendor
         ArrayList<String> knownMacs = new ArrayList<String>();
         try
         {
-            JSONArray knownMacJSONArray = vendorJSONObject.getJSONArray("known_macs");
+            JSONArray knownMacJSONArray = jsonObject.getJSONArray("known_macs");
             for(int arrayIndex = 0; arrayIndex< knownMacJSONArray.length(); arrayIndex++)
             {
                 knownMacs.add(arrayIndex, knownMacJSONArray.getString(arrayIndex));
@@ -145,7 +138,7 @@ public class Vendor
         ArrayList<Firmware> firmwareList = new ArrayList<Firmware>();
         try
         {
-            JSONArray firmwareJSONArray = vendorJSONObject.getJSONArray("firmwares");
+            JSONArray firmwareJSONArray = jsonObject.getJSONArray("firmwares");
             for(int arrayIndex = 0; arrayIndex <firmwareJSONArray.length(); arrayIndex++)
             {
                 JSONObject firmwareJSONObject = firmwareJSONArray.getJSONObject(arrayIndex);
@@ -165,7 +158,7 @@ public class Vendor
         HttpRequest request = Unirest.get(url);
         try
         {
-            HttpResponse<JsonNode> response = request.header("accept", "application/jason").asJson();
+            HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
             try
             {
                 JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
