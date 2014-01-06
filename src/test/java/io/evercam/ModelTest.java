@@ -12,7 +12,7 @@ public class ModelTest {
 
     @BeforeClass
     public static void setUpClass() {
-        API.URL = "http://127.0.0.1:3000/v1/";
+        API.URL = TestURL.URL;
     }
 
     @Test
