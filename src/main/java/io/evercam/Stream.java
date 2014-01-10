@@ -37,4 +37,35 @@ public class Stream extends EvercamObject {
         }
         return stream;
     }
+
+    public static Stream getById(String streamId) throws EvercamException
+    {
+        Stream stream;
+        try
+        {
+            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + streamId).header("accept", "application/json").asJson();
+            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("streams").getJSONObject(0);
+            stream = new Stream(userJSONObject);
+        }
+        catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        catch (UnirestException e)
+        {
+            throw new EvercamException(e);
+        }
+        return stream;
+    }
+
+    public String getId() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("id");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
 }

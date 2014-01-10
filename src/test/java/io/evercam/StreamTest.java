@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static junit.framework.Assert.assertEquals;
+
 public class StreamTest {
 
     @BeforeClass
@@ -22,6 +24,12 @@ public class StreamTest {
         streamMap.put("auth", "{\"basic\": {\"username\": \"user1\",\"password\": \"abcde\"}}");
         streamMap.put("snapshots", "{\"jpg\": \"/onvif/snapshot\"}");
         streamMap.put("endpoints", "[\"http://127.0.0.1:8080\"]");
-        Stream.create(streamMap);
+        Stream stream = Stream.create(streamMap);
+        assertEquals("teststream", stream.getId());
+    }
+    @Test
+    public void testGetByIdStream() throws EvercamException {
+        Stream stream =Stream.getById("teststream");
+        assertEquals("teststream", stream.getId());
     }
 }
