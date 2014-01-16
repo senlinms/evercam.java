@@ -34,7 +34,7 @@ public class UserTest {
     }
 
     @Test
-    public void testGetStreams() throws EvercamException {
+    public void testGetCameras() throws EvercamException {
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(1, cameras.size());
     }

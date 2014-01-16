@@ -13,9 +13,9 @@ import java.util.Map;
 public class Camera extends EvercamObject {
     static String URL = API.URL + "cameras";
 
-    Camera(JSONObject streamJSONObject)
+    Camera(JSONObject cameraJSONObject)
     {
-        this.jsonObject = streamJSONObject;
+        this.jsonObject = cameraJSONObject;
     }
 
     public static Camera create(Map<String, Object> params) throws EvercamException
@@ -38,12 +38,12 @@ public class Camera extends EvercamObject {
         return camera;
     }
 
-    public static Camera getById(String streamId) throws EvercamException
+    public static Camera getById(String cameraId) throws EvercamException
     {
         Camera camera;
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + streamId).header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").asJson();
             JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
             camera = new Camera(userJSONObject);
         }

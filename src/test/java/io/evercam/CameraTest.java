@@ -18,14 +18,14 @@ public class CameraTest
     }
 
     @Test
-    public void testCreateStream() throws EvercamException {
-        Map<String, Object> streamMap = new HashMap<String, Object>();
-        streamMap.put("id", "testcamera");
-        streamMap.put("is_public", true);
-        streamMap.put("auth", "{\"basic\": {\"username\": \"user1\",\"password\": \"abcde\"}}");
-        streamMap.put("snapshots", "{\"jpg\": \"/onvif/snapshot\"}");
-        streamMap.put("endpoints", "[\"http://127.0.0.1:8080\"]");
-        Camera camera = Camera.create(streamMap);
+    public void testCreateCamera() throws EvercamException {
+        Map<String, Object> cameraMap = new HashMap<String, Object>();
+        cameraMap.put("id", "testcamera");
+        cameraMap.put("is_public", true);
+        cameraMap.put("auth", "{\"basic\": {\"username\": \"user1\",\"password\": \"abcde\"}}");
+        cameraMap.put("snapshots", "{\"jpg\": \"/onvif/snapshot\"}");
+        cameraMap.put("endpoints", "[\"http://127.0.0.1:8080\"]");
+        Camera camera = Camera.create(cameraMap);
         assertEquals("testcamera", camera.getId());
     }
     @Test
