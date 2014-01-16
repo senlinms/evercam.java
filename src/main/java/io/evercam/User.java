@@ -61,17 +61,17 @@ public class User extends EvercamObject {
         return user;
     }
 
-    public static ArrayList<Stream> getStreams(String userId) throws EvercamException
+    public static ArrayList<Camera> getCameras(String userId) throws EvercamException
     {
-        ArrayList<Stream> streamList = new ArrayList<Stream>();
+        ArrayList<Camera> cameraList = new ArrayList<Camera>();
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(URL + "/" + userId + "/streams").header("accept", "application/json").asJson();
-            JSONArray streamsJSONArray = response.getBody().getObject().getJSONArray("streams");
-            for(int i = 0; i < streamsJSONArray.length(); i++)
+            HttpResponse<JsonNode> response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
+            JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
+            for(int i = 0; i < camerasJSONArray.length(); i++)
             {
-                JSONObject streamJSONObject =  streamsJSONArray.getJSONObject(i);
-                streamList.add(new Stream(streamJSONObject));
+                JSONObject cameraJSONObject =  camerasJSONArray.getJSONObject(i);
+                cameraList.add(new Camera(cameraJSONObject));
             }
         }
         catch (JSONException e)
@@ -82,6 +82,6 @@ public class User extends EvercamObject {
         {
             throw new EvercamException(e);
         }
-        return streamList;
+        return cameraList;
     }
 }

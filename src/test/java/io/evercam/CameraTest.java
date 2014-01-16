@@ -9,7 +9,8 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 
-public class StreamTest {
+public class CameraTest
+{
 
     @BeforeClass
     public static void setUpClass() {
@@ -19,17 +20,17 @@ public class StreamTest {
     @Test
     public void testCreateStream() throws EvercamException {
         Map<String, Object> streamMap = new HashMap<String, Object>();
-        streamMap.put("id", "teststream");
+        streamMap.put("id", "testcamera");
         streamMap.put("is_public", true);
         streamMap.put("auth", "{\"basic\": {\"username\": \"user1\",\"password\": \"abcde\"}}");
         streamMap.put("snapshots", "{\"jpg\": \"/onvif/snapshot\"}");
         streamMap.put("endpoints", "[\"http://127.0.0.1:8080\"]");
-        Stream stream = Stream.create(streamMap);
-        assertEquals("teststream", stream.getId());
+        Camera camera = Camera.create(streamMap);
+        assertEquals("testcamera", camera.getId());
     }
     @Test
-    public void testGetByIdStream() throws EvercamException {
-        Stream stream =Stream.getById("teststream");
-        assertEquals("teststream", stream.getId());
+    public void testGetByIdCamera() throws EvercamException {
+        Camera camera = Camera.getById("testcamera");
+        assertEquals("testcamera", camera.getId());
     }
 }

@@ -10,22 +10,22 @@ import org.json.JSONObject;
 import java.util.Map;
 
 
-public class Stream extends EvercamObject {
-    static String URL = API.URL + "streams";
+public class Camera extends EvercamObject {
+    static String URL = API.URL + "cameras";
 
-    Stream(JSONObject streamJSONObject)
+    Camera(JSONObject streamJSONObject)
     {
         this.jsonObject = streamJSONObject;
     }
 
-    public static Stream create(Map<String, Object> params) throws EvercamException
+    public static Camera create(Map<String, Object> params) throws EvercamException
     {
-        Stream stream;
+        Camera camera;
         try
         {
             HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(params).asJson();
-            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("streams").getJSONObject(0);
-            stream = new Stream(userJSONObject);
+            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
+            camera = new Camera(userJSONObject);
         }
         catch (JSONException e)
         {
@@ -35,17 +35,17 @@ public class Stream extends EvercamObject {
         {
             throw new EvercamException(e);
         }
-        return stream;
+        return camera;
     }
 
-    public static Stream getById(String streamId) throws EvercamException
+    public static Camera getById(String streamId) throws EvercamException
     {
-        Stream stream;
+        Camera camera;
         try
         {
             HttpResponse<JsonNode> response = Unirest.get(URL + '/' + streamId).header("accept", "application/json").asJson();
-            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("streams").getJSONObject(0);
-            stream = new Stream(userJSONObject);
+            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
+            camera = new Camera(userJSONObject);
         }
         catch (JSONException e)
         {
@@ -55,7 +55,7 @@ public class Stream extends EvercamObject {
         {
             throw new EvercamException(e);
         }
-        return stream;
+        return camera;
     }
 
     public String getId() throws EvercamException
