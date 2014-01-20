@@ -44,5 +44,6 @@ public class UserTest {
         API.setAuth("joeyb","12345");
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(2, cameras.size());
+        API.setAuth(null,null);
     }
 }

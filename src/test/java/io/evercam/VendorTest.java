@@ -7,11 +7,6 @@ import org.junit.rules.ExpectedException;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: Liuting
- * Date: 03/12/13
- * Time: 14:32
- */
 public class VendorTest
 {
     private static final String TEST_VENDOR_ID = "testid";

@@ -3,11 +3,6 @@ package io.evercam;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * User: Liuting
- * Date: 04/12/13
- * Time: 08:49
- */
 public class Firmware extends EvercamObject
 {
     protected Firmware(JSONObject firmwareJSONObject)

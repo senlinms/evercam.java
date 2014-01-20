@@ -12,6 +12,7 @@ public class Auth
 {
     private String type;
     private JSONObject authJSONObject = null;
+    public static final String TYPE_BASIC = "basic";
 
     protected Auth(String type, JSONObject authJSONObject)
     {
