@@ -66,7 +66,15 @@ public class User extends EvercamObject {
         ArrayList<Camera> cameraList = new ArrayList<Camera>();
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response;
+            if(API.isAuth())
+            {
+                response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").basicAuth(API.getAuth()[0],API.getAuth()[1]).asJson();
+            }
+            else
+            {
+                response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
+            }
             JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
             for(int i = 0; i < camerasJSONArray.length(); i++)
             {
