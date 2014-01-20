@@ -15,7 +15,6 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.2</version>
                 <executions>
-                    <!--
                     <execution>
                         <phase>package</phase>
                         <goals>
@@ -33,7 +32,7 @@
                                     <include>org.apache.httpcomponents:httpmime</include>
                                     <include>org.json:json</include>
                                     <include>commons-logging:commons-logging</include>
-                                    <include>commons-codec:commons-codec</include>
+									<include>commons-codec:commons-codec</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -41,10 +40,14 @@
                                     <pattern>org.apache.http</pattern>
                                     <shadedPattern>io.evercam.relocation</shadedPattern>
                                 </relocation>
+								<relocation>
+                                    <pattern>org.apache.commons.codec</pattern>
+                                    <shadedPattern>io.evercam.relocation</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
-                    -->
+                    <!--
                     <execution>
                         <phase>package</phase>
                         <goals>
@@ -70,6 +73,7 @@
                             </relocations>
                         </configuration>
                     </execution>
+		-->
                 </executions>
 
             </plugin>
