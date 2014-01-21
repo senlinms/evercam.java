@@ -5,11 +5,19 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
@@ -146,18 +154,19 @@ public class Camera extends EvercamObject {
         String url = selectEndpoint() + getSnapshotPath("jpg") ;
         try
         {
-            HttpResponse<String> response = Unirest.get(url).basicAuth(API.getAuth()[0],API.getAuth()[1]).asString();
+            HttpResponse<String> response = Unirest.get(url).basicAuth(getAuth(Auth.TYPE_BASIC).getUsername(),getAuth(Auth.TYPE_BASIC).getPassword()).asString();
             inputStream = response.getRawBody();
-
-        } catch (UnirestException e)
+        }
+        catch (UnirestException e)
         {
             throw new EvercamException(e);
         }
-        return inputStream;
+         return inputStream;
     }
 
     private String selectEndpoint() throws EvercamException
     {
+        //Need to be fixed (choose the fastest one)
         String snapshot = getSnapshotPath("jpg");
 
         for (String endpoint: getEndpoints())
