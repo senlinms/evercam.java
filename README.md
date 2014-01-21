@@ -6,6 +6,13 @@ A Java wrapper around Evercam API
 ```java
 import io.evercam.*;
 
+//Get camera by ID, auth is necessary.
+API.setAuth("evercamUsername","evercamPassword");
+Camera camera = Camera.getById("cameraId");
+//Get camera snapshot as stream
+InputStream stream = camera.getSnapshotStream();
+
+
 //Get vendor object by name
 Vendor axis = new Vendor("axis");
 String defaultUsername = axis.getFirmware("*").getAuth("basic").getUsername();
