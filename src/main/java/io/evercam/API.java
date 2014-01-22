@@ -2,7 +2,7 @@ package io.evercam;
 
 public abstract class API {
     public static String VERSION = "v1";
-    public static String URL = "http://api.evercam.io/" + VERSION + "/";
+    public static String URL = "https://api.evercam.io/" + VERSION + "/";
 
     private static String[] auth = {null, null};
 
