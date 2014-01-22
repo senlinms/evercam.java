@@ -33,37 +33,6 @@ public class Vendor extends EvercamObject
        return getVendors(URL_VENDORS + '/' + mac);
     }
 
-    public Firmware getFirmware(String name) throws EvercamException
-    {
-        Firmware firmware = null;
-        Boolean matched = false;
-        try
-        {
-            JSONArray firmwareJSONArray = jsonObject.getJSONArray("firmwares");
-            for(int arrayIndex = 0; arrayIndex <firmwareJSONArray.length(); arrayIndex++)
-            {
-                JSONObject firmwareJSONObject = firmwareJSONArray.getJSONObject(arrayIndex);
-
-                if(firmwareJSONObject.getString("name").equals(name))
-                {
-                     matched = true;
-                     firmware= new Firmware(firmwareJSONObject);
-                     return firmware;
-                }
-            }
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
-
-        if(!matched)
-        {
-           throw new EvercamException("Unknown Firmware");
-        }
-        return firmware;
-    }
-
-
     public String getId() throws EvercamException
     {
         try
@@ -131,25 +100,6 @@ public class Vendor extends EvercamObject
             throw new EvercamException(e);
         }
         return knownMacs;
-    }
-
-    public ArrayList<Firmware> getFirmwares()
-    {
-        ArrayList<Firmware> firmwareList = new ArrayList<Firmware>();
-        try
-        {
-            JSONArray firmwareJSONArray = jsonObject.getJSONArray("firmwares");
-            for(int arrayIndex = 0; arrayIndex <firmwareJSONArray.length(); arrayIndex++)
-            {
-                JSONObject firmwareJSONObject = firmwareJSONArray.getJSONObject(arrayIndex);
-                firmwareList.add(new Firmware(firmwareJSONObject));
-
-            }
-        } catch (JSONException e)
-        {
-            return null;
-        }
-        return firmwareList;
     }
 
     private static ArrayList<Vendor> getVendors(String url) throws EvercamException

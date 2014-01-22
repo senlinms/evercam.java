@@ -3,11 +3,6 @@ package io.evercam;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * User: Liuting
- * Date: 05/12/13
- * Time: 14:56
- */
 public class Auth
 {
     private String type;
@@ -34,10 +29,6 @@ public class Auth
         return username;
     }
 
-    public String getType()
-    {
-        return type;
-    }
 
     public String getPassword() throws EvercamException
     {

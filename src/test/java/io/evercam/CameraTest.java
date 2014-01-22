@@ -2,7 +2,9 @@ package io.evercam;
 
 
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import sun.misc.IOUtils;
 
 import java.io.ByteArrayInputStream;
@@ -17,6 +19,8 @@ import static org.junit.Assert.assertFalse;
 
 public class CameraTest
 {
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @BeforeClass
     public static void setUpClass() {
@@ -59,6 +63,14 @@ public class CameraTest
         assertEquals("privatecamera",cameraPrivate.getId());
 
     }
+
+        @Test
+        public void tesBoundaryUnknownAuth() throws EvercamException
+        {
+            Camera camera = Camera.getById("testcamera");
+            exception.expect(EvercamException.class);
+            camera.getAuth("");
+        }
 
     private static byte[] getBytes(InputStream is) throws IOException {
 
