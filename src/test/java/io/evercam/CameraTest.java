@@ -12,9 +12,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertFalse;
 
 public class CameraTest
@@ -49,6 +47,11 @@ public class CameraTest
         assertEquals(3, camera.getEndpoints().size());
         assertEquals("/snapshot.jpg",camera.getSnapshotPath("jpg"));
         assertEquals(105708, getBytes(camera.getSnapshotStream()).length);
+        assertEquals("Public Camera", camera.getName());
+        assertEquals("axis", camera.getVendor());
+        assertEquals("null", camera.getModel());
+        assertEquals("Etc/UTC",camera.getTimezone());
+        assertEquals("null", camera.isOnline());
 
         API.setAuth("joeyb","12345");
         Camera cameraPrivate = Camera.getById("privatecamera");
@@ -56,6 +59,7 @@ public class CameraTest
         assertEquals("privatecamera",cameraPrivate.getId());
 
     }
+
     private static byte[] getBytes(InputStream is) throws IOException {
 
         int len;

@@ -145,6 +145,61 @@ public class Camera extends EvercamObject {
         return auth;
     }
 
+    public String getName() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("name");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getVendor() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("vendor");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getTimezone() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("timezone");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getModel() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("model");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String isOnline() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("is_online");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
     public String getSnapshotPath(String type) throws EvercamException
     {
         try
