@@ -56,7 +56,15 @@ public class Camera extends EvercamObject {
         Camera camera;
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response;
+            if(API.isAuth())
+            {
+                response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").basicAuth(API.getAuth()[0],API.getAuth()[1]).asJson();
+            }
+            else
+            {
+                response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").asJson();
+            }
             JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
             camera = new Camera(userJSONObject);
         }
@@ -151,22 +159,29 @@ public class Camera extends EvercamObject {
     public InputStream getSnapshotStream() throws EvercamException
     {
         InputStream inputStream;
-        String url = selectEndpoint() + getSnapshotPath("jpg") ;
-        try
+        String endpoint = selectEndpoint();
+        if(endpoint != null)
         {
-            HttpResponse<String> response = Unirest.get(url).basicAuth(getAuth(Auth.TYPE_BASIC).getUsername(),getAuth(Auth.TYPE_BASIC).getPassword()).asString();
-            inputStream = response.getRawBody();
+            String url = endpoint + getSnapshotPath("jpg");
+            try
+            {
+                HttpResponse<String> response = Unirest.get(url).basicAuth(getAuth(Auth.TYPE_BASIC).getUsername(),getAuth(Auth.TYPE_BASIC).getPassword()).asString();
+                inputStream = response.getRawBody();
+            }
+            catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
         }
-        catch (UnirestException e)
+        else
         {
-            throw new EvercamException(e);
+            throw new EvercamException("Endpoint not available");
         }
-         return inputStream;
+        return inputStream;
     }
 
     private String selectEndpoint() throws EvercamException
     {
-        //Need to be fixed (choose the fastest one)
         String snapshot = getSnapshotPath("jpg");
 
         for (String endpoint: getEndpoints())
@@ -179,10 +194,6 @@ public class Camera extends EvercamObject {
                {
                     return endpoint;
                }
-                else
-                {
-                    throw new EvercamException("Endpoint not responding");
-                }
             } catch (UnirestException e)
             {
                 throw new EvercamException(e);

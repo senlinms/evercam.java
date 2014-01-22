@@ -35,6 +35,7 @@ public class UserTest {
 
     @Test
     public void testGetCameras() throws EvercamException {
+        API.setAuth(null,null);
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(1, cameras.size());
     }
