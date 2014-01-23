@@ -10,9 +10,14 @@ import org.apache.http.HttpRequest;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +25,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -30,26 +36,53 @@ public class Camera extends EvercamObject {
     {
         this.jsonObject = cameraJSONObject;
     }
-//
-//    public static Camera create(Map<String, Object> params) throws EvercamException
-//    {
-//        Camera camera;
-//        try
-//        {
-//            HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(params).asJson();
-//            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
-//            camera = new Camera(userJSONObject);
-//        }
-//        catch (JSONException e)
-//        {
-//            throw new EvercamException(e);
-//        }
-//        catch (UnirestException e)
-//        {
-//            throw new EvercamException(e);
-//        }
-//        return camera;
-//    }
+
+    public static Camera create(CameraInfo cameraInfo) throws EvercamException
+    {
+        Camera camera = null;
+        try
+        {
+            JSONObject cameraJSONObject = new JSONObject();
+            JSONObject authJSONObject = new JSONObject();
+            JSONObject basicJSONObject = new JSONObject();
+            JSONObject snapshotJSONObject = new JSONObject();
+            snapshotJSONObject.put("jpg",cameraInfo.getSnapshotJPG());
+            basicJSONObject.put("username",cameraInfo.getBasicAuth()[0]);
+            basicJSONObject.put("password",cameraInfo.getBasicAuth()[1]);
+            authJSONObject.put("basic",basicJSONObject);
+
+            cameraJSONObject.put("id", cameraInfo.getId());
+            cameraJSONObject.put("name", cameraInfo.getName());
+            cameraJSONObject.put("is_public", true);
+            cameraJSONObject.put("snapshots", snapshotJSONObject);
+            cameraJSONObject.put("endpoints", cameraInfo.getEndpoints());
+            cameraJSONObject.put("auth",authJSONObject);
+
+            DefaultHttpClient c = new DefaultHttpClient();
+            c.getCredentialsProvider().setCredentials(
+                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+                    new UsernamePasswordCredentials("joeyb", "12345"));
+            HttpPost post = new HttpPost(URL);
+            post.setHeader("Content-type", "application/json");
+
+            post.setEntity(new StringEntity(cameraJSONObject.toString()));
+            org.apache.http.HttpResponse r = c.execute(post);
+            JsonNode jsonNode = new JsonNode(EntityUtils.toString(r.getEntity()));
+            JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
+            return new Camera(jsonObject);
+
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        } catch (ClientProtocolException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return camera;
+    }
 
     public static Camera getById(String cameraId) throws EvercamException
     {
