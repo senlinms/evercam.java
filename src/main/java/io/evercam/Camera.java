@@ -294,6 +294,9 @@ public class Camera extends EvercamObject {
 
         cameraJSONObject.put("id", cameraDetail.getId());
         cameraJSONObject.put("name", cameraDetail.getName());
+        cameraJSONObject.put("model", cameraDetail.getModel());
+        cameraJSONObject.put("vendor",cameraDetail.getVendor());
+        cameraJSONObject.put("timezone",cameraDetail.getTimezone());
         cameraJSONObject.put("is_public", true);
         cameraJSONObject.put("snapshots", snapshotJSONObject);
         cameraJSONObject.put("endpoints", cameraDetail.getEndpoints());
