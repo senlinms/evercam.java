@@ -1,6 +1,6 @@
 package io.evercam;
 
-public class CameraInfo
+public class CameraDetail
 {
     private String id;
     private String name;

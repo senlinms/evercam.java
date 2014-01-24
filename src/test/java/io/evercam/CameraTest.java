@@ -2,19 +2,15 @@ package io.evercam;
 
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import sun.misc.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import static junit.framework.Assert.*;
 import static org.junit.Assert.assertFalse;
@@ -32,15 +28,20 @@ public class CameraTest
     @Test
     public void testCreateCamera() throws EvercamException, JSONException
     {
-        CameraInfo cameraInfo = new CameraInfo();
-        cameraInfo.setId("testcamera");
-        cameraInfo.setName("testcameraname");
-        cameraInfo.setPublic(true);
-        cameraInfo.setSnapshotJPG("/onvif/snapshot");
-        cameraInfo.setBasicAuth(new String[]{"user1","abcde"});
-        cameraInfo.setEndpoints(new String[]{"http://127.0.0.1:8080"});
-        Camera camera = Camera.create(cameraInfo);
+        CameraDetail cameraDetail = new CameraDetail();
+        cameraDetail.setId("testcamera");
+        cameraDetail.setName("testcameraname");
+        cameraDetail.setPublic(true);
+        cameraDetail.setSnapshotJPG("/onvif/snapshot");
+        cameraDetail.setBasicAuth(new String[]{"user1","abcde"});
+        cameraDetail.setEndpoints(new String[]{"http://127.0.0.1:8080"});
+        API.setAuth("joeyb","12345");
+        Camera camera = Camera.create(cameraDetail);
         assertEquals("testcamera",camera.getId());
+
+        API.setAuth(null,null);
+        exception.expect(EvercamException.class);
+        Camera.create(cameraDetail);
     }
 
     @Test
