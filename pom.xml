@@ -31,8 +31,7 @@
                                     <include>org.apache.httpcomponents:httpasyncclient</include>
                                     <include>org.apache.httpcomponents:httpmime</include>
                                     <include>org.json:json</include>
-                                    <include>commons-logging:commons-logging</include>
-									<include>commons-codec:commons-codec</include>
+				    <include>commons-codec:commons-codec</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -40,40 +39,13 @@
                                     <pattern>org.apache.http</pattern>
                                     <shadedPattern>io.evercam.relocation</shadedPattern>
                                 </relocation>
-								<relocation>
+				<relocation>
                                     <pattern>org.apache.commons.codec</pattern>
                                     <shadedPattern>io.evercam.relocation</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
                     </execution>
-                    <!--
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>${project.artifactId}-${project.version}-ShadedForEvercamConnect</finalName>
-                            <artifactSet>
-                                <includes>
-                                    <include>com.mashape.unirest:unirest-java</include>
-                                    <include>org.apache.httpcomponents:httpclient</include>
-                                    <include>org.apache.httpcomponents:httpcore</include>
-                                    <include>org.apache.httpcomponents:httpcore-nio</include>
-                                    <include>org.apache.httpcomponents:httpasyncclient</include>
-                                    <include>org.apache.httpcomponents:httpmime</include>
-                                </includes>
-                            </artifactSet>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.apache.http</pattern>
-                                    <shadedPattern>io.evercam.relocation</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-		-->
                 </executions>
 
             </plugin>
