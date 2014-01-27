@@ -25,6 +25,7 @@ public class Camera extends EvercamObject
     static final int CODE_CREATE = 201;
     static final int CODE_UNAUTHORISED = 401;
     static final int CODE_ERROR = 400;
+    static final int CODE_SERVER_ERROR = 500;
 
     Camera(JSONObject cameraJSONObject)
     {
@@ -40,7 +41,6 @@ public class Camera extends EvercamObject
             {
                 JSONObject cameraJSONObject = buildCameraJSONObject(cameraDetail);
                 DefaultHttpClient c = new DefaultHttpClient();
-                //       c.getCredentialsProvider().setCredentials(new AuthScope(AuthScope.ANY), new UsernamePasswordCredentials(API.getAuth()[0], API.getAuth()[1]));
                 HttpPost post = new HttpPost(URL);
                 post.setHeader("Content-type", "application/json");
                 post.setEntity(new StringEntity(cameraJSONObject.toString()));
@@ -50,12 +50,10 @@ public class Camera extends EvercamObject
                 String result = EntityUtils.toString(r.getEntity());
                 if (r.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
                 {
-                    System.out.print(result);
                     throw new EvercamException("Invalid auth");
                 }
                 else if (r.getStatusLine().getStatusCode() == CODE_ERROR)
                 {
-
                     JsonNode jsonNode = new JsonNode(result);
                     String message = jsonNode.getObject().getString("message");
                     throw new EvercamException(message);
@@ -66,7 +64,7 @@ public class Camera extends EvercamObject
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
                     return new Camera(jsonObject);
                 }
-                else if (r.getStatusLine().getStatusCode() == 500)
+                else if (r.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException("Internal server error");
                 }

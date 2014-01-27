@@ -12,7 +12,7 @@ public class CameraDetail
     private String[] endpoints;
     private String[] basicAuth;
 
-    public String getId() throws EvercamException
+    protected String getId() throws EvercamException
     {
         if (id == null)
         {
@@ -26,7 +26,7 @@ public class CameraDetail
         this.id = id;
     }
 
-    public String getName() throws EvercamException
+    protected String getName() throws EvercamException
     {
         if (name == null)
         {
@@ -40,7 +40,7 @@ public class CameraDetail
         this.name = name;
     }
 
-    public boolean isPublic() throws EvercamException
+    protected boolean isPublic() throws EvercamException
     {
         if (isPublic == null)
         {
@@ -54,7 +54,7 @@ public class CameraDetail
         this.isPublic = isPublic;
     }
 
-    public String getSnapshotJPG() throws EvercamException
+    protected String getSnapshotJPG() throws EvercamException
     {
         if (snapshotJPG == null)
         {
@@ -68,7 +68,7 @@ public class CameraDetail
         this.snapshotJPG = snapshotJPG;
     }
 
-    public String[] getEndpoints() throws EvercamException
+    protected String[] getEndpoints() throws EvercamException
     {
         if (endpoints == null)
         {
@@ -82,7 +82,7 @@ public class CameraDetail
         this.endpoints = endpoints;
     }
 
-    public String[] getBasicAuth() throws EvercamException
+    protected String[] getBasicAuth() throws EvercamException
     {
         if (basicAuth == null)
         {
@@ -100,7 +100,7 @@ public class CameraDetail
         this.basicAuth = new String[]{username, password};
     }
 
-    public String getVendor()
+    protected String getVendor()
     {
         return vendor;
     }
@@ -110,7 +110,7 @@ public class CameraDetail
         this.vendor = vendor;
     }
 
-    public String getModel()
+    protected String getModel()
     {
         return model;
     }
@@ -120,7 +120,7 @@ public class CameraDetail
         this.model = model;
     }
 
-    public String getTimezone() throws EvercamException
+    protected String getTimezone() throws EvercamException
     {
         return timezone;
     }
