@@ -11,28 +11,34 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class User extends EvercamObject {
+public class User extends EvercamObject
+{
 
     private static String URL = API.URL + "users";
 
-    public String getCountry() throws JSONException {
+    public String getCountry() throws JSONException
+    {
         return jsonObject.getString("country");
     }
 
-    public String getId() throws JSONException  {
+    public String getId() throws JSONException
+    {
         return jsonObject.getString("id");
     }
 
-    public String getEmail() throws JSONException  {
+    public String getEmail() throws JSONException
+    {
         return jsonObject.getString("email");
     }
 
-    public String getLastname() throws JSONException {
+    public String getLastname() throws JSONException
+    {
         return jsonObject.getString("lastname");
     }
 
 
-    public String getForename() throws JSONException {
+    public String getForename() throws JSONException
+    {
         return jsonObject.getString("forename");
     }
 
@@ -49,12 +55,10 @@ public class User extends EvercamObject {
             HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(params).field("parameter", "value").asJson();
             JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
             user = new User(userJSONObject);
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException(e);
-        }
-        catch (UnirestException e)
+        } catch (UnirestException e)
         {
             throw new EvercamException(e);
         }
@@ -67,26 +71,24 @@ public class User extends EvercamObject {
         try
         {
             HttpResponse<JsonNode> response;
-            if(API.isAuth())
+            if (API.isAuth())
             {
-                response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").basicAuth(API.getAuth()[0],API.getAuth()[1]).asJson();
+                response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
             }
             else
             {
                 response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
             }
             JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
-            for(int i = 0; i < camerasJSONArray.length(); i++)
+            for (int i = 0; i < camerasJSONArray.length(); i++)
             {
-                JSONObject cameraJSONObject =  camerasJSONArray.getJSONObject(i);
+                JSONObject cameraJSONObject = camerasJSONArray.getJSONObject(i);
                 cameraList.add(new Camera(cameraJSONObject));
             }
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException(e);
-        }
-        catch (UnirestException e)
+        } catch (UnirestException e)
         {
             throw new EvercamException(e);
         }

@@ -11,8 +11,8 @@ public class Auth
 
     protected Auth(String type, JSONObject authJSONObject)
     {
-         this.type = type;
-         this.authJSONObject = authJSONObject;
+        this.type = type;
+        this.authJSONObject = authJSONObject;
     }
 
 
@@ -36,8 +36,7 @@ public class Auth
         try
         {
             password = authJSONObject.getString("password");
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException(e);
         }

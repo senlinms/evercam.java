@@ -8,15 +8,18 @@ import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 
-public class ModelTest {
+public class ModelTest
+{
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass()
+    {
         API.URL = TestURL.URL;
     }
 
     @Test
-    public void testGetAll() throws EvercamException {
+    public void testGetAll() throws EvercamException
+    {
         ArrayList<Vendor> vendors = Model.getAll();
         assertEquals(2, vendors.size());
         ArrayList<String> models = vendors.get(1).getModels();
@@ -24,14 +27,17 @@ public class ModelTest {
     }
 
     @Test
-    public void testGetByVendor() throws EvercamException {
+    public void testGetByVendor() throws EvercamException
+    {
         ArrayList<Vendor> vendors = Model.getByVendor("testid");
         assertEquals(1, vendors.size());
         ArrayList<String> models = vendors.get(0).getModels();
         assertEquals(4, models.size());
     }
+
     @Test
-    public void testGetByModel() throws EvercamException {
+    public void testGetByModel() throws EvercamException
+    {
         Model model = Model.getByModel("testid", "YCW005");
         ArrayList<String> models = model.getKnownModels();
         assertEquals(1, models.size());

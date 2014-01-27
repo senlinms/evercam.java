@@ -12,7 +12,8 @@ public class VendorTest
 
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass()
+    {
         API.URL = TestURL.URL;
     }
 

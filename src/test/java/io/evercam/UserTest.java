@@ -10,15 +10,18 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 
-public class UserTest {
+public class UserTest
+{
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass()
+    {
         API.URL = TestURL.URL;
     }
 
     @Test
-    public void testCreateUser() throws EvercamException, JSONException {
+    public void testCreateUser() throws EvercamException, JSONException
+    {
         Map<String, Object> userMap = new HashMap<String, Object>();
         userMap.put("forename", "Joe");
         userMap.put("lastname", "Bloggs");
@@ -34,17 +37,19 @@ public class UserTest {
     }
 
     @Test
-    public void testGetCameras() throws EvercamException {
-        API.setAuth(null,null);
+    public void testGetCameras() throws EvercamException
+    {
+        API.setAuth(null, null);
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(1, cameras.size());
     }
 
     @Test
-    public void testGetCamerasWithAuth() throws EvercamException {
-        API.setAuth("joeyb","12345");
+    public void testGetCamerasWithAuth() throws EvercamException
+    {
+        API.setAuth("joeyb", "12345");
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(2, cameras.size());
-        API.setAuth(null,null);
+        API.setAuth(null, null);
     }
 }

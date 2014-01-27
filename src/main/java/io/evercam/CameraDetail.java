@@ -14,7 +14,7 @@ public class CameraDetail
 
     public String getId() throws EvercamException
     {
-        if(id == null)
+        if (id == null)
         {
             throw new EvercamException("camera id required");
         }
@@ -28,7 +28,7 @@ public class CameraDetail
 
     public String getName() throws EvercamException
     {
-        if(name == null)
+        if (name == null)
         {
             throw new EvercamException("camera name required");
         }
@@ -42,7 +42,7 @@ public class CameraDetail
 
     public boolean isPublic() throws EvercamException
     {
-        if(isPublic ==null)
+        if (isPublic == null)
         {
             throw new EvercamException("camera public/private required");
         }
@@ -56,7 +56,7 @@ public class CameraDetail
 
     public String getSnapshotJPG() throws EvercamException
     {
-        if(snapshotJPG == null)
+        if (snapshotJPG == null)
         {
             throw new EvercamException("snapshot jpg required");
         }
@@ -70,7 +70,7 @@ public class CameraDetail
 
     public String[] getEndpoints() throws EvercamException
     {
-        if(endpoints == null)
+        if (endpoints == null)
         {
             throw new EvercamException("endpoints required");
         }
@@ -84,11 +84,11 @@ public class CameraDetail
 
     public String[] getBasicAuth() throws EvercamException
     {
-        if(basicAuth==null)
+        if (basicAuth == null)
         {
             throw new EvercamException("basic auth required");
         }
-        else if (basicAuth[0]==null || basicAuth[1]==null)
+        else if (basicAuth[0] == null || basicAuth[1] == null)
         {
             throw new EvercamException("basic auth required");
         }
@@ -97,7 +97,7 @@ public class CameraDetail
 
     public void setBasicAuth(String username, String password)
     {
-        this.basicAuth = new String[] {username, password};
+        this.basicAuth = new String[]{username, password};
     }
 
     public String getVendor()

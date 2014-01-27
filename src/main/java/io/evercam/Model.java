@@ -10,7 +10,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Model extends EvercamObject {
+public class Model extends EvercamObject
+{
     private static String URL = API.URL + "models";
 
     Model(JSONObject modelJSONObject)
@@ -46,7 +47,7 @@ public class Model extends EvercamObject {
         try
         {
             JSONArray modelsJSONArray = jsonObject.getJSONArray("known_models");
-            for(int i = 0; i< modelsJSONArray.length(); i++)
+            for (int i = 0; i < modelsJSONArray.length(); i++)
             {
                 models.add(i, modelsJSONArray.getString(i));
             }
@@ -75,17 +76,15 @@ public class Model extends EvercamObject {
         {
             HttpResponse<JsonNode> response = Unirest.get(url).header("accept", "application/json").asJson();
             JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
-            for(int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
+            for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
             {
-                JSONObject vendorJSONObject =  vendorsJSONArray.getJSONObject(vendorIndex);
+                JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
                 vendorList.add(new Vendor(vendorJSONObject));
             }
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException(e);
-        }
-        catch (UnirestException e)
+        } catch (UnirestException e)
         {
             throw new EvercamException(e);
         }
@@ -100,12 +99,10 @@ public class Model extends EvercamObject {
             HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + modelId).header("accept", "application/json").asJson();
             JSONObject modelJSONObject = response.getBody().getObject().getJSONArray("models").getJSONObject(0);
             model = new Model(modelJSONObject);
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException(e);
-        }
-        catch (UnirestException e)
+        } catch (UnirestException e)
         {
             throw new EvercamException(e);
         }

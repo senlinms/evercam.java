@@ -30,7 +30,7 @@ public class Vendor extends EvercamObject
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
-       return getVendors(URL_VENDORS + '/' + mac);
+        return getVendors(URL_VENDORS + '/' + mac);
     }
 
     public String getId() throws EvercamException
@@ -50,7 +50,7 @@ public class Vendor extends EvercamObject
         try
         {
             JSONArray modelsJSONArray = jsonObject.getJSONArray("models");
-            for(int i = 0; i< modelsJSONArray.length(); i++)
+            for (int i = 0; i < modelsJSONArray.length(); i++)
             {
                 models.add(i, modelsJSONArray.getString(i));
             }
@@ -90,7 +90,7 @@ public class Vendor extends EvercamObject
         try
         {
             JSONArray knownMacJSONArray = jsonObject.getJSONArray("known_macs");
-            for(int arrayIndex = 0; arrayIndex< knownMacJSONArray.length(); arrayIndex++)
+            for (int arrayIndex = 0; arrayIndex < knownMacJSONArray.length(); arrayIndex++)
             {
                 knownMacs.add(arrayIndex, knownMacJSONArray.getString(arrayIndex));
             }
@@ -112,18 +112,16 @@ public class Vendor extends EvercamObject
             try
             {
                 JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
-                for(int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
+                for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
                 {
-                    JSONObject vendorJSONObject =  vendorsJSONArray.getJSONObject(vendorIndex);
+                    JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
                     vendorList.add(new Vendor(vendorJSONObject));
                 }
-            }
-            catch (JSONException e)
+            } catch (JSONException e)
             {
                 throw new EvercamException(e);
             }
-        }
-        catch (UnirestException e)
+        } catch (UnirestException e)
         {
             throw new EvercamException(e);
         }

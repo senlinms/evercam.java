@@ -1,6 +1,7 @@
 package io.evercam;
 
-public abstract class API {
+public abstract class API
+{
     public static String VERSION = "v1";
     public static String URL = "https://api.evercam.io/" + VERSION + "/";
 
@@ -19,7 +20,7 @@ public abstract class API {
 
     public static boolean isAuth()
     {
-        if(!(auth[0]==null || auth[1]==null))
+        if (!(auth[0] == null || auth[1] == null))
         {
             return true;
         }

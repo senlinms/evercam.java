@@ -12,7 +12,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 public class CameraTest
@@ -51,7 +52,7 @@ public class CameraTest
         CameraDetail cameraDetail = new CameraDetail();
         cameraDetail.setId("fail");
         cameraDetail.setName("name");
-        cameraDetail.setBasicAuth("user1","abcde");
+        cameraDetail.setBasicAuth("user1", "abcde");
         cameraDetail.setSnapshotJPG("/jpg");
         cameraDetail.setEndpoints(new String[]{"http://127.0.0.1:8080"});
         cameraDetail.setPublic(true);
