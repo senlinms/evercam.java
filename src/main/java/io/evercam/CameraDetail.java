@@ -7,13 +7,17 @@ public class CameraDetail
     private String vendor;
     private String model;
     private String timezone;
-    private boolean isPublic;
+    private Boolean isPublic;
     private String snapshotJPG;
     private String[] endpoints;
     private String[] basicAuth;
 
-    public String getId()
+    public String getId() throws EvercamException
     {
+        if(id == null)
+        {
+            throw new EvercamException("camera id required");
+        }
         return id;
     }
 
@@ -22,8 +26,12 @@ public class CameraDetail
         this.id = id;
     }
 
-    public String getName()
+    public String getName() throws EvercamException
     {
+        if(name == null)
+        {
+            throw new EvercamException("camera name required");
+        }
         return name;
     }
 
@@ -32,8 +40,12 @@ public class CameraDetail
         this.name = name;
     }
 
-    public boolean isPublic()
+    public boolean isPublic() throws EvercamException
     {
+        if(isPublic ==null)
+        {
+            throw new EvercamException("camera public/private required");
+        }
         return isPublic;
     }
 
@@ -42,8 +54,12 @@ public class CameraDetail
         this.isPublic = isPublic;
     }
 
-    public String getSnapshotJPG()
+    public String getSnapshotJPG() throws EvercamException
     {
+        if(snapshotJPG == null)
+        {
+            throw new EvercamException("snapshot jpg required");
+        }
         return snapshotJPG;
     }
 
@@ -52,8 +68,12 @@ public class CameraDetail
         this.snapshotJPG = snapshotJPG;
     }
 
-    public String[] getEndpoints()
+    public String[] getEndpoints() throws EvercamException
     {
+        if(endpoints == null)
+        {
+            throw new EvercamException("endpoints required");
+        }
         return endpoints;
     }
 
@@ -62,14 +82,22 @@ public class CameraDetail
         this.endpoints = endpoints;
     }
 
-    public String[] getBasicAuth()
+    public String[] getBasicAuth() throws EvercamException
     {
+        if(basicAuth==null)
+        {
+            throw new EvercamException("basic auth required");
+        }
+        else if (basicAuth[0]==null || basicAuth[1]==null)
+        {
+            throw new EvercamException("basic auth required");
+        }
         return basicAuth;
     }
 
-    public void setBasicAuth(String[] basicAuth)
+    public void setBasicAuth(String username, String password)
     {
-        this.basicAuth = basicAuth;
+        this.basicAuth = new String[] {username, password};
     }
 
     public String getVendor()
@@ -92,7 +120,7 @@ public class CameraDetail
         this.model = model;
     }
 
-    public String getTimezone()
+    public String getTimezone() throws EvercamException
     {
         return timezone;
     }

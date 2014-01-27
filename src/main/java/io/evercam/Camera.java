@@ -4,11 +4,17 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.http.Header;
+import org.apache.http.HttpRequest;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.AuthPolicy;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -22,6 +28,9 @@ import java.util.ArrayList;
 
 public class Camera extends EvercamObject {
     static String URL = API.URL + "cameras";
+    static final int CODE_CREATE = 201;
+    static final int CODE_UNAUTHORISED = 401;
+    static final int CODE_ERROR = 400;
 
     Camera(JSONObject cameraJSONObject)
     {
@@ -38,23 +47,40 @@ public class Camera extends EvercamObject {
             JSONObject cameraJSONObject = buildCameraJSONObject(cameraDetail) ;
             DefaultHttpClient c = new DefaultHttpClient();
             c.getCredentialsProvider().setCredentials(
-                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+                    new AuthScope(AuthScope.ANY),
                     new UsernamePasswordCredentials(API.getAuth()[0], API.getAuth()[1]));
             HttpPost post = new HttpPost(URL);
             post.setHeader("Content-type", "application/json");
             post.setEntity(new StringEntity(cameraJSONObject.toString()));
             org.apache.http.HttpResponse r = c.execute(post);
-            JsonNode jsonNode = new JsonNode(EntityUtils.toString(r.getEntity()));
-            JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
-            return new Camera(jsonObject);
-
-        } catch (JSONException e)
+            String result =  EntityUtils.toString(r.getEntity());
+            if(r.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
+            {
+                System.out.print(result);
+                throw new EvercamException("Invalid auth");
+            }
+            else if(r.getStatusLine().getStatusCode() == CODE_ERROR)
+            {
+                JsonNode jsonNode = new JsonNode(result);
+                String message = jsonNode.getObject().getString("message");
+                throw new EvercamException(message);
+            }
+            else if (r.getStatusLine().getStatusCode() == CODE_CREATE)
+            {
+                JsonNode jsonNode = new JsonNode(result);
+                JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
+                return new Camera(jsonObject);
+            }
+        }
+        catch (JSONException e)
         {
             throw new EvercamException(e);
-        } catch (ClientProtocolException e)
+        }
+        catch (ClientProtocolException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -281,23 +307,34 @@ public class Camera extends EvercamObject {
         return  endpoint + snapshot;
     }
 
-    private static JSONObject buildCameraJSONObject(CameraDetail cameraDetail) throws JSONException
+    private static JSONObject buildCameraJSONObject(CameraDetail cameraDetail) throws JSONException, EvercamException
     {
         JSONObject cameraJSONObject = new JSONObject();
         JSONObject authJSONObject = new JSONObject();
         JSONObject basicJSONObject = new JSONObject();
         JSONObject snapshotJSONObject = new JSONObject();
+
+
         snapshotJSONObject.put("jpg", cameraDetail.getSnapshotJPG());
         basicJSONObject.put("username", cameraDetail.getBasicAuth()[0]);
         basicJSONObject.put("password", cameraDetail.getBasicAuth()[1]);
         authJSONObject.put("basic",basicJSONObject);
-
         cameraJSONObject.put("id", cameraDetail.getId());
         cameraJSONObject.put("name", cameraDetail.getName());
+
+        if(cameraDetail.getModel()!=null)
+        {
         cameraJSONObject.put("model", cameraDetail.getModel());
+        }
+        if(cameraDetail.getVendor()!=null)
+        {
         cameraJSONObject.put("vendor",cameraDetail.getVendor());
+        }
+        if(cameraDetail.getTimezone() !=null)
+        {
         cameraJSONObject.put("timezone",cameraDetail.getTimezone());
-        cameraJSONObject.put("is_public", true);
+        }
+        cameraJSONObject.put("is_public", cameraDetail.isPublic());
         cameraJSONObject.put("snapshots", snapshotJSONObject);
         cameraJSONObject.put("endpoints", cameraDetail.getEndpoints());
         cameraJSONObject.put("auth",authJSONObject);
