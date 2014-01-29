@@ -43,6 +43,7 @@ public class Camera extends EvercamObject
                 DefaultHttpClient c = new DefaultHttpClient();
                 HttpPost post = new HttpPost(URL);
                 post.setHeader("Content-type", "application/json");
+                post.setHeader("Accept", "application/json");
                 post.setEntity(new StringEntity(cameraJSONObject.toString()));
                 String encoding = Base64Coder.encodeString(API.getAuth()[0] + ":" + API.getAuth()[1]);
                 post.setHeader("Authorization", "Basic " + encoding);
@@ -302,6 +303,11 @@ public class Camera extends EvercamObject
         JSONObject authJSONObject = new JSONObject();
         JSONObject basicJSONObject = new JSONObject();
         JSONObject snapshotJSONObject = new JSONObject();
+        JSONArray endpointArray = new JSONArray();
+        for(int i=0; i<cameraDetail.getEndpoints().length;i++)
+        {
+            endpointArray.put(i,cameraDetail.getEndpoints()[i]);
+        }
         snapshotJSONObject.put("jpg", cameraDetail.getSnapshotJPG());
         basicJSONObject.put("username", cameraDetail.getBasicAuth()[0]);
         basicJSONObject.put("password", cameraDetail.getBasicAuth()[1]);
@@ -322,7 +328,7 @@ public class Camera extends EvercamObject
         }
         cameraJSONObject.put("is_public", cameraDetail.isPublic());
         cameraJSONObject.put("snapshots", snapshotJSONObject);
-        cameraJSONObject.put("endpoints", cameraDetail.getEndpoints());
+        cameraJSONObject.put("endpoints", endpointArray);
         cameraJSONObject.put("auth", authJSONObject);
 
         return cameraJSONObject;
