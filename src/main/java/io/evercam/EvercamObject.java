@@ -6,7 +6,10 @@ import org.json.JSONObject;
 
 public abstract class EvercamObject
 {
-
+    static final int CODE_CREATE = 201;
+    static final int CODE_UNAUTHORISED = 401;
+    static final int CODE_ERROR = 400;
+    static final int CODE_SERVER_ERROR = 500;
     JSONObject jsonObject;
 
     @Override
