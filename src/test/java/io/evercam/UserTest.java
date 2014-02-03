@@ -2,7 +2,9 @@ package io.evercam;
 
 import org.json.JSONException;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,21 +21,52 @@ public class UserTest
         API.URL = TestURL.URL;
     }
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void testCreateUser() throws EvercamException, JSONException
     {
-        Map<String, Object> userMap = new HashMap<String, Object>();
-        userMap.put("forename", "Joe");
-        userMap.put("lastname", "Bloggs");
-        userMap.put("email", "joe.bloggs@example.org");
-        userMap.put("username", "joeyb");
-        userMap.put("country", "us");
-        User user = User.create(userMap);
+        UserDetail detail = new UserDetail();
+        detail.setFirstname("Joe");
+        detail.setLastname("Bloggs");
+        detail.setCountrycode("us");
+        detail.setEmail("joe.bloggs@example.org");
+        detail.setUsername("joeyb");
+        User user = User.create(detail);
         assertEquals("Joe", user.getForename());
         assertEquals("Bloggs", user.getLastname());
         assertEquals("joe.bloggs@example.org", user.getEmail());
         assertEquals("joeyb", user.getId());
         assertEquals("us", user.getCountry());
+    }
+
+    @Test
+    public void testUserExists() throws EvercamException
+    {
+        UserDetail detail = new UserDetail();
+        detail.setFirstname("Joe");
+        detail.setLastname("Bloggs");
+        detail.setCountrycode("us");
+        detail.setEmail("joe.bloggs@example.org");
+        detail.setUsername("fail");
+        exception.expect(EvercamException.class);
+        User.create(detail);
+    }
+
+    @Test
+    public void testMissingUserDetail() throws EvercamException
+    {
+        UserDetail detail = new UserDetail();
+
+        exception.expect(EvercamException.class);
+        User.create(detail);
+
+        detail.setFirstname("Joe");
+        detail.setLastname("Bloggs");
+        detail.setCountrycode("us");
+        detail.setEmail("joe.bloggs@example.org");
+        detail.setUsername("fail");
     }
 
     @Test

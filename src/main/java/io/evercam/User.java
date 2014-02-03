@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class User extends EvercamObject
@@ -47,14 +48,28 @@ public class User extends EvercamObject
         this.jsonObject = userJSONObject;
     }
 
-    public static User create(Map<String, Object> params) throws EvercamException
+    public static User create(UserDetail userDetail) throws EvercamException
     {
-        User user;
+        User user = null;
+        Map<String, Object> userMap = new HashMap<String, Object>();
+        userMap.put("forename", userDetail.getFirstname());
+        userMap.put("lastname", userDetail.getLastname());
+        userMap.put("email", userDetail.getEmail());
+        userMap.put("username", userDetail.getUsername());
+        userMap.put("country", userDetail.getCountrycode());
         try
         {
-            HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(params).field("parameter", "value").asJson();
-            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
-            user = new User(userJSONObject);
+            HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(userMap).field("parameter", "value").asJson();
+            if(response.getCode() == CODE_CREATE)
+            {
+                JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
+                user = new User(userJSONObject);
+            }
+            else if(response.getCode() == CODE_ERROR)
+            {
+                String message = response.getBody().getObject().getJSONArray("message").toString();
+                throw new EvercamException(message);
+            }
         } catch (JSONException e)
         {
             throw new EvercamException(e);
