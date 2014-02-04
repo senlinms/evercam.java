@@ -23,6 +23,11 @@ public class Vendor extends EvercamObject
         this.jsonObject = vendorJSONObject;
     }
 
+    public static Vendor getById(String vendorId) throws EvercamException
+    {
+        return Model.getByVendor(vendorId).get(0);
+    }
+
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
         return getVendors(URL_VENDORS);

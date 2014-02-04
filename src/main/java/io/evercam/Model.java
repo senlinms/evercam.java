@@ -64,9 +64,33 @@ public class Model extends EvercamObject
         return getModels(URL);
     }
 
-    public static ArrayList<Vendor> getByVendor(String vendorId) throws EvercamException
+    protected static ArrayList<Vendor> getByVendor(String vendorId) throws EvercamException
     {
-        return getModels(URL + '/' + vendorId);
+        ArrayList<Vendor> vendorList = new ArrayList<Vendor>();
+        try
+        {
+            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId).header("accept", "application/json").asJson();
+            if(response.getCode() == CODE_NOT_FOUND)
+            {
+                throw new EvercamException("model vendor not found");
+            }
+            else if (response.getCode() == CODE_OK)
+            {
+                JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
+                for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
+                {
+                   JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
+                   vendorList.add(new Vendor(vendorJSONObject));
+                }
+            }
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        } catch (UnirestException e)
+        {
+            throw new EvercamException(e);
+        }
+        return vendorList;
     }
 
     public static ArrayList<Vendor> getModels(String url) throws EvercamException

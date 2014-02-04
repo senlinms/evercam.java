@@ -35,6 +35,13 @@ public class VendorTest
     }
 
     @Test
+    public void testGetById() throws EvercamException
+    {
+        Vendor vendor = Vendor.getById("testid");
+        assertEquals("testid", vendor.getId());
+    }
+
+    @Test
     public void testGetByMac() throws EvercamException
     {
         assertEquals(1, Vendor.getByMac(TEST_VENDOR_MAC).size());

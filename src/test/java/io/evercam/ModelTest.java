@@ -26,14 +26,14 @@ public class ModelTest
         assertEquals(4, models.size());
     }
 
-    @Test
-    public void testGetByVendor() throws EvercamException
-    {
-        ArrayList<Vendor> vendors = Model.getByVendor("testid");
-        assertEquals(1, vendors.size());
-        ArrayList<String> models = vendors.get(0).getModels();
-        assertEquals(4, models.size());
-    }
+//    @Test
+//    public void testGetByVendor() throws EvercamException
+//    {
+//        ArrayList<Vendor> vendors = Model.getByVendor("testid");
+//        assertEquals(1, vendors.size());
+//        ArrayList<String> models = vendors.get(0).getModels();
+//        assertEquals(4, models.size());
+//    }
 
     @Test
     public void testGetByModel() throws EvercamException
