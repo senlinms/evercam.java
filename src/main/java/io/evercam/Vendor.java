@@ -99,12 +99,21 @@ public class Vendor extends EvercamObject
             {
                 knownMacs.add(arrayIndex, knownMacJSONArray.getString(arrayIndex));
             }
-
         } catch (JSONException e)
         {
             throw new EvercamException(e);
         }
         return knownMacs;
+    }
+
+    public Model getModel(String modelName) throws EvercamException
+    {
+         return Model.getByModel(getId() , modelName);
+    }
+
+    public static ArrayList<Vendor> getSupportedVendors() throws EvercamException
+    {
+        return Model.getAll();
     }
 
     private static ArrayList<Vendor> getVendors(String url) throws EvercamException

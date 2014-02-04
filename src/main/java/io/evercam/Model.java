@@ -59,7 +59,21 @@ public class Model extends EvercamObject
         return models;
     }
 
-    public static ArrayList<Vendor> getAll() throws EvercamException
+    public Defaults getDefaults() throws EvercamException
+    {
+        Defaults defaults;
+        try
+        {
+            JSONObject defaultsJSONObject = jsonObject.getJSONObject("defaults");
+            defaults = new Defaults(defaultsJSONObject);
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        return defaults;
+    }
+
+    protected static ArrayList<Vendor> getAll() throws EvercamException
     {
         return getModels(URL);
     }
@@ -93,7 +107,7 @@ public class Model extends EvercamObject
         return vendorList;
     }
 
-    public static ArrayList<Vendor> getModels(String url) throws EvercamException
+    private static ArrayList<Vendor> getModels(String url) throws EvercamException
     {
         ArrayList<Vendor> vendorList = new ArrayList<Vendor>();
         try
@@ -115,7 +129,7 @@ public class Model extends EvercamObject
         return vendorList;
     }
 
-    public static Model getByModel(String vendorId, String modelId) throws EvercamException
+    protected static Model getByModel(String vendorId, String modelId) throws EvercamException
     {
         Model model;
         try
