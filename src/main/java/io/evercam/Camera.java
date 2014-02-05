@@ -217,6 +217,17 @@ public class Camera extends EvercamObject
         }
     }
 
+    public String getMacAddress() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("mac_address");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
     public String isOnline() throws EvercamException
     {
         try
@@ -321,6 +332,10 @@ public class Camera extends EvercamObject
         if (cameraDetail.getTimezone() != null)
         {
             cameraJSONObject.put("timezone", cameraDetail.getTimezone());
+        }
+        if (cameraDetail.getMacAddress() != null)
+        {
+            cameraJSONObject.put("mac_address", cameraDetail.getMacAddress());
         }
         cameraJSONObject.put("is_public", cameraDetail.isPublic());
         cameraJSONObject.put("snapshots", snapshotJSONObject);

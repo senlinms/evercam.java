@@ -8,6 +8,7 @@ public class CameraDetail
     private String model;
     private String timezone;
     private Boolean isPublic;
+    private String macAddress;
     private String snapshotJPG;
     private String[] endpoints;
     private String[] basicAuth;
@@ -128,5 +129,15 @@ public class CameraDetail
     public void setTimezone(String timezone)
     {
         this.timezone = timezone;
+    }
+
+    public String getMacAddress()
+    {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macaddress)
+    {
+        this.macAddress = macaddress;
     }
 }

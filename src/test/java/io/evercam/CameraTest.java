@@ -79,12 +79,12 @@ public class CameraTest
         assertEquals("null", camera.getModel());
         assertEquals("Etc/UTC", camera.getTimezone());
         assertEquals("null", camera.isOnline());
+        assertEquals("null", camera.getMacAddress());
 
         API.setAuth("joeyb", "12345");
         Camera cameraPrivate = Camera.getById("privatecamera");
         assertFalse(cameraPrivate.isPublic());
         assertEquals("privatecamera", cameraPrivate.getId());
-
     }
 
     @Test
@@ -106,7 +106,6 @@ public class CameraTest
         {
             size = is.available();
             buf = new byte[size];
-            len = is.read(buf, 0, size);
         }
         else
         {
