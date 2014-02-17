@@ -2,7 +2,7 @@ package io.evercam;
 
 import javafx.util.Builder;
 
-public class PatchCameraBuilder implements Builder<PatchCamera>
+public class PatchCameraBuilder implements Builder<CameraDetail>
 {
     final String id;
     Boolean isPublic;
@@ -15,9 +15,16 @@ public class PatchCameraBuilder implements Builder<PatchCamera>
     String[] endpoints;
     String[] basicAuth;
 
-    PatchCameraBuilder(String cameraId)
+    PatchCameraBuilder(String cameraId) throws EvercamException
     {
-        id = cameraId;
+        if(cameraId!=null)
+        {
+            id = cameraId;
+        }
+        else
+        {
+            throw new EvercamException("camera id can not be null");
+        }
     }
 
     public PatchCameraBuilder setName(String cameraName)
@@ -44,9 +51,9 @@ public class PatchCameraBuilder implements Builder<PatchCamera>
         return this;
     }
 
-    public PatchCameraBuilder setBasicAuth(String[] basicAuth)
+    public PatchCameraBuilder setBasicAuth(String username, String password)
     {
-        this.basicAuth = basicAuth;
+        this.basicAuth = new String[] {username, password};
         return this;
     }
 
@@ -75,8 +82,8 @@ public class PatchCameraBuilder implements Builder<PatchCamera>
     }
 
     @Override
-    public PatchCamera build()
+    public CameraDetail build()
     {
-        return new PatchCamera(this);
+        return new CameraDetail(this);
     }
 }

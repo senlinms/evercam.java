@@ -36,7 +36,7 @@ public class Camera extends EvercamObject
         {
             try
             {
-                JSONObject cameraJSONObject = buildCameraJSONObject(cameraDetail);
+                JSONObject cameraJSONObject = buildPatchJSONObject(cameraDetail);
                 DefaultHttpClient c = new DefaultHttpClient();
                 HttpPost post = new HttpPost(URL);
                 post.setHeader("Content-type", "application/json");
@@ -84,17 +84,17 @@ public class Camera extends EvercamObject
         return camera;
     }
 
-    public static Camera patch(PatchCamera patchCamera) throws EvercamException
+    public static Camera patch(CameraDetail cameraDetail) throws EvercamException
     {
         Camera camera = null;
         if (API.isAuth())
         {
             try
             {
-                JSONObject cameraJSONObject = buildPatchJSONObject(patchCamera);
+                JSONObject cameraJSONObject = buildPatchJSONObject(cameraDetail);
                 System.out.print(cameraJSONObject.toString());
                 DefaultHttpClient c = new DefaultHttpClient();
-                HttpPatch patch = new HttpPatch(URL + '/' + patchCamera.id);
+                HttpPatch patch = new HttpPatch(URL + '/' + cameraDetail.id);
                 patch.setHeader("Content-type", "application/json");
                 patch.setHeader("Accept", "application/json");
                 patch.setEntity(new StringEntity(cameraJSONObject.toString()));
@@ -361,102 +361,57 @@ public class Camera extends EvercamObject
         return endpoint + snapshot;
     }
 
-    private static JSONObject buildCameraJSONObject(CameraDetail cameraDetail) throws JSONException, EvercamException
+    private static JSONObject buildPatchJSONObject(CameraDetail cameraDetail) throws JSONException
     {
         JSONObject cameraJSONObject = new JSONObject();
         JSONObject authJSONObject = new JSONObject();
         JSONObject basicJSONObject = new JSONObject();
         JSONObject snapshotJSONObject = new JSONObject();
         JSONArray endpointArray = new JSONArray();
-        for(int i=0; i<cameraDetail.getEndpoints().length;i++)
+        cameraJSONObject.put("id", cameraDetail.id);
+        if(cameraDetail.endpoints != null)
         {
-            endpointArray.put(i,cameraDetail.getEndpoints()[i]);
-        }
-        snapshotJSONObject.put("jpg", cameraDetail.getSnapshotJPG());
-        basicJSONObject.put("username", cameraDetail.getBasicAuth()[0]);
-        basicJSONObject.put("password", cameraDetail.getBasicAuth()[1]);
-        authJSONObject.put("basic", basicJSONObject);
-        cameraJSONObject.put("id", cameraDetail.getId());
-        cameraJSONObject.put("name", cameraDetail.getName());
-        if (cameraDetail.getModel() != null)
+        for(int i=0; i< cameraDetail.endpoints.length;i++)
         {
-            cameraJSONObject.put("model", cameraDetail.getModel());
-        }
-        if (cameraDetail.getVendor() != null)
-        {
-            cameraJSONObject.put("vendor", cameraDetail.getVendor());
-        }
-        if (cameraDetail.getTimezone() != null)
-        {
-            cameraJSONObject.put("timezone", cameraDetail.getTimezone());
-        }
-        if (cameraDetail.getMacAddress() != null)
-        {
-            cameraJSONObject.put("mac_address", cameraDetail.getMacAddress());
-        }
-        cameraJSONObject.put("is_public", cameraDetail.isPublic());
-
-        if(cameraDetail.getSnapshotJPG() != null)
-        {
-            cameraJSONObject.put("snapshots", snapshotJSONObject);
-        }
-        cameraJSONObject.put("endpoints", endpointArray);
-        cameraJSONObject.put("auth", authJSONObject);
-
-        return cameraJSONObject;
-    }
-
-    private static JSONObject buildPatchJSONObject(PatchCamera patchCamera) throws JSONException
-    {
-        JSONObject cameraJSONObject = new JSONObject();
-        JSONObject authJSONObject = new JSONObject();
-        JSONObject basicJSONObject = new JSONObject();
-        JSONObject snapshotJSONObject = new JSONObject();
-        JSONArray endpointArray = new JSONArray();
-        if(patchCamera.endpoints != null)
-        {
-        for(int i=0; i<patchCamera.endpoints.length;i++)
-        {
-            endpointArray.put(i,patchCamera.endpoints[i]);
+            endpointArray.put(i, cameraDetail.endpoints[i]);
         }
             cameraJSONObject.put("endpoints", endpointArray);
         }
-        if(patchCamera.snapshotJPG != null)
+        if(cameraDetail.snapshotJPG != null)
         {
-            snapshotJSONObject.put("jpg", patchCamera.snapshotJPG);
+            snapshotJSONObject.put("jpg", cameraDetail.snapshotJPG);
             cameraJSONObject.put("snapshots", snapshotJSONObject);
         }
-        if(patchCamera.isPublic != null)
+        if(cameraDetail.isPublic != null)
         {
-            cameraJSONObject.put("is_public", patchCamera.isPublic);
+            cameraJSONObject.put("is_public", cameraDetail.isPublic);
         }
-        if(patchCamera.basicAuth != null)
+        if(cameraDetail.basicAuth != null)
         {
-            basicJSONObject.put("username", patchCamera.basicAuth[0]);
-            basicJSONObject.put("password", patchCamera.basicAuth[1]);
+            basicJSONObject.put("username", cameraDetail.basicAuth[0]);
+            basicJSONObject.put("password", cameraDetail.basicAuth[1]);
             authJSONObject.put("basic", basicJSONObject);
             cameraJSONObject.put("auth", authJSONObject);
         }
-        cameraJSONObject.put("id", patchCamera.id);
-        if(patchCamera.name != null)
+        if(cameraDetail.name != null)
         {
-        cameraJSONObject.put("name", patchCamera.name);
+        cameraJSONObject.put("name", cameraDetail.name);
         }
-        if (patchCamera.model != null)
+        if (cameraDetail.model != null)
         {
-            cameraJSONObject.put("model", patchCamera.model);
+            cameraJSONObject.put("model", cameraDetail.model);
         }
-        if (patchCamera.vendor != null)
+        if (cameraDetail.vendor != null)
         {
-            cameraJSONObject.put("vendor", patchCamera.vendor);
+            cameraJSONObject.put("vendor", cameraDetail.vendor);
         }
-        if (patchCamera.timezone != null)
+        if (cameraDetail.timezone != null)
         {
-            cameraJSONObject.put("timezone", patchCamera.timezone);
+            cameraJSONObject.put("timezone", cameraDetail.timezone);
         }
-        if (patchCamera.macAddress != null)
+        if (cameraDetail.macAddress != null)
         {
-            cameraJSONObject.put("mac_address", patchCamera.macAddress);
+            cameraJSONObject.put("mac_address", cameraDetail.macAddress);
         }
 
         return cameraJSONObject;
