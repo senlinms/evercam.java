@@ -395,7 +395,11 @@ public class Camera extends EvercamObject
             cameraJSONObject.put("mac_address", cameraDetail.getMacAddress());
         }
         cameraJSONObject.put("is_public", cameraDetail.isPublic());
-        cameraJSONObject.put("snapshots", snapshotJSONObject);
+
+        if(cameraDetail.getSnapshotJPG() != null)
+        {
+            cameraJSONObject.put("snapshots", snapshotJSONObject);
+        }
         cameraJSONObject.put("endpoints", endpointArray);
         cameraJSONObject.put("auth", authJSONObject);
 

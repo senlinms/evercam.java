@@ -57,10 +57,6 @@ public class CameraDetail
 
     protected String getSnapshotJPG() throws EvercamException
     {
-        if (snapshotJPG == null)
-        {
-            throw new EvercamException("snapshot jpg required");
-        }
         return snapshotJPG;
     }
 
