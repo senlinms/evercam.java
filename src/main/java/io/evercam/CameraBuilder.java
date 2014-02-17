@@ -1,8 +1,6 @@
 package io.evercam;
 
-import javafx.util.Builder;
-
-public class CameraBuilder implements Builder<CameraDetail>
+public class CameraBuilder
 {
     final String id;
     final Boolean isPublic;
@@ -16,7 +14,7 @@ public class CameraBuilder implements Builder<CameraDetail>
     String snapshotJPG;
     String[] basicAuth;
 
-    CameraBuilder(String cameraId, String cameraName, Boolean isPublic, String[] endpoints) throws EvercamException
+    public CameraBuilder(String cameraId, String cameraName, Boolean isPublic, String[] endpoints) throws EvercamException
     {
         if(cameraId!=null)
         {
@@ -88,7 +86,6 @@ public class CameraBuilder implements Builder<CameraDetail>
         return this;
     }
 
-    @Override
     public CameraDetail build()
     {
         return new CameraDetail(this);

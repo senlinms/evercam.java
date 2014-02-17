@@ -1,9 +1,9 @@
 package io.evercam;
 
 
-class CameraDetail
+public class CameraDetail
 {
-    String id;
+    public String id;
     String name;
     Boolean isPublic;
     String vendor;
@@ -14,7 +14,7 @@ class CameraDetail
     String[] endpoints;
     String[] basicAuth;
 
-    CameraDetail(PatchCameraBuilder builder)
+    public CameraDetail(PatchCameraBuilder builder)
     {
         id = builder.id;
         name = builder.name;
@@ -28,7 +28,7 @@ class CameraDetail
         basicAuth = builder.basicAuth;
     }
 
-    CameraDetail(CameraBuilder builder)
+    public CameraDetail(CameraBuilder builder)
     {
         id = builder.id;
         name = builder.name;

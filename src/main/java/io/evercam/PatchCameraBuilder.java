@@ -1,8 +1,6 @@
 package io.evercam;
 
-import javafx.util.Builder;
-
-public class PatchCameraBuilder implements Builder<CameraDetail>
+public class PatchCameraBuilder
 {
     final String id;
     Boolean isPublic;
@@ -15,7 +13,7 @@ public class PatchCameraBuilder implements Builder<CameraDetail>
     String[] endpoints;
     String[] basicAuth;
 
-    PatchCameraBuilder(String cameraId) throws EvercamException
+    public PatchCameraBuilder(String cameraId) throws EvercamException
     {
         if(cameraId!=null)
         {
@@ -81,7 +79,6 @@ public class PatchCameraBuilder implements Builder<CameraDetail>
         return this;
     }
 
-    @Override
     public CameraDetail build()
     {
         return new CameraDetail(this);
