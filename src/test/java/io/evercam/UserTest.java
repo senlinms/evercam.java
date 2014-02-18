@@ -38,7 +38,22 @@ public class UserTest
         assertEquals("Bloggs", user.getLastname());
         assertEquals("joe.bloggs@example.org", user.getEmail());
         assertEquals("joeyb", user.getId());
+        assertEquals("joeyb",user.getUsername());
         assertEquals("us", user.getCountry());
+    }
+
+    @Test
+    public void testGetUser() throws EvercamException
+    {
+        API.setAuth("joeyb", "12345");
+        User user = new User("joeyb");
+        assertEquals("Joe", user.getForename());
+        assertEquals("Bloggs", user.getLastname());
+        assertEquals("joe.bloggs@example.org", user.getEmail());
+        assertEquals("joeyb", user.getId());
+        assertEquals("joeyb",user.getUsername());
+        assertEquals("us", user.getCountry());
+        API.setAuth(null, null);
     }
 
     @Test

@@ -17,35 +17,108 @@ public class User extends EvercamObject
 
     private static String URL = API.URL + "users";
 
-    public String getCountry() throws JSONException
+    public String getCountry() throws EvercamException
     {
-        return jsonObject.getString("country");
+        try
+        {
+            return jsonObject.getString("country");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
     }
 
-    public String getId() throws JSONException
+    public String getId() throws EvercamException
     {
-        return jsonObject.getString("id");
+        try
+        {
+            return jsonObject.getString("id");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
     }
 
-    public String getEmail() throws JSONException
+    public String getEmail() throws EvercamException
     {
-        return jsonObject.getString("email");
+        try
+        {
+            return jsonObject.getString("email");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
     }
 
-    public String getLastname() throws JSONException
+    public String getLastname() throws EvercamException
     {
-        return jsonObject.getString("lastname");
+        try
+        {
+            return jsonObject.getString("lastname");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
     }
 
 
-    public String getForename() throws JSONException
+    public String getForename() throws EvercamException
     {
-        return jsonObject.getString("forename");
+        try
+        {
+            return jsonObject.getString("forename");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getUsername() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("username");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
     }
 
     User(JSONObject userJSONObject)
     {
         this.jsonObject = userJSONObject;
+    }
+
+    public User(String id) throws EvercamException
+    {
+        if(API.isAuth())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                if(response.getCode() == CODE_OK)
+                {
+                    JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
+                    this.jsonObject = userJSONObject;
+                }
+                else if(response.getCode() == CODE_UNAUTHORISED)
+                {
+                    throw new EvercamException("Invalid auth");
+                }
+            }
+            catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            throw new EvercamException("Authentication required to access user info");
+        }
     }
 
     public static User create(UserDetail userDetail) throws EvercamException
