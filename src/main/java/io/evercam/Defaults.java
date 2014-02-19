@@ -15,8 +15,7 @@ public class Defaults extends EvercamObject
         try
         {
             return jsonObject.getJSONObject("snapshots").getString("jpg");
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException(e);
         }

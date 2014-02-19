@@ -37,32 +37,32 @@ public class Camera extends EvercamObject
             try
             {
                 JSONObject cameraJSONObject = buildPatchJSONObject(cameraDetail);
-                DefaultHttpClient c = new DefaultHttpClient();
+                DefaultHttpClient client = new DefaultHttpClient();
                 HttpPost post = new HttpPost(URL);
                 post.setHeader("Content-type", "application/json");
                 post.setHeader("Accept", "application/json");
                 post.setEntity(new StringEntity(cameraJSONObject.toString()));
                 String encoding = Base64Coder.encodeString(API.getAuth()[0] + ":" + API.getAuth()[1]);
                 post.setHeader("Authorization", "Basic " + encoding);
-                org.apache.http.HttpResponse r = c.execute(post);
-                String result = EntityUtils.toString(r.getEntity());
-                if (r.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
+                org.apache.http.HttpResponse response = client.execute(post);
+                String result = EntityUtils.toString(response.getEntity());
+                if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException("Invalid auth");
                 }
-                else if (r.getStatusLine().getStatusCode() == CODE_ERROR)
+                else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     String message = jsonNode.getObject().getString("message");
                     throw new EvercamException(message);
                 }
-                else if (r.getStatusLine().getStatusCode() == CODE_CREATE)
+                else if (response.getStatusLine().getStatusCode() == CODE_CREATE)
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
                     return new Camera(jsonObject);
                 }
-                else if (r.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
+                else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException("Internal server error");
                 }
@@ -92,33 +92,32 @@ public class Camera extends EvercamObject
             try
             {
                 JSONObject cameraJSONObject = buildPatchJSONObject(cameraDetail);
-                System.out.print(cameraJSONObject.toString());
-                DefaultHttpClient c = new DefaultHttpClient();
+                DefaultHttpClient client = new DefaultHttpClient();
                 HttpPatch patch = new HttpPatch(URL + '/' + cameraDetail.id);
                 patch.setHeader("Content-type", "application/json");
                 patch.setHeader("Accept", "application/json");
                 patch.setEntity(new StringEntity(cameraJSONObject.toString()));
                 String encoding = Base64Coder.encodeString(API.getAuth()[0] + ":" + API.getAuth()[1]);
                 patch.setHeader("Authorization", "Basic " + encoding);
-                org.apache.http.HttpResponse r = c.execute(patch);
-                String result = EntityUtils.toString(r.getEntity());
-                if (r.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
+                org.apache.http.HttpResponse response = client.execute(patch);
+                String result = EntityUtils.toString(response.getEntity());
+                if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException("Invalid auth");
                 }
-                else if (r.getStatusLine().getStatusCode() == CODE_ERROR)
+                else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     String message = jsonNode.getObject().getString("message");
                     throw new EvercamException(message);
                 }
-                else if (r.getStatusLine().getStatusCode() == CODE_OK)
+                else if (response.getStatusLine().getStatusCode() == CODE_OK)
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
                     return new Camera(jsonObject);
                 }
-                else if (r.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
+                else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException("Internal server error");
                 }
@@ -172,9 +171,9 @@ public class Camera extends EvercamObject
         try
         {
             JSONArray endpointJSONArray = jsonObject.getJSONArray("endpoints");
-            for (int i = 0; i < endpointJSONArray.length(); i++)
+            for (int count = 0; count < endpointJSONArray.length(); count++)
             {
-                endpoints.add(endpointJSONArray.getString(i));
+                endpoints.add(endpointJSONArray.getString(count));
             }
         } catch (JSONException e)
         {
@@ -369,33 +368,33 @@ public class Camera extends EvercamObject
         JSONObject snapshotJSONObject = new JSONObject();
         JSONArray endpointArray = new JSONArray();
         cameraJSONObject.put("id", cameraDetail.id);
-        if(cameraDetail.endpoints != null)
+        if (cameraDetail.endpoints != null)
         {
-        for(int i=0; i< cameraDetail.endpoints.length;i++)
-        {
-            endpointArray.put(i, cameraDetail.endpoints[i]);
-        }
+            for (int count = 0; count < cameraDetail.endpoints.length; count++)
+            {
+                endpointArray.put(count, cameraDetail.endpoints[count]);
+            }
             cameraJSONObject.put("endpoints", endpointArray);
         }
-        if(cameraDetail.snapshotJPG != null)
+        if (cameraDetail.snapshotJPG != null)
         {
             snapshotJSONObject.put("jpg", cameraDetail.snapshotJPG);
             cameraJSONObject.put("snapshots", snapshotJSONObject);
         }
-        if(cameraDetail.isPublic != null)
+        if (cameraDetail.isPublic != null)
         {
             cameraJSONObject.put("is_public", cameraDetail.isPublic);
         }
-        if(cameraDetail.basicAuth != null)
+        if (cameraDetail.basicAuth != null)
         {
             basicJSONObject.put("username", cameraDetail.basicAuth[0]);
             basicJSONObject.put("password", cameraDetail.basicAuth[1]);
             authJSONObject.put("basic", basicJSONObject);
             cameraJSONObject.put("auth", authJSONObject);
         }
-        if(cameraDetail.name != null)
+        if (cameraDetail.name != null)
         {
-        cameraJSONObject.put("name", cameraDetail.name);
+            cameraJSONObject.put("name", cameraDetail.name);
         }
         if (cameraDetail.model != null)
         {

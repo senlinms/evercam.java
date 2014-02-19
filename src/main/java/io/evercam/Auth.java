@@ -29,6 +29,10 @@ public class Auth
         return username;
     }
 
+    public String getType()
+    {
+        return type;
+    }
 
     public String getPassword() throws EvercamException
     {

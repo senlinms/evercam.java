@@ -31,7 +31,7 @@ public class CameraTest
     public void testCreateCamera() throws EvercamException, JSONException
     {
         API.setAuth("joeyb", "12345");
-        CameraDetail cameraDetail =  new CameraBuilder("testcamera","testcameraname",true,new String[]{"http://127.0.0.1:8080"}).setSnapshotJPG("/onvif/snapshot").setBasicAuth("user1", "abcde").build();
+        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true, new String[]{"http://127.0.0.1:8080"}).setSnapshotJPG("/onvif/snapshot").setBasicAuth("user1", "abcde").build();
         Camera camera = Camera.create(cameraDetail);
         assertEquals("testcamera", camera.getId());
 
@@ -43,7 +43,7 @@ public class CameraTest
     @Test
     public void testCreateBoundary() throws EvercamException, JSONException
     {
-        CameraDetail failDetail = new CameraBuilder("fail","name",true,new String[]{"http://127.0.0.1:8080"}).setSnapshotJPG("/jpg").setBasicAuth("user1", "abcde").build();
+        CameraDetail failDetail = new CameraBuilder("fail", "name", true, new String[]{"http://127.0.0.1:8080"}).setSnapshotJPG("/jpg").setBasicAuth("user1", "abcde").build();
         API.setAuth("joeyb", "12345");
         exception.expect(EvercamException.class);
         Camera.create(failDetail);

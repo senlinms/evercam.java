@@ -15,7 +15,7 @@ public class PatchCameraBuilder
 
     public PatchCameraBuilder(String cameraId) throws EvercamException
     {
-        if(cameraId!=null)
+        if (cameraId != null)
         {
             id = cameraId;
         }
@@ -39,8 +39,8 @@ public class PatchCameraBuilder
 
     public PatchCameraBuilder setEndpoints(String[] endpoints)
     {
-       this.endpoints = endpoints;
-       return this;
+        this.endpoints = endpoints;
+        return this;
     }
 
     public PatchCameraBuilder setSnapshotJPG(String snapshotJPG)
@@ -51,7 +51,7 @@ public class PatchCameraBuilder
 
     public PatchCameraBuilder setBasicAuth(String username, String password)
     {
-        this.basicAuth = new String[] {username, password};
+        this.basicAuth = new String[]{username, password};
         return this;
     }
 

@@ -55,9 +55,9 @@ public class Vendor extends EvercamObject
         try
         {
             JSONArray modelsJSONArray = jsonObject.getJSONArray("models");
-            for (int i = 0; i < modelsJSONArray.length(); i++)
+            for (int count = 0; count < modelsJSONArray.length(); count++)
             {
-                models.add(i, modelsJSONArray.getString(i));
+                models.add(count, modelsJSONArray.getString(count));
             }
 
         } catch (JSONException e)
@@ -108,7 +108,7 @@ public class Vendor extends EvercamObject
 
     public Model getModel(String modelName) throws EvercamException
     {
-         return Model.getByModel(getId() , modelName);
+        return Model.getByModel(getId(), modelName);
     }
 
     public static ArrayList<Vendor> getSupportedVendors() throws EvercamException

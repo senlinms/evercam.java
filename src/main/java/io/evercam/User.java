@@ -91,26 +91,24 @@ public class User extends EvercamObject
 
     public User(String id) throws EvercamException
     {
-        if(API.isAuth())
+        if (API.isAuth())
         {
             try
             {
                 HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
-                if(response.getCode() == CODE_OK)
+                if (response.getCode() == CODE_OK)
                 {
                     JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
                     this.jsonObject = userJSONObject;
                 }
-                else if(response.getCode() == CODE_UNAUTHORISED)
+                else if (response.getCode() == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException("Invalid auth");
                 }
-            }
-            catch (UnirestException e)
+            } catch (UnirestException e)
             {
                 throw new EvercamException(e);
-            }
-            catch (JSONException e)
+            } catch (JSONException e)
             {
                 e.printStackTrace();
             }
@@ -133,12 +131,12 @@ public class User extends EvercamObject
         try
         {
             HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(userMap).field("parameter", "value").asJson();
-            if(response.getCode() == CODE_CREATE)
+            if (response.getCode() == CODE_CREATE)
             {
                 JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
                 user = new User(userJSONObject);
             }
-            else if(response.getCode() == CODE_ERROR)
+            else if (response.getCode() == CODE_ERROR)
             {
                 String message = response.getBody().getObject().getJSONArray("message").toString();
                 throw new EvercamException(message);
@@ -168,9 +166,9 @@ public class User extends EvercamObject
                 response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
             }
             JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
-            for (int i = 0; i < camerasJSONArray.length(); i++)
+            for (int count = 0; count < camerasJSONArray.length(); count++)
             {
-                JSONObject cameraJSONObject = camerasJSONArray.getJSONObject(i);
+                JSONObject cameraJSONObject = camerasJSONArray.getJSONObject(count);
                 cameraList.add(new Camera(cameraJSONObject));
             }
         } catch (JSONException e)

@@ -21,7 +21,8 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>${project.artifactId}-${project.version}-withDependency-ShadedForAndroid</finalName>
+                            <finalName>${project.artifactId}-${project.version}-withDependency-ShadedForAndroid
+                            </finalName>
                             <artifactSet>
                                 <includes>
                                     <include>com.mashape.unirest:unirest-java</include>
@@ -31,7 +32,7 @@
                                     <include>org.apache.httpcomponents:httpasyncclient</include>
                                     <include>org.apache.httpcomponents:httpmime</include>
                                     <include>org.json:json</include>
-				    <include>commons-codec:commons-codec</include>
+                                    <include>commons-codec:commons-codec</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -39,7 +40,7 @@
                                     <pattern>org.apache.http</pattern>
                                     <shadedPattern>io.evercam.relocation</shadedPattern>
                                 </relocation>
-				<relocation>
+                                <relocation>
                                     <pattern>org.apache.commons.codec</pattern>
                                     <shadedPattern>io.evercam.relocation</shadedPattern>
                                 </relocation>

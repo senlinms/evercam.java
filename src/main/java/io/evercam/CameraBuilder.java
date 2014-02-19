@@ -16,7 +16,7 @@ public class CameraBuilder
 
     public CameraBuilder(String cameraId, String cameraName, Boolean isPublic, String[] endpoints) throws EvercamException
     {
-        if(cameraId!=null)
+        if (cameraId != null)
         {
             id = cameraId;
         }
@@ -24,7 +24,7 @@ public class CameraBuilder
         {
             throw new EvercamException("camera id can not be null");
         }
-        if(cameraName!=null)
+        if (cameraName != null)
         {
             name = cameraName;
         }
@@ -32,15 +32,15 @@ public class CameraBuilder
         {
             throw new EvercamException("camera name can not be null");
         }
-        if(isPublic!=null)
+        if (isPublic != null)
         {
-            this.isPublic =  isPublic;
+            this.isPublic = isPublic;
         }
         else
         {
             throw new EvercamException("camera public/private can not be null");
         }
-        if(endpoints!=null)
+        if (endpoints != null)
         {
             this.endpoints = endpoints;
         }
@@ -58,7 +58,7 @@ public class CameraBuilder
 
     public CameraBuilder setBasicAuth(String username, String password)
     {
-        this.basicAuth = new String[] {username, password};
+        this.basicAuth = new String[]{username, password};
         return this;
     }
 

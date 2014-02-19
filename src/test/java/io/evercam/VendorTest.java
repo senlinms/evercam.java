@@ -52,15 +52,15 @@ public class VendorTest
     @Test
     public void testGetModel() throws EvercamException
     {
-         Model model = Vendor.getById("testid").getModel("YCW005");
-         ArrayList<String> models = model.getKnownModels();
-         assertEquals(1, models.size());
-         assertEquals("testid", model.getVendor());
-         assertEquals("YCW005", model.getName());
-         assertEquals(1, model.getKnownModels().size());
-         assertEquals("admin", model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername());
-         assertEquals("12345", model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword());
-         assertEquals("/Streaming/channels/1/picture", model.getDefaults().getJpgURL());
+        Model model = Vendor.getById("testid").getModel("YCW005");
+        ArrayList<String> models = model.getKnownModels();
+        assertEquals(1, models.size());
+        assertEquals("testid", model.getVendor());
+        assertEquals("YCW005", model.getName());
+        assertEquals(1, model.getKnownModels().size());
+        assertEquals("admin", model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername());
+        assertEquals("12345", model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword());
+        assertEquals("/Streaming/channels/1/picture", model.getDefaults().getJpgURL());
     }
 
     @Test

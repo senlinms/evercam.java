@@ -11,60 +11,69 @@ public class UserDetail
 
     public String getFirstname() throws EvercamException
     {
-        if(firstname == null)
+        if (firstname == null)
         {
             throw new EvercamException("firstname is missing");
         }
         return firstname;
     }
+
     public String getLastname() throws EvercamException
     {
-        if(lastname == null)
+        if (lastname == null)
         {
             throw new EvercamException("lastname is missing");
         }
         return lastname;
     }
+
     public String getUsername() throws EvercamException
     {
-        if(username == null)
+        if (username == null)
         {
             throw new EvercamException("username is missing");
         }
         return username;
     }
+
     public String getEmail() throws EvercamException
     {
-        if(email == null)
+        if (email == null)
         {
             throw new EvercamException("email is missing");
         }
         return email;
     }
+
     public String getCountrycode() throws EvercamException
     {
-        if(countrycode == null)
+        if (countrycode == null)
         {
             throw new EvercamException("country is missing");
         }
         return countrycode;
     }
+
     public void setFirstname(String firstname)
     {
         this.firstname = firstname;
     }
+
     public void setLastname(String lastname)
     {
         this.lastname = lastname;
     }
+
     public void setUsername(String username)
     {
         this.username = username;
     }
+
     public void setEmail(String email)
     {
         this.email = email;
     }
+
     public void setCountrycode(String countrycode)
     {
         this.countrycode = countrycode;

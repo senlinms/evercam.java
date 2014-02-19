@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -38,7 +36,7 @@ public class UserTest
         assertEquals("Bloggs", user.getLastname());
         assertEquals("joe.bloggs@example.org", user.getEmail());
         assertEquals("joeyb", user.getId());
-        assertEquals("joeyb",user.getUsername());
+        assertEquals("joeyb", user.getUsername());
         assertEquals("us", user.getCountry());
     }
 
@@ -51,7 +49,7 @@ public class UserTest
         assertEquals("Bloggs", user.getLastname());
         assertEquals("joe.bloggs@example.org", user.getEmail());
         assertEquals("joeyb", user.getId());
-        assertEquals("joeyb",user.getUsername());
+        assertEquals("joeyb", user.getUsername());
         assertEquals("us", user.getCountry());
         API.setAuth(null, null);
     }
