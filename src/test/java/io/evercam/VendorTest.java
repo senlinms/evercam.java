@@ -61,6 +61,11 @@ public class VendorTest
         assertEquals("admin", model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername());
         assertEquals("12345", model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword());
         assertEquals("/Streaming/channels/1/picture", model.getDefaults().getJpgURL());
+        assertEquals("snapshot/h264", model.getDefaults().getH264URL());
+        assertEquals("snapshot/lowres", model.getDefaults().getLowresURL());
+        assertEquals("", model.getDefaults().getMpeg4URL());
+        assertEquals("snapshot/mobile", model.getDefaults().getMobileURL());
+        assertEquals("snapshot/mjpg", model.getDefaults().getMjpgURL());
     }
 
     @Test
