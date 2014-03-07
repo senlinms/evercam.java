@@ -12,3 +12,6 @@ dependency-reduced-pom.xml
 #IntelliJ
 .idea/
 *.iml
+
+#Local tests
+TestForReal.java
