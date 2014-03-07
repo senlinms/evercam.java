@@ -30,12 +30,12 @@ public class Vendor extends EvercamObject
 
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
-        return getVendors(URL_VENDORS);
+        return getVendors(URL_VENDORS  + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]);
     }
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
-        return getVendors(URL_VENDORS + '/' + mac);
+        return getVendors(URL_VENDORS + '/' + mac  + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]);
     }
 
     public String getId() throws EvercamException
@@ -120,6 +120,9 @@ public class Vendor extends EvercamObject
     {
         ArrayList<Vendor> vendorList = new ArrayList<Vendor>();
         HttpRequest request = Unirest.get(url);
+
+        if(API.hasKeyPair())
+        {
         try
         {
             HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
@@ -138,6 +141,11 @@ public class Vendor extends EvercamObject
         } catch (UnirestException e)
         {
             throw new EvercamException(e);
+        }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
         }
         return vendorList;
     }

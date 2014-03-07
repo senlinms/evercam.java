@@ -100,8 +100,10 @@ public class UserTest
     public void testGetCamerasWithAuth() throws EvercamException
     {
         API.setAuth("joeyb", "12345");
+        API.setKeyPair("apikey","apiid");
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(2, cameras.size());
         API.setAuth(null, null);
+        API.setKeyPair(null, null);
     }
 }

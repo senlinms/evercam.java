@@ -22,18 +22,22 @@ public class VendorTest
     @Test
     public void testGetVendorInfo() throws EvercamException
     {
+        API.setKeyPair("apikey","apiid");
         Vendor axis = Vendor.getByMac(TEST_VENDOR_MAC).get(0);
         assertEquals("Ubiquiti Networks", axis.getName());
         assertEquals(TEST_VENDOR_ID, axis.getId());
         assertEquals(true, axis.getKnownMacs().contains(TEST_VENDOR_MAC));
         assertEquals(5, axis.getKnownMacs().size());
         assertEquals(true, axis.isSupported());
+        API.setKeyPair(null,null);
     }
 
     @Test
     public void testGetAll() throws EvercamException
     {
+        API.setKeyPair("apikey","apiid");
         assertEquals(2, Vendor.getAll().size());
+        API.setKeyPair(null,null);
     }
 
     @Test
@@ -48,7 +52,9 @@ public class VendorTest
     @Test
     public void testGetByMac() throws EvercamException
     {
+        API.setKeyPair("apikey","apiid");
         assertEquals(1, Vendor.getByMac(TEST_VENDOR_MAC).size());
+        API.setKeyPair(null,null);
     }
 
     @Test
