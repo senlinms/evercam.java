@@ -3,19 +3,21 @@ package io.evercam;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONException;
 
-public class EvercamException extends Exception
+class EvercamException extends Exception
 {
-    public EvercamException(String message)
+    protected final static String MSG_API_KEY_REQUIRED = "API key and API ID required";
+
+    EvercamException(String message)
     {
         super(message);
     }
 
-    public EvercamException(UnirestException unirestException)
+    EvercamException(UnirestException unirestException)
     {
         super(unirestException);
     }
 
-    public EvercamException(JSONException jsonException)
+    EvercamException(JSONException jsonException)
     {
         super(jsonException);
     }

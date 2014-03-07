@@ -1,5 +1,6 @@
 package io.evercam;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -38,5 +39,13 @@ public class APITest
         assertTrue(API.hasKeyAndID());
         assertEquals(TEST_KEY, API.getKey());
         assertEquals(TEST_ID, API.getID());
+    }
+
+    @AfterClass
+    public static void resetAPI()
+    {
+        API.setID(null);
+        API.setKey(null);
+        API.setAuth(null,null);
     }
 }

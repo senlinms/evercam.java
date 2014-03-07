@@ -31,11 +31,15 @@ public class CameraTest
     public void testCreateCamera() throws EvercamException, JSONException
     {
         API.setAuth("joeyb", "12345");
+        API.setID("apiid");
+        API.setKey("apikey");
         CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true, new String[]{"http://127.0.0.1:8080"}).setSnapshotJPG("/onvif/snapshot").setBasicAuth("user1", "abcde").build();
         Camera camera = Camera.create(cameraDetail);
         assertEquals("testcamera", camera.getId());
 
         API.setAuth(null, null);
+        API.setID(null);
+        API.setKey(null);
         exception.expect(EvercamException.class);
         Camera.create(cameraDetail);
     }
@@ -53,6 +57,8 @@ public class CameraTest
     public void testGetByIdCamera() throws EvercamException, IOException
     {
         API.setAuth(null, null);
+        API.setKey("apikey");
+        API.setID("apiid");
         Camera camera = Camera.getById("testcamera");
         assertEquals("testcamera", camera.getId());
         assertEquals("joeyb", camera.getOwner());
@@ -73,14 +79,20 @@ public class CameraTest
         Camera cameraPrivate = Camera.getById("privatecamera");
         assertFalse(cameraPrivate.isPublic());
         assertEquals("privatecamera", cameraPrivate.getId());
+        API.setKey(null);
+        API.setID(null);
     }
 
     @Test
     public void tesBoundaryUnknownAuth() throws EvercamException
     {
+        API.setKey("apikey");
+        API.setID("apiid");
         Camera camera = Camera.getById("testcamera");
         exception.expect(EvercamException.class);
         camera.getAuth("");
+        API.setKey(null);
+        API.setID(null);
     }
 
     private static byte[] getBytes(InputStream is) throws IOException
