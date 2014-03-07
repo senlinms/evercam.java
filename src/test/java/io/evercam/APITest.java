@@ -9,6 +9,9 @@ public class APITest
 
     String TEST_USERNAME = "username";
     String TEST_PASSWORD = "password";
+    String TEST_KEY = "testkey";
+    String TEST_ID = "testid";
+
 
     @Test
     public void testAuth()
@@ -19,5 +22,21 @@ public class APITest
         assertEquals(auth[0], TEST_USERNAME);
         assertEquals(auth[1], TEST_PASSWORD);
         assertTrue(API.isAuth());
+    }
+
+    @Test
+    public void testAPIKeyAndId()
+    {
+        assertFalse(API.hasKeyAndID());
+        assertEquals(null, API.getKey());
+        assertEquals(null, API.getID());
+
+        API.setKey(TEST_KEY);
+        assertFalse(API.hasKeyAndID());
+
+        API.setID(TEST_ID);
+        assertTrue(API.hasKeyAndID());
+        assertEquals(TEST_KEY, API.getKey());
+        assertEquals(TEST_ID, API.getID());
     }
 }
