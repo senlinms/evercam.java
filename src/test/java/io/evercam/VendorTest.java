@@ -39,8 +39,10 @@ public class VendorTest
     @Test
     public void testGetById() throws EvercamException
     {
+        API.setKeyPair("apikey","apiid");
         Vendor vendor = Vendor.getById("testid");
         assertEquals("testid", vendor.getId());
+        API.setKeyPair(null,null);
     }
 
     @Test
@@ -52,6 +54,7 @@ public class VendorTest
     @Test
     public void testGetModel() throws EvercamException
     {
+        API.setKeyPair("apikey","apiid");
         Model model = Vendor.getById("testid").getModel("YCW005");
         ArrayList<String> models = model.getKnownModels();
         assertEquals(1, models.size());
@@ -66,14 +69,17 @@ public class VendorTest
         assertEquals("", model.getDefaults().getMpeg4URL());
         assertEquals("snapshot/mobile", model.getDefaults().getMobileURL());
         assertEquals("snapshot/mjpg", model.getDefaults().getMjpgURL());
+        API.setKeyPair(null, null);
     }
 
     @Test
     public void testGetSupportedVendors() throws EvercamException
     {
+        API.setKeyPair("apikey","apiid");
         ArrayList<Vendor> vendors = Vendor.getSupportedVendors();
         assertEquals(2, vendors.size());
         ArrayList<String> models = vendors.get(1).getModels();
         assertEquals(4, models.size());
+        API.setKeyPair(null, null);
     }
 }

@@ -32,7 +32,7 @@ public class Camera extends EvercamObject
     public static Camera create(CameraDetail cameraDetail) throws EvercamException
     {
         Camera camera = null;
-        if (API.hasKeyAndID())
+        if (API.hasKeyPair())
         {
             if (API.isAuth())
             {
@@ -94,7 +94,7 @@ public class Camera extends EvercamObject
     public static Camera patch(CameraDetail cameraDetail) throws EvercamException
     {
         Camera camera = null;
-        if (API.hasKeyAndID())
+        if (API.hasKeyPair())
         {
             if (API.isAuth())
             {
@@ -156,18 +156,18 @@ public class Camera extends EvercamObject
     public static Camera getById(String cameraId) throws EvercamException
     {
         Camera camera;
-        if(API.hasKeyAndID())
+        if(API.hasKeyPair())
         {
         try
         {
             HttpResponse<JsonNode> response;
             if (API.isAuth())
             {
-                response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKey() + "&app_id=" +API.getID()).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
             }
             else
             {
-                response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKey() + "&app_id=" +API.getID()).header("accept", "application/json").asJson();
+                response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]).header("accept", "application/json").asJson();
             }
             JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
             camera = new Camera(userJSONObject);
@@ -360,7 +360,7 @@ public class Camera extends EvercamObject
             try
             {
                 HttpResponse<String> response = Unirest.get(url).asString();
-                if (response.getCode() != 400)
+                if (response.getCode() != CODE_ERROR)
                 {
                     return endpoint;
                 }
@@ -388,8 +388,8 @@ public class Camera extends EvercamObject
         JSONObject basicJSONObject = new JSONObject();
         JSONObject snapshotJSONObject = new JSONObject();
         JSONArray endpointArray = new JSONArray();
-        cameraJSONObject.put("app_key", API.getKey());
-        cameraJSONObject.put("app_id", API.getID());
+        cameraJSONObject.put("app_key", API.getKeyPair()[0]);
+        cameraJSONObject.put("app_id", API.getKeyPair()[1]);
         cameraJSONObject.put("id", cameraDetail.id);
         if (cameraDetail.endpoints != null)
         {

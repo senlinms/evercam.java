@@ -6,8 +6,7 @@ public abstract class API
     public static String URL = "https://api.evercam.io/" + VERSION + "/";
 
     private static String[] auth = {null, null};
-    private static String key = null;
-    private static String id = null;
+    private static String[] keyPair = {null, null};
 
     public static void setAuth(String username, String password)
     {
@@ -15,29 +14,20 @@ public abstract class API
         auth[1] = password;
     }
 
-    public static void setKey(String apiKey)
+    public static void setKeyPair(String apiKey, String apiID)
     {
-        key = apiKey;
-    }
-
-    public static String getKey()
-    {
-        return key;
-    }
-
-    public static void setID(String apiID)
-    {
-        id= apiID;
-    }
-
-    public static String getID()
-    {
-        return id;
+        keyPair[0] = apiKey;
+        keyPair[1] = apiID;
     }
 
     public static String[] getAuth()
     {
         return auth;
+    }
+
+    public static String[] getKeyPair()
+    {
+        return keyPair;
     }
 
     public static boolean isAuth()
@@ -49,8 +39,8 @@ public abstract class API
         return false;
     }
 
-    public static boolean hasKeyAndID()
+    public static boolean hasKeyPair()
     {
-        return (((key != null) && (id != null)) ? true : false);
+        return (((keyPair[0] != null) && (keyPair[1] != null)) ? true : false);
     }
 }

@@ -81,9 +81,11 @@ public class Model extends EvercamObject
     protected static ArrayList<Vendor> getByVendor(String vendorId) throws EvercamException
     {
         ArrayList<Vendor> vendorList = new ArrayList<Vendor>();
+        if(API.hasKeyPair())
+        {
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId).header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]).header("accept", "application/json").asJson();
             if (response.getCode() == CODE_NOT_FOUND)
             {
                 throw new EvercamException("model vendor not found");
@@ -104,15 +106,22 @@ public class Model extends EvercamObject
         {
             throw new EvercamException(e);
         }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
         return vendorList;
     }
 
     private static ArrayList<Vendor> getModels(String url) throws EvercamException
     {
         ArrayList<Vendor> vendorList = new ArrayList<Vendor>();
+        if(API.hasKeyPair())
+        {
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(url).header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response = Unirest.get(url + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]).header("accept", "application/json").asJson();
             JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
             for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
             {
@@ -126,12 +135,19 @@ public class Model extends EvercamObject
         {
             throw new EvercamException(e);
         }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
         return vendorList;
     }
 
     protected static Model getByModel(String vendorId, String modelId) throws EvercamException
     {
         Model model;
+        if (API.hasKeyPair())
+        {
         try
         {
             HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + modelId).header("accept", "application/json").asJson();
@@ -143,6 +159,11 @@ public class Model extends EvercamObject
         } catch (UnirestException e)
         {
             throw new EvercamException(e);
+        }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
         }
         return model;
     }

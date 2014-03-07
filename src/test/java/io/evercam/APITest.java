@@ -28,24 +28,17 @@ public class APITest
     @Test
     public void testAPIKeyAndId()
     {
-        assertFalse(API.hasKeyAndID());
-        assertEquals(null, API.getKey());
-        assertEquals(null, API.getID());
-
-        API.setKey(TEST_KEY);
-        assertFalse(API.hasKeyAndID());
-
-        API.setID(TEST_ID);
-        assertTrue(API.hasKeyAndID());
-        assertEquals(TEST_KEY, API.getKey());
-        assertEquals(TEST_ID, API.getID());
+        assertFalse(API.hasKeyPair());
+        API.setKeyPair(TEST_KEY, TEST_ID);
+        assertTrue(API.hasKeyPair());
+        assertEquals(TEST_KEY, API.getKeyPair()[0]);
+        assertEquals(TEST_ID, API.getKeyPair()[1]);
     }
 
     @AfterClass
     public static void resetAPI()
     {
-        API.setID(null);
-        API.setKey(null);
+        API.setKeyPair(null,null);
         API.setAuth(null,null);
     }
 }
