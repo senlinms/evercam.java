@@ -30,12 +30,12 @@ public class Vendor extends EvercamObject
 
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
-        return getVendors(URL_VENDORS  + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]);
+        return getVendors(URL_VENDORS + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" + API.getKeyPair()[1]);
     }
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
-        return getVendors(URL_VENDORS + '/' + mac  + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]);
+        return getVendors(URL_VENDORS + '/' + mac + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" + API.getKeyPair()[1]);
     }
 
     public String getId() throws EvercamException
@@ -121,27 +121,27 @@ public class Vendor extends EvercamObject
         ArrayList<Vendor> vendorList = new ArrayList<Vendor>();
         HttpRequest request = Unirest.get(url);
 
-        if(API.hasKeyPair())
+        if (API.hasKeyPair())
         {
-        try
-        {
-            HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
             try
             {
-                JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
-                for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
+                HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
+                try
                 {
-                    JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
-                    vendorList.add(new Vendor(vendorJSONObject));
+                    JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
+                    for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
+                    {
+                        JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
+                        vendorList.add(new Vendor(vendorJSONObject));
+                    }
+                } catch (JSONException e)
+                {
+                    throw new EvercamException(e);
                 }
-            } catch (JSONException e)
+            } catch (UnirestException e)
             {
                 throw new EvercamException(e);
             }
-        } catch (UnirestException e)
-        {
-            throw new EvercamException(e);
-        }
         }
         else
         {

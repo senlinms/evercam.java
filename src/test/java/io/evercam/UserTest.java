@@ -25,7 +25,7 @@ public class UserTest
     @Test
     public void testCreateUser() throws EvercamException, JSONException
     {
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         UserDetail detail = new UserDetail();
         detail.setFirstname("Joe");
         detail.setLastname("Bloggs");
@@ -46,7 +46,7 @@ public class UserTest
     public void testGetUser() throws EvercamException
     {
         API.setAuth("joeyb", "12345");
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         User user = new User("joeyb");
         assertEquals("Joe", user.getForename());
         assertEquals("Bloggs", user.getLastname());
@@ -90,7 +90,7 @@ public class UserTest
     public void testGetCameras() throws EvercamException
     {
         API.setAuth(null, null);
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(1, cameras.size());
         API.setKeyPair(null, null);
@@ -100,7 +100,7 @@ public class UserTest
     public void testGetCamerasWithAuth() throws EvercamException
     {
         API.setAuth("joeyb", "12345");
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(2, cameras.size());
         API.setAuth(null, null);

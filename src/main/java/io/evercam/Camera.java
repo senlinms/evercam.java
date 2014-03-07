@@ -50,7 +50,7 @@ public class Camera extends EvercamObject
                     String result = EntityUtils.toString(response.getEntity());
                     if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
                     {
-                        throw new EvercamException("Invalid auth");
+                        throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
                     }
                     else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
                     {
@@ -66,7 +66,7 @@ public class Camera extends EvercamObject
                     }
                     else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
                     {
-                        throw new EvercamException("Internal server error");
+                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                     }
                 } catch (JSONException e)
                 {
@@ -112,7 +112,7 @@ public class Camera extends EvercamObject
                     String result = EntityUtils.toString(response.getEntity());
                     if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
                     {
-                        throw new EvercamException("Invalid auth");
+                        throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
                     }
                     else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
                     {
@@ -128,7 +128,7 @@ public class Camera extends EvercamObject
                     }
                     else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
                     {
-                        throw new EvercamException("Internal server error");
+                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                     }
                 } catch (JSONException e)
                 {
@@ -156,28 +156,28 @@ public class Camera extends EvercamObject
     public static Camera getById(String cameraId) throws EvercamException
     {
         Camera camera;
-        if(API.hasKeyPair())
+        if (API.hasKeyPair())
         {
-        try
-        {
-            HttpResponse<JsonNode> response;
-            if (API.isAuth())
+            try
             {
-                response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
-            }
-            else
+                HttpResponse<JsonNode> response;
+                if (API.isAuth())
+                {
+                    response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" + API.getKeyPair()[1]).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                }
+                else
+                {
+                    response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" + API.getKeyPair()[1]).header("accept", "application/json").asJson();
+                }
+                JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
+                camera = new Camera(userJSONObject);
+            } catch (JSONException e)
             {
-                response = Unirest.get(URL + '/' + cameraId + '/' + "?app_key=" + API.getKeyPair()[0] + "&app_id=" +API.getKeyPair()[1]).header("accept", "application/json").asJson();
+                throw new EvercamException(e);
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
             }
-            JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
-            camera = new Camera(userJSONObject);
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        } catch (UnirestException e)
-        {
-            throw new EvercamException(e);
-        }
         }
         else
         {

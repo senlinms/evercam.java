@@ -38,7 +38,7 @@ public class APITest
     @AfterClass
     public static void resetAPI()
     {
-        API.setKeyPair(null,null);
-        API.setAuth(null,null);
+        API.setKeyPair(null, null);
+        API.setAuth(null, null);
     }
 }

@@ -22,45 +22,45 @@ public class VendorTest
     @Test
     public void testGetVendorInfo() throws EvercamException
     {
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         Vendor axis = Vendor.getByMac(TEST_VENDOR_MAC).get(0);
         assertEquals("Ubiquiti Networks", axis.getName());
         assertEquals(TEST_VENDOR_ID, axis.getId());
         assertEquals(true, axis.getKnownMacs().contains(TEST_VENDOR_MAC));
         assertEquals(5, axis.getKnownMacs().size());
         assertEquals(true, axis.isSupported());
-        API.setKeyPair(null,null);
+        API.setKeyPair(null, null);
     }
 
     @Test
     public void testGetAll() throws EvercamException
     {
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         assertEquals(2, Vendor.getAll().size());
-        API.setKeyPair(null,null);
+        API.setKeyPair(null, null);
     }
 
     @Test
     public void testGetById() throws EvercamException
     {
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         Vendor vendor = Vendor.getById("testid");
         assertEquals("testid", vendor.getId());
-        API.setKeyPair(null,null);
+        API.setKeyPair(null, null);
     }
 
     @Test
     public void testGetByMac() throws EvercamException
     {
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         assertEquals(1, Vendor.getByMac(TEST_VENDOR_MAC).size());
-        API.setKeyPair(null,null);
+        API.setKeyPair(null, null);
     }
 
     @Test
     public void testGetModel() throws EvercamException
     {
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         Model model = Vendor.getById("testid").getModel("YCW005");
         ArrayList<String> models = model.getKnownModels();
         assertEquals(1, models.size());
@@ -81,7 +81,7 @@ public class VendorTest
     @Test
     public void testGetSupportedVendors() throws EvercamException
     {
-        API.setKeyPair("apikey","apiid");
+        API.setKeyPair("apikey", "apiid");
         ArrayList<Vendor> vendors = Vendor.getSupportedVendors();
         assertEquals(2, vendors.size());
         ArrayList<String> models = vendors.get(1).getModels();
