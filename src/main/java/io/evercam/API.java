@@ -1,5 +1,8 @@
 package io.evercam;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class API
 {
     public static String VERSION = "v1";
@@ -42,5 +45,20 @@ public abstract class API
     public static boolean hasKeyPair()
     {
         return (((keyPair[0] != null) && (keyPair[1] != null)) ? true : false);
+    }
+
+    protected static Map<String,Object> keypairMap() throws EvercamException
+    {
+        if(hasKeyPair())
+        {
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("app_key", getKeyPair()[0]);
+            map.put("app_id", getKeyPair()[1]);
+            return map;
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
     }
 }

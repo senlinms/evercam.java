@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Camera extends EvercamObject
@@ -357,16 +359,17 @@ public class Camera extends EvercamObject
         {
             if(API.isAuth())
             {
+                Map<String,Object> keypairMap = API.keypairMap();
                 try
                 {
                     HttpResponse<JsonNode> response;
                     if(notes == null)
                     {
-                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(keypairMap).basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
                     }
                     else
                     {
-                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").field("notes",notes).basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(keypairMap).field("notes",notes).basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
                     }
                     if(response.getCode()==CODE_CREATE)
                     {
