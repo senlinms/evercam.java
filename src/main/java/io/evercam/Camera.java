@@ -350,7 +350,7 @@ public class Camera extends EvercamObject
         return inputStream;
     }
 
-    public static Snapshot archiveSnapshot(String cameraId) throws EvercamException
+    public static Snapshot archiveSnapshot(String cameraId, String notes) throws EvercamException
     {
         Snapshot snapshot;
         if(API.hasKeyPair())
@@ -359,7 +359,15 @@ public class Camera extends EvercamObject
             {
                 try
                 {
-                    HttpResponse<JsonNode> response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                    HttpResponse<JsonNode> response;
+                    if(notes == null)
+                    {
+                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                    }
+                    else
+                    {
+                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").field("notes",notes).basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                    }
                     if(response.getCode()==CODE_CREATE)
                     {
                         JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);

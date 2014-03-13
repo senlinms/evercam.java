@@ -24,7 +24,7 @@ public class SnapshotTest
     @Test
     public void testSaveSnapshot() throws EvercamException
     {
-        Snapshot snapshot = Camera.archiveSnapshot("testid");
+        Snapshot snapshot = Camera.archiveSnapshot("testid",null);
         assertEquals("testid", snapshot.getCameraId());
         assertEquals("null", snapshot.getNotes());
         assertEquals(1394712493, snapshot.getTimeStamp());
@@ -35,14 +35,14 @@ public class SnapshotTest
     public void testSaveSnapshotCameraNotExists() throws EvercamException
     {
         exception.expect(EvercamException.class);
-        Camera.archiveSnapshot("fail");
+        Camera.archiveSnapshot("fail",null);
     }
 
     @Test
     public void testSaveSnapshotCameraOffline() throws EvercamException
     {
         exception.expect(EvercamException.class);
-        Camera.archiveSnapshot("offline");
+        Camera.archiveSnapshot("offline",null);
     }
 
     @AfterClass
