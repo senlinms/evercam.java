@@ -350,6 +350,57 @@ public class Camera extends EvercamObject
         return inputStream;
     }
 
+    public static Snapshot archiveSnapshot(String cameraId) throws EvercamException
+    {
+        Snapshot snapshot;
+        if(API.hasKeyPair())
+        {
+            if(API.isAuth())
+            {
+                try
+                {
+                    HttpResponse<JsonNode> response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                    if(response.getCode()==CODE_CREATE)
+                    {
+                        JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
+                        snapshot = new Snapshot(snapshotJsonObject);
+                    }
+                    else if (response.getCode() == CODE_NOT_FOUND)
+                    {
+                        throw new EvercamException("Camera does not exist");
+                    }
+                    else if (response.getCode() == CODE_ERROR)
+                    {
+                        throw new EvercamException("camera is offline");
+                    }
+                    else if (response.getCode() == CODE_SERVER_ERROR)
+                    {
+                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                    }
+                    else
+                    {
+                        throw new EvercamException(response.getCode() + response.getBody().toString());
+                    }
+                } catch (UnirestException e)
+                {
+                    throw new EvercamException(e);
+                } catch (JSONException e)
+                {
+                    throw new EvercamException(e);
+                }
+            }
+            else
+            {
+                throw new EvercamException("Auth required to save snapshot.");
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
+        return snapshot;
+    }
+
     private String selectEndpoint() throws EvercamException
     {
         String snapshot = getSnapshotPath("jpg");
