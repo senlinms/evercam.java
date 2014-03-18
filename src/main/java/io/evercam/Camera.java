@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.http.utils.Base64Coder;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -91,6 +92,43 @@ public class Camera extends EvercamObject
             throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
         }
         return camera;
+    }
+
+    public static boolean delete(String cameraId) throws EvercamException
+    {
+        if (API.hasKeyPair())
+        {
+            if(API.isAuth())
+            {
+                try
+                {
+                    DefaultHttpClient client = new DefaultHttpClient();
+                    HttpDelete delete = new HttpDelete(URL + '/' + cameraId);
+                    String encoding = Base64Coder.encodeString(API.getAuth()[0] + ":" + API.getAuth()[1]);
+                    delete.setHeader("Authorization", "Basic " + encoding);
+                    org.apache.http.HttpResponse response = client.execute(delete);
+                    if(response.getStatusLine().getStatusCode()==CODE_OK)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                } catch (IOException e)
+                {
+                    throw new EvercamException(e);
+                }
+            }
+            else
+            {
+                throw new EvercamException("Auth is required to delete a camera");
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
     }
 
     public static Camera patch(CameraDetail cameraDetail) throws EvercamException
