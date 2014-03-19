@@ -78,6 +78,7 @@ public class CameraTest
         assertEquals("abcde", camera.getCameraPassword());
         assertEquals(MOCK_URL + "basicauth", camera.getInternalUrl());
         assertEquals(MOCK_URL + "noauth", camera.getExternalUrl());
+        assertEquals(2, camera.getEndpoints().size());
         assertEquals("/snapshot.jpg", camera.getJpgUrl());
         assertEquals(105708, getBytes(camera.getSnapshotImage()).length);
         assertEquals("Public Camera", camera.getName());

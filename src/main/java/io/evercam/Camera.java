@@ -403,6 +403,30 @@ public class Camera extends EvercamObject
         return inputStream;
     }
 
+    public ArrayList<String> getEndpoints()
+    {
+        ArrayList<String> endpointsArray = new ArrayList<String>();
+        String internalUrl = null;
+        String externalUrl = null;
+        try
+        {
+            internalUrl = getInternalUrl();
+            externalUrl = getExternalUrl();
+        } catch (EvercamException e)
+        {
+            e.printStackTrace();
+        }
+        if(internalUrl!=null)
+        {
+            endpointsArray.add(internalUrl);
+        }
+        if(externalUrl!=null)
+        {
+            endpointsArray.add(externalUrl);
+        }
+        return endpointsArray;
+    }
+
     public static Snapshot archiveSnapshot(String cameraId, String notes) throws EvercamException
     {
         Snapshot snapshot;
