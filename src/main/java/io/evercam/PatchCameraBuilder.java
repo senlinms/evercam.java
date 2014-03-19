@@ -9,9 +9,11 @@ public class PatchCameraBuilder
     String model;
     String timezone;
     String macAddress;
-    String snapshotJPG;
-    String[] endpoints;
-    String[] basicAuth;
+    String jpgUrl;
+    String internalUrl;
+    String externalUrl;
+    String cameraUsername;
+    String cameraPassword;
 
     public PatchCameraBuilder(String cameraId) throws EvercamException
     {
@@ -37,21 +39,33 @@ public class PatchCameraBuilder
         return this;
     }
 
-    public PatchCameraBuilder setEndpoints(String[] endpoints)
+    public PatchCameraBuilder setJpgUrl(String jpgUrl)
     {
-        this.endpoints = endpoints;
+        this.jpgUrl = jpgUrl;
         return this;
     }
 
-    public PatchCameraBuilder setSnapshotJPG(String snapshotJPG)
+    public PatchCameraBuilder setInternalUrl(String internalUrl)
     {
-        this.snapshotJPG = snapshotJPG;
+        this.internalUrl = internalUrl;
         return this;
     }
 
-    public PatchCameraBuilder setBasicAuth(String username, String password)
+    public PatchCameraBuilder setExternalUrl(String externalUrl)
     {
-        this.basicAuth = new String[]{username, password};
+        this.externalUrl = externalUrl;
+        return this;
+    }
+
+    public PatchCameraBuilder setCameraUsername(String cameraUsername)
+    {
+        this.cameraUsername = cameraUsername;
+        return this;
+    }
+
+    public PatchCameraBuilder setCameraPassword(String cameraPassword)
+    {
+        this.cameraPassword = cameraPassword;
         return this;
     }
 

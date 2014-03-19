@@ -5,16 +5,18 @@ public class CameraBuilder
     final String id;
     final Boolean isPublic;
     final String name;
-    final String[] endpoints;
+    final String externalUrl;
 
     String vendor;
     String model;
     String timezone;
     String macAddress;
-    String snapshotJPG;
-    String[] basicAuth;
+    String jpgUrl;
+    String internalUrl;
+    String cameraUsername;
+    String cameraPassword;
 
-    public CameraBuilder(String cameraId, String cameraName, Boolean isPublic, String[] endpoints) throws EvercamException
+    public CameraBuilder(String cameraId, String cameraName, Boolean isPublic, String externalUrl) throws EvercamException
     {
         if (cameraId != null)
         {
@@ -40,25 +42,37 @@ public class CameraBuilder
         {
             throw new EvercamException("camera public/private can not be null");
         }
-        if (endpoints != null)
+        if (externalUrl != null)
         {
-            this.endpoints = endpoints;
+            this.externalUrl= externalUrl;
         }
         else
         {
-            throw new EvercamException("camera endpoints can not be null");
+            throw new EvercamException("external url can not be null");
         }
     }
 
-    public CameraBuilder setSnapshotJPG(String snapshotJPG)
+    public CameraBuilder setJpgUrl(String jpgUrl)
     {
-        this.snapshotJPG = snapshotJPG;
+        this.jpgUrl = jpgUrl;
         return this;
     }
 
-    public CameraBuilder setBasicAuth(String username, String password)
+    public CameraBuilder setInternalUrl(String internalUrl)
     {
-        this.basicAuth = new String[]{username, password};
+        this.internalUrl = internalUrl;
+        return this;
+    }
+
+    public CameraBuilder setCameraUsername(String cameraUsername)
+    {
+        this.cameraUsername = cameraUsername;
+        return this;
+    }
+
+    public CameraBuilder setCameraPassword(String cameraPassword)
+    {
+        this.cameraPassword = cameraPassword;
         return this;
     }
 

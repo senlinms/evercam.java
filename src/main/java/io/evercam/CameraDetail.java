@@ -10,9 +10,11 @@ public class CameraDetail
     String model;
     String timezone;
     String macAddress;
-    String snapshotJPG;
-    String[] endpoints;
-    String[] basicAuth;
+    String jpgUrl;
+    String internalUrl;
+    String externalUrl;
+    String cameraUsername;
+    String cameraPassword;
 
     public CameraDetail(PatchCameraBuilder builder)
     {
@@ -23,9 +25,11 @@ public class CameraDetail
         model = builder.model;
         timezone = builder.timezone;
         macAddress = builder.macAddress;
-        snapshotJPG = builder.snapshotJPG;
-        endpoints = builder.endpoints;
-        basicAuth = builder.basicAuth;
+        jpgUrl = builder.jpgUrl;
+        internalUrl = builder.internalUrl;
+        externalUrl = builder.externalUrl;
+        cameraUsername = builder.cameraUsername;
+        cameraPassword = builder.cameraPassword;
     }
 
     public CameraDetail(CameraBuilder builder)
@@ -37,8 +41,10 @@ public class CameraDetail
         model = builder.model;
         timezone = builder.timezone;
         macAddress = builder.macAddress;
-        snapshotJPG = builder.snapshotJPG;
-        endpoints = builder.endpoints;
-        basicAuth = builder.basicAuth;
+        jpgUrl = builder.jpgUrl;
+        internalUrl = builder.internalUrl;
+        externalUrl = builder.externalUrl;
+        cameraUsername = builder.cameraUsername;
+        cameraPassword = builder.cameraPassword;
     }
 }

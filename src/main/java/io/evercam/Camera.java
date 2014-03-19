@@ -226,21 +226,59 @@ public class Camera extends EvercamObject
         return camera;
     }
 
-    public ArrayList<String> getEndpoints()
+    public String getExternalUrl() throws EvercamException
     {
-        ArrayList<String> endpoints = new ArrayList<String>();
         try
         {
-            JSONArray endpointJSONArray = jsonObject.getJSONArray("endpoints");
-            for (int count = 0; count < endpointJSONArray.length(); count++)
-            {
-                endpoints.add(endpointJSONArray.getString(count));
-            }
+            return jsonObject.getString("external_url");
         } catch (JSONException e)
         {
-            e.printStackTrace();
+            throw new EvercamException(e);
         }
-        return endpoints;
+    }
+
+    public String getInternalUrl() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("internal_url");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getJpgUrl() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("jpg_url");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getCameraUsername() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("cam_username");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getCameraPassword() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("cam_password");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
     }
 
     public String getId() throws EvercamException
@@ -274,20 +312,6 @@ public class Camera extends EvercamObject
         {
             throw new EvercamException(e);
         }
-    }
-
-    public Auth getAuth(String type) throws EvercamException
-    {
-        Auth auth;
-        try
-        {
-            JSONObject authJSONObject = jsonObject.getJSONObject("auth").getJSONObject(type);
-            auth = new Auth(type, authJSONObject);
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
-        return auth;
     }
 
     public String getName() throws EvercamException
@@ -356,27 +380,16 @@ public class Camera extends EvercamObject
         }
     }
 
-    public String getSnapshotPath(String type) throws EvercamException
-    {
-        try
-        {
-            return jsonObject.getJSONObject("snapshots").getString(type);
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
-    }
-
-    public InputStream getSnapshotStream() throws EvercamException
+    public InputStream getSnapshotImage() throws EvercamException
     {
         InputStream inputStream;
         String endpoint = selectEndpoint();
         if (endpoint != null)
         {
-            String url = endpoint + getSnapshotPath("jpg");
+            String url = getFullURL(endpoint,getJpgUrl());
             try
             {
-                HttpResponse<String> response = Unirest.get(url).basicAuth(getAuth(Auth.TYPE_BASIC).getUsername(), getAuth(Auth.TYPE_BASIC).getPassword()).asString();
+                HttpResponse<String> response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asString();
                 inputStream = response.getRawBody();
             } catch (UnirestException e)
             {
@@ -452,22 +465,36 @@ public class Camera extends EvercamObject
 
     private String selectEndpoint() throws EvercamException
     {
-        String snapshot = getSnapshotPath("jpg");
+        String snapshot = getJpgUrl();
+        String internalUrl = getInternalUrl();
+        String externalUrl = getExternalUrl();
 
-        for (String endpoint : getEndpoints())
+        if(internalUrl!=null)
         {
-            String url = getFullURL(endpoint, snapshot);
+            String internalFullUrl = getFullURL(internalUrl, snapshot);
             try
             {
-                HttpResponse<String> response = Unirest.get(url).asString();
+                HttpResponse<String> response = Unirest.get(internalFullUrl).asString();
                 if (response.getCode() != CODE_ERROR)
                 {
-                    return endpoint;
+                    return internalUrl;
                 }
             } catch (UnirestException e)
             {
                 throw new EvercamException(e);
             }
+        }
+        String externalFullUrl = getFullURL(externalUrl, snapshot);
+        try
+        {
+            HttpResponse<String> response = Unirest.get(externalFullUrl).asString();
+            if (response.getCode() != CODE_ERROR)
+            {
+                return externalUrl;
+            }
+        } catch (UnirestException e)
+        {
+            throw new EvercamException(e);
         }
         return null;
     }
@@ -484,36 +511,32 @@ public class Camera extends EvercamObject
     private static JSONObject buildJSONObject(CameraDetail cameraDetail) throws JSONException
     {
         JSONObject cameraJSONObject = new JSONObject();
-        JSONObject authJSONObject = new JSONObject();
-        JSONObject basicJSONObject = new JSONObject();
-        JSONObject snapshotJSONObject = new JSONObject();
-        JSONArray endpointArray = new JSONArray();
         cameraJSONObject.put("app_key", API.getKeyPair()[0]);
         cameraJSONObject.put("app_id", API.getKeyPair()[1]);
         cameraJSONObject.put("id", cameraDetail.id);
-        if (cameraDetail.endpoints != null)
+        if (cameraDetail.internalUrl != null)
         {
-            for (int count = 0; count < cameraDetail.endpoints.length; count++)
-            {
-                endpointArray.put(count, cameraDetail.endpoints[count]);
-            }
-            cameraJSONObject.put("endpoints", endpointArray);
+            cameraJSONObject.put("internal_url", cameraDetail.internalUrl);
         }
-        if (cameraDetail.snapshotJPG != null)
+        if (cameraDetail.externalUrl != null)
         {
-            snapshotJSONObject.put("jpg", cameraDetail.snapshotJPG);
-            cameraJSONObject.put("snapshots", snapshotJSONObject);
+            cameraJSONObject.put("external_url", cameraDetail.externalUrl);
+        }
+        if (cameraDetail.jpgUrl != null)
+        {
+            cameraJSONObject.put("jpg_url", cameraDetail.jpgUrl);
         }
         if (cameraDetail.isPublic != null)
         {
             cameraJSONObject.put("is_public", cameraDetail.isPublic);
         }
-        if (cameraDetail.basicAuth != null)
+        if (cameraDetail.cameraUsername != null)
         {
-            basicJSONObject.put("username", cameraDetail.basicAuth[0]);
-            basicJSONObject.put("password", cameraDetail.basicAuth[1]);
-            authJSONObject.put("basic", basicJSONObject);
-            cameraJSONObject.put("auth", authJSONObject);
+            cameraJSONObject.put("cam_username",cameraDetail.cameraUsername);
+        }
+        if (cameraDetail.cameraPassword != null)
+        {
+            cameraJSONObject.put("cam_password",cameraDetail.cameraPassword);
         }
         if (cameraDetail.name != null)
         {

@@ -18,6 +18,8 @@ import static org.junit.Assert.assertFalse;
 
 public class CameraTest
 {
+    private final String MOCK_URL = "http://ec2-54-194-83-178.eu-west-1.compute.amazonaws.com:3000/";
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -32,7 +34,7 @@ public class CameraTest
     {
         API.setAuth("joeyb", "12345");
         API.setKeyPair("apikey", "apiid");
-        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true, new String[]{"http://127.0.0.1:8080"}).setSnapshotJPG("/onvif/snapshot").setBasicAuth("user1", "abcde").build();
+        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true, "http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
         Camera camera = Camera.create(cameraDetail);
         assertEquals("testcamera", camera.getId());
 
@@ -45,10 +47,22 @@ public class CameraTest
     @Test
     public void testCreateBoundary() throws EvercamException, JSONException
     {
-        CameraDetail failDetail = new CameraBuilder("fail", "name", true, new String[]{"http://127.0.0.1:8080"}).setSnapshotJPG("/jpg").setBasicAuth("user1", "abcde").build();
+        CameraDetail failDetail = new CameraBuilder("fail", "name", true, "http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
         API.setAuth("joeyb", "12345");
         exception.expect(EvercamException.class);
         Camera.create(failDetail);
+    }
+
+    @Test
+    public void testDeleteCamera()
+    {
+        //FIXME: Missing camera delete tests.
+    }
+
+    @Test
+    public void testPatchCamera()
+    {
+        //FIXME: Missing camera patch tests.
     }
 
     @Test
@@ -60,11 +74,12 @@ public class CameraTest
         assertEquals("testcamera", camera.getId());
         assertEquals("joeyb", camera.getOwner());
         assertTrue(camera.isPublic());
-        assertEquals("user1", camera.getAuth(Auth.TYPE_BASIC).getUsername());
-        assertEquals("abcde", camera.getAuth(Auth.TYPE_BASIC).getPassword());
-        assertEquals(3, camera.getEndpoints().size());
-        assertEquals("/snapshot.jpg", camera.getSnapshotPath("jpg"));
-        assertEquals(105708, getBytes(camera.getSnapshotStream()).length);
+        assertEquals("user1", camera.getCameraUsername());
+        assertEquals("abcde", camera.getCameraPassword());
+        assertEquals(MOCK_URL + "basicauth", camera.getInternalUrl());
+        assertEquals(MOCK_URL + "noauth", camera.getExternalUrl());
+        assertEquals("/snapshot.jpg", camera.getJpgUrl());
+        assertEquals(105708, getBytes(camera.getSnapshotImage()).length);
         assertEquals("Public Camera", camera.getName());
         assertEquals("axis", camera.getVendor());
         assertEquals("null", camera.getModel());
@@ -76,16 +91,6 @@ public class CameraTest
         Camera cameraPrivate = Camera.getById("privatecamera");
         assertFalse(cameraPrivate.isPublic());
         assertEquals("privatecamera", cameraPrivate.getId());
-        API.setKeyPair(null, null);
-    }
-
-    @Test
-    public void tesBoundaryUnknownAuth() throws EvercamException
-    {
-        API.setKeyPair("apikey", "apiid");
-        Camera camera = Camera.getById("testcamera");
-        exception.expect(EvercamException.class);
-        camera.getAuth("");
         API.setKeyPair(null, null);
     }
 
