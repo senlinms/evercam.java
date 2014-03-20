@@ -34,7 +34,7 @@ public class CameraTest
     {
         API.setAuth("joeyb", "12345");
         API.setKeyPair("apikey", "apiid");
-        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true, "http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
+        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true).setExternalUrl("http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
         Camera camera = Camera.create(cameraDetail);
         assertEquals("testcamera", camera.getId());
 
@@ -47,7 +47,7 @@ public class CameraTest
     @Test
     public void testCreateBoundary() throws EvercamException, JSONException
     {
-        CameraDetail failDetail = new CameraBuilder("fail", "name", true, "http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
+        CameraDetail failDetail = new CameraBuilder("fail", "name", true).setExternalUrl( "http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
         API.setAuth("joeyb", "12345");
         exception.expect(EvercamException.class);
         Camera.create(failDetail);

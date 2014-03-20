@@ -5,7 +5,6 @@ public class CameraBuilder
     final String id;
     final Boolean isPublic;
     final String name;
-    final String externalUrl;
 
     String vendor;
     String model;
@@ -13,10 +12,11 @@ public class CameraBuilder
     String macAddress;
     String jpgUrl;
     String internalUrl;
+    String externalUrl;
     String cameraUsername;
     String cameraPassword;
 
-    public CameraBuilder(String cameraId, String cameraName, Boolean isPublic, String externalUrl) throws EvercamException
+    public CameraBuilder(String cameraId, String cameraName, Boolean isPublic) throws EvercamException
     {
         if (cameraId != null)
         {
@@ -42,14 +42,6 @@ public class CameraBuilder
         {
             throw new EvercamException("camera public/private can not be null");
         }
-        if (externalUrl != null)
-        {
-            this.externalUrl= externalUrl;
-        }
-        else
-        {
-            throw new EvercamException("external url can not be null");
-        }
     }
 
     public CameraBuilder setJpgUrl(String jpgUrl)
@@ -61,6 +53,12 @@ public class CameraBuilder
     public CameraBuilder setInternalUrl(String internalUrl)
     {
         this.internalUrl = internalUrl;
+        return this;
+    }
+
+    public CameraBuilder setExternalUrl(String externalUrl)
+    {
+        this.externalUrl = externalUrl;
         return this;
     }
 
