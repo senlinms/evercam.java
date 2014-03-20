@@ -416,11 +416,11 @@ public class Camera extends EvercamObject
         {
             e.printStackTrace();
         }
-        if(internalUrl!=null)
+        if(internalUrl!=null && !internalUrl.equals("null"))
         {
             endpointsArray.add(internalUrl);
         }
-        if(externalUrl!=null)
+        if(externalUrl!=null && !externalUrl.equals("null"))
         {
             endpointsArray.add(externalUrl);
         }
@@ -490,35 +490,21 @@ public class Camera extends EvercamObject
     private String selectEndpoint() throws EvercamException
     {
         String snapshot = getJpgUrl();
-        String internalUrl = getInternalUrl();
-        String externalUrl = getExternalUrl();
 
-        if(internalUrl!=null)
+        for (String endpoint : getEndpoints())
         {
-            String internalFullUrl = getFullURL(internalUrl, snapshot);
+            String url = getFullURL(endpoint, snapshot);
             try
             {
-                HttpResponse<String> response = Unirest.get(internalFullUrl).asString();
+                HttpResponse<String> response = Unirest.get(url).asString();
                 if (response.getCode() != CODE_ERROR)
                 {
-                    return internalUrl;
+                    return endpoint;
                 }
             } catch (UnirestException e)
             {
-                throw new EvercamException(e);
-            }
-        }
-        String externalFullUrl = getFullURL(externalUrl, snapshot);
-        try
-        {
-            HttpResponse<String> response = Unirest.get(externalFullUrl).asString();
-            if (response.getCode() != CODE_ERROR)
-            {
-                return externalUrl;
-            }
-        } catch (UnirestException e)
-        {
             throw new EvercamException(e);
+            }
         }
         return null;
     }
