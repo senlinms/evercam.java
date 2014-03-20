@@ -47,11 +47,11 @@ public abstract class API
         return (((keyPair[0] != null) && (keyPair[1] != null)) ? true : false);
     }
 
-    protected static Map<String,Object> keypairMap() throws EvercamException
+    protected static Map<String, Object> keypairMap() throws EvercamException
     {
-        if(hasKeyPair())
+        if (hasKeyPair())
         {
-            Map<String,Object> map = new HashMap<String, Object>();
+            Map<String, Object> map = new HashMap<String, Object>();
             map.put("app_key", getKeyPair()[0]);
             map.put("app_id", getKeyPair()[1]);
             return map;

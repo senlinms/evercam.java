@@ -9,7 +9,7 @@ public class Snapshot
 
     Snapshot(JSONObject snapshotJsonObject)
     {
-         jsonObject = snapshotJsonObject;
+        jsonObject = snapshotJsonObject;
     }
 
     public String getCameraId() throws EvercamException
@@ -45,7 +45,7 @@ public class Snapshot
         }
     }
 
-    public String getTimeZone() throws  EvercamException
+    public String getTimeZone() throws EvercamException
     {
         try
         {

@@ -12,14 +12,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -98,7 +96,7 @@ public class Camera extends EvercamObject
     {
         if (API.hasKeyPair())
         {
-            if(API.isAuth())
+            if (API.isAuth())
             {
                 try
                 {
@@ -107,7 +105,7 @@ public class Camera extends EvercamObject
                     String encoding = Base64Coder.encodeString(API.getAuth()[0] + ":" + API.getAuth()[1]);
                     delete.setHeader("Authorization", "Basic " + encoding);
                     org.apache.http.HttpResponse response = client.execute(delete);
-                    if(response.getStatusLine().getStatusCode()==CODE_OK)
+                    if (response.getStatusLine().getStatusCode() == CODE_OK)
                     {
                         return true;
                     }
@@ -386,7 +384,7 @@ public class Camera extends EvercamObject
         String endpoint = selectEndpoint();
         if (endpoint != null)
         {
-            String url = getFullURL(endpoint,getJpgUrl());
+            String url = getFullURL(endpoint, getJpgUrl());
             try
             {
                 HttpResponse<String> response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asString();
@@ -416,11 +414,11 @@ public class Camera extends EvercamObject
         {
             e.printStackTrace();
         }
-        if(internalUrl!=null && !internalUrl.equals("null"))
+        if (internalUrl != null && !internalUrl.equals("null"))
         {
             endpointsArray.add(internalUrl);
         }
-        if(externalUrl!=null && !externalUrl.equals("null"))
+        if (externalUrl != null && !externalUrl.equals("null"))
         {
             endpointsArray.add(externalUrl);
         }
@@ -430,23 +428,23 @@ public class Camera extends EvercamObject
     public static Snapshot archiveSnapshot(String cameraId, String notes) throws EvercamException
     {
         Snapshot snapshot;
-        if(API.hasKeyPair())
+        if (API.hasKeyPair())
         {
-            if(API.isAuth())
+            if (API.isAuth())
             {
-                Map<String,Object> keypairMap = API.keypairMap();
+                Map<String, Object> keypairMap = API.keypairMap();
                 try
                 {
                     HttpResponse<JsonNode> response;
-                    if(notes == null)
+                    if (notes == null)
                     {
                         response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(keypairMap).basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
                     }
                     else
                     {
-                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(keypairMap).field("notes",notes).basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(keypairMap).field("notes", notes).basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
                     }
-                    if(response.getCode()==CODE_CREATE)
+                    if (response.getCode() == CODE_CREATE)
                     {
                         JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
                         snapshot = new Snapshot(snapshotJsonObject);
@@ -503,7 +501,7 @@ public class Camera extends EvercamObject
                 }
             } catch (UnirestException e)
             {
-            throw new EvercamException(e);
+                throw new EvercamException(e);
             }
         }
         return null;
@@ -542,11 +540,11 @@ public class Camera extends EvercamObject
         }
         if (cameraDetail.cameraUsername != null)
         {
-            cameraJSONObject.put("cam_username",cameraDetail.cameraUsername);
+            cameraJSONObject.put("cam_username", cameraDetail.cameraUsername);
         }
         if (cameraDetail.cameraPassword != null)
         {
-            cameraJSONObject.put("cam_password",cameraDetail.cameraPassword);
+            cameraJSONObject.put("cam_password", cameraDetail.cameraPassword);
         }
         if (cameraDetail.name != null)
         {
