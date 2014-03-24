@@ -28,11 +28,11 @@ public class APITest
     @Test
     public void testAPIKeyAndId()
     {
-        assertFalse(API.hasKeyPair());
+        assertFalse(API.hasDeveloperKeyPair());
         API.setKeyPair(TEST_KEY, TEST_ID);
-        assertTrue(API.hasKeyPair());
-        assertEquals(TEST_KEY, API.getKeyPair()[0]);
-        assertEquals(TEST_ID, API.getKeyPair()[1]);
+        assertTrue(API.hasDeveloperKeyPair());
+        assertEquals(TEST_KEY, API.getDeveloperKeyPair()[0]);
+        assertEquals(TEST_ID, API.getDeveloperKeyPair()[1]);
     }
 
     @AfterClass
