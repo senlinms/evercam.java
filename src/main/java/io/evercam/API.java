@@ -33,10 +33,10 @@ public abstract class API
         auth[1] = password;
     }
 
-    public static void setKeyPair(String apiKey, String apiID)
+    public static void setKeyPair(String developerApiKey, String developerApiID)
     {
-        developerKeyPair[0] = apiKey;
-        developerKeyPair[1] = apiID;
+        developerKeyPair[0] = developerApiKey;
+        developerKeyPair[1] = developerApiID;
     }
 
     public static void setUserKeyPair(String clientApiKey, String clientApiID)

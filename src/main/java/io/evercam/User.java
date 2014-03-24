@@ -91,13 +91,11 @@ public class User extends EvercamObject
 
     public User(String id) throws EvercamException
     {
-        if (API.hasDeveloperKeyPair())
+        if (API.hasUserKeyPair())
         {
-            if (API.isAuth())
-            {
                 try
                 {
-                    HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                    HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id + '/' + "?app_key=" + API.getUserKeyPair()[0] + "&app_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
                     if (response.getCode() == CODE_OK)
                     {
                         JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
@@ -105,24 +103,23 @@ public class User extends EvercamObject
                     }
                     else if (response.getCode() == CODE_UNAUTHORISED)
                     {
-                        throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
+                        throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                    }
+                    else if (response.getCode() == CODE_NOT_FOUND)
+                    {
+                        throw new EvercamException(response.getBody().getObject().getString("message"));
                     }
                 } catch (UnirestException e)
                 {
                     throw new EvercamException(e);
                 } catch (JSONException e)
                 {
-                    e.printStackTrace();
+                    throw new EvercamException(e);
                 }
-            }
-            else
-            {
-                throw new EvercamException("Authentication required to access user info");
-            }
         }
         else
         {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
     }
 
