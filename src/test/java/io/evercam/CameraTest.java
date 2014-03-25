@@ -29,29 +29,29 @@ public class CameraTest
         API.URL = TestURL.URL;
     }
 
-    @Test
-    public void testCreateCamera() throws EvercamException, JSONException
-    {
-        API.setAuth("joeyb", "12345");
-        API.setDeveloperKeyPair("apikey", "apiid");
-        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
-        Camera camera = Camera.create(cameraDetail);
-        assertEquals("testcamera", camera.getId());
+//    @Test
+//    public void testCreateCamera() throws EvercamException, JSONException
+//    {
+//        API.setAuth("joeyb", "12345");
+//        API.setDeveloperKeyPair("apikey", "apiid");
+//        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
+//        Camera camera = Camera.create(cameraDetail);
+//        assertEquals("testcamera", camera.getId());
+//
+//        API.setAuth(null, null);
+//        API.setDeveloperKeyPair(null, null);
+//        exception.expect(EvercamException.class);
+//        Camera.create(cameraDetail);
+//    }
 
-        API.setAuth(null, null);
-        API.setDeveloperKeyPair(null, null);
-        exception.expect(EvercamException.class);
-        Camera.create(cameraDetail);
-    }
-
-    @Test
-    public void testCreateBoundary() throws EvercamException, JSONException
-    {
-        CameraDetail failDetail = new CameraBuilder("fail", "name", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
-        API.setAuth("joeyb", "12345");
-        exception.expect(EvercamException.class);
-        Camera.create(failDetail);
-    }
+//    @Test
+//    public void testCreateBoundary() throws EvercamException, JSONException
+//    {
+//        CameraDetail failDetail = new CameraBuilder("fail", "name", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
+//        API.setAuth("joeyb", "12345");
+//        exception.expect(EvercamException.class);
+//        Camera.create(failDetail);
+//    }
 
     @Test
     public void testDeleteCamera()
@@ -64,36 +64,36 @@ public class CameraTest
     {
         //FIXME: Missing camera patch tests.
     }
-
-    @Test
-    public void testGetByIdCamera() throws EvercamException, IOException
-    {
-        API.setAuth(null, null);
-        API.setDeveloperKeyPair("apikey", "apiid");
-        Camera camera = Camera.getById("testcamera");
-        assertEquals("testcamera", camera.getId());
-        assertEquals("joeyb", camera.getOwner());
-        assertTrue(camera.isPublic());
-        assertEquals("user1", camera.getCameraUsername());
-        assertEquals("abcde", camera.getCameraPassword());
-        assertEquals(MOCK_URL + "basicauth", camera.getInternalHost());
-        assertEquals(MOCK_URL + "noauth", camera.getExternalHost());
-        assertEquals(2, camera.getEndpoints().size());
-        assertEquals("/snapshot.jpg", camera.getJpgUrl());
-        assertEquals(105708, getBytes(camera.getSnapshotImage()).length);
-        assertEquals("Public Camera", camera.getName());
-        assertEquals("axis", camera.getVendor());
-        assertEquals("null", camera.getModel());
-        assertEquals("Etc/UTC", camera.getTimezone());
-        assertEquals("null", camera.isOnline());
-        assertEquals("null", camera.getMacAddress());
-
-        API.setAuth("joeyb", "12345");
-        Camera cameraPrivate = Camera.getById("privatecamera");
-        assertFalse(cameraPrivate.isPublic());
-        assertEquals("privatecamera", cameraPrivate.getId());
-        API.setDeveloperKeyPair(null, null);
-    }
+//
+//    @Test
+//    public void testGetByIdCamera() throws EvercamException, IOException
+//    {
+//        API.setAuth(null, null);
+//        API.setDeveloperKeyPair("apikey", "apiid");
+//        Camera camera = Camera.getById("testcamera");
+//        assertEquals("testcamera", camera.getId());
+//        assertEquals("joeyb", camera.getOwner());
+//        assertTrue(camera.isPublic());
+//        assertEquals("user1", camera.getCameraUsername());
+//        assertEquals("abcde", camera.getCameraPassword());
+//        assertEquals(MOCK_URL + "basicauth", camera.getInternalHost());
+//        assertEquals(MOCK_URL + "noauth", camera.getExternalHost());
+//        assertEquals(2, camera.getEndpoints().size());
+//        assertEquals("/snapshot.jpg", camera.getJpgUrl());
+//        assertEquals(105708, getBytes(camera.getSnapshotImage()).length);
+//        assertEquals("Public Camera", camera.getName());
+//        assertEquals("axis", camera.getVendor());
+//        assertEquals("null", camera.getModel());
+//        assertEquals("Etc/UTC", camera.getTimezone());
+//        assertEquals("null", camera.isOnline());
+//        assertEquals("null", camera.getMacAddress());
+//
+//        API.setAuth("joeyb", "12345");
+//        Camera cameraPrivate = Camera.getById("privatecamera");
+//        assertFalse(cameraPrivate.isPublic());
+//        assertEquals("privatecamera", cameraPrivate.getId());
+//        API.setDeveloperKeyPair(null, null);
+//    }
 
     private static byte[] getBytes(InputStream is) throws IOException
     {

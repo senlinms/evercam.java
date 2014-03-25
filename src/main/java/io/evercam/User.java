@@ -172,7 +172,7 @@ public class User extends EvercamObject
                 HttpResponse<JsonNode> response;
                 if (API.hasUserKeyPair())
                 {
-                    response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                    response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
                 }
                 else
                 {

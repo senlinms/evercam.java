@@ -23,31 +23,19 @@ public abstract class API
     public static String VERSION = "v1";
     public static String URL = "https://dashboard.evercam.io/" + VERSION + "/";
 
-    private static String[] auth = {null, null};
     private static String[] developerKeyPair = {null, null};
     private static String[] userKeyPair = {null, null};
 
-    public static void setAuth(String username, String password)
+    public static void setDeveloperKeyPair(String developerAppKey, String developerAppID)
     {
-        auth[0] = username;
-        auth[1] = password;
-    }
-
-    public static void setDeveloperKeyPair(String developerApiKey, String developerApiID)
-    {
-        developerKeyPair[0] = developerApiKey;
-        developerKeyPair[1] = developerApiID;
+        developerKeyPair[0] = developerAppKey;
+        developerKeyPair[1] = developerAppID;
     }
 
     public static void setUserKeyPair(String userApiKey, String userApiID)
     {
         userKeyPair[0] = userApiKey;
         userKeyPair[1] = userApiID;
-    }
-
-    public static String[] getAuth()
-    {
-        return auth;
     }
 
     public static String[] getDeveloperKeyPair()
@@ -58,15 +46,6 @@ public abstract class API
     public static String[] getUserKeyPair()
     {
         return userKeyPair;
-    }
-
-    public static boolean isAuth()
-    {
-        if (!(auth[0] == null || auth[1] == null))
-        {
-            return true;
-        }
-        return false;
     }
 
     public static boolean hasDeveloperKeyPair()
@@ -129,15 +108,7 @@ public abstract class API
                     JSONObject keyPairJsonObject = new JSONObject(result);
                     userKeyPair = new ApiKeyPair(keyPairJsonObject);
                 }
-                else if(statusCode == EvercamObject.CODE_UNAUTHORISED)
-                {
-                    throw new EvercamException(EvercamException.MSG_INVALID_DEVELOPER_KEY);
-                }
-                else if(statusCode == EvercamObject.CODE_FORBIDDEN)
-                {
-                    throw new EvercamException("Invalid password");
-                }
-                else if(statusCode == EvercamObject.CODE_NOT_FOUND)
+                else
                 {
                     throw new EvercamException(new JSONObject(result).getString("message"));
                 }

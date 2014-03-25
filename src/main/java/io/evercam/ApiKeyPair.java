@@ -3,7 +3,7 @@ package io.evercam;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class ApiKeyPair
+public class ApiKeyPair
 {
     private JSONObject jsonObject;
 

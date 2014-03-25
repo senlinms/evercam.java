@@ -200,9 +200,7 @@ public class Camera extends EvercamObject
                 }
                 else
                 {
-                    //FIXME: Public camera should be returned without user api key.
-                    //response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").asJson();
-                    throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+                    response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").asJson();
                 }
                 if(response.getCode() == CODE_OK)
                 {
@@ -577,7 +575,7 @@ public class Camera extends EvercamObject
         }
         if (cameraDetail.externalHost != null)
         {
-            cameraJSONObject.put("external_url", cameraDetail.externalHost);
+            cameraJSONObject.put("external_host", cameraDetail.externalHost);
         }
         if (cameraDetail.externalHttpPort != 0)
         {

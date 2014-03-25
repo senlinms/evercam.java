@@ -59,4 +59,27 @@ public class CameraDetail
         cameraUsername = builder.cameraUsername;
         cameraPassword = builder.cameraPassword;
     }
+
+    @Override
+    public String toString()
+    {
+        return "CameraDetail{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", isPublic=" + isPublic +
+                ", vendor='" + vendor + '\'' +
+                ", model='" + model + '\'' +
+                ", timezone='" + timezone + '\'' +
+                ", macAddress='" + macAddress + '\'' +
+                ", jpgUrl='" + jpgUrl + '\'' +
+                ", internalHost='" + internalHost + '\'' +
+                ", internalHttpPort=" + internalHttpPort +
+                ", internalRtspPort=" + internalRtspPort +
+                ", externalHost='" + externalHost + '\'' +
+                ", externalHttpPort=" + externalHttpPort +
+                ", externalRtspPort=" + externalRtspPort +
+                ", cameraUsername='" + cameraUsername + '\'' +
+                ", cameraPassword='" + cameraPassword + '\'' +
+                '}';
+    }
 }
