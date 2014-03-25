@@ -96,11 +96,11 @@ public abstract class API
 
     protected static Map<String, Object> userKeyPairMap() throws EvercamException
     {
-        if (hasDeveloperKeyPair())
+        if (hasUserKeyPair())
         {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("app_key", getUserKeyPair()[0]);
-            map.put("app_id", getUserKeyPair()[1]);
+            map.put("api_key", getUserKeyPair()[0]);
+            map.put("api_id", getUserKeyPair()[1]);
             return map;
         }
         else
@@ -131,7 +131,7 @@ public abstract class API
                 }
                 else if(statusCode == EvercamObject.CODE_UNAUTHORISED)
                 {
-                    throw new EvercamException("Invalid developer api key/id");
+                    throw new EvercamException(EvercamException.MSG_INVALID_DEVELOPER_KEY);
                 }
                 else if(statusCode == EvercamObject.CODE_FORBIDDEN)
                 {

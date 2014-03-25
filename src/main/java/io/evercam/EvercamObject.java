@@ -9,7 +9,7 @@ public abstract class EvercamObject
     static final int CODE_OK = 200;
     static final int CODE_CREATE = 201;
     static final int CODE_UNAUTHORISED = 401;
-    static final int CODE_FORBIDDEN = 401;
+    static final int CODE_FORBIDDEN = 403;
     static final int CODE_ERROR = 400;
     static final int CODE_NOT_FOUND = 404;
     static final int CODE_SERVER_ERROR = 500;

@@ -34,7 +34,7 @@ public class CameraTest
     {
         API.setAuth("joeyb", "12345");
         API.setDeveloperKeyPair("apikey", "apiid");
-        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true).setExternalUrl("http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
+        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
         Camera camera = Camera.create(cameraDetail);
         assertEquals("testcamera", camera.getId());
 
@@ -47,7 +47,7 @@ public class CameraTest
     @Test
     public void testCreateBoundary() throws EvercamException, JSONException
     {
-        CameraDetail failDetail = new CameraBuilder("fail", "name", true).setExternalUrl("http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
+        CameraDetail failDetail = new CameraBuilder("fail", "name", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
         API.setAuth("joeyb", "12345");
         exception.expect(EvercamException.class);
         Camera.create(failDetail);
@@ -76,8 +76,8 @@ public class CameraTest
         assertTrue(camera.isPublic());
         assertEquals("user1", camera.getCameraUsername());
         assertEquals("abcde", camera.getCameraPassword());
-        assertEquals(MOCK_URL + "basicauth", camera.getInternalUrl());
-        assertEquals(MOCK_URL + "noauth", camera.getExternalUrl());
+        assertEquals(MOCK_URL + "basicauth", camera.getInternalHost());
+        assertEquals(MOCK_URL + "noauth", camera.getExternalHost());
         assertEquals(2, camera.getEndpoints().size());
         assertEquals("/snapshot.jpg", camera.getJpgUrl());
         assertEquals(105708, getBytes(camera.getSnapshotImage()).length);

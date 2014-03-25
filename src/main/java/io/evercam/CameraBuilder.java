@@ -11,8 +11,12 @@ public class CameraBuilder
     String timezone;
     String macAddress;
     String jpgUrl;
-    String internalUrl;
-    String externalUrl;
+    String internalHost;
+    int internalHttpPort;
+    int internalRtspPort;
+    String externalHost;
+    int externalHttpPort;
+    int externalRtspPort;
     String cameraUsername;
     String cameraPassword;
 
@@ -50,15 +54,39 @@ public class CameraBuilder
         return this;
     }
 
-    public CameraBuilder setInternalUrl(String internalUrl)
+    public CameraBuilder setInternalHost(String internalHost)
     {
-        this.internalUrl = internalUrl;
+        this.internalHost = internalHost;
         return this;
     }
 
-    public CameraBuilder setExternalUrl(String externalUrl)
+    public CameraBuilder setInternalHttpPort(int internalHttpPort)
     {
-        this.externalUrl = externalUrl;
+        this.internalHttpPort = internalHttpPort;
+        return this;
+    }
+
+    public CameraBuilder setInternalRtspPort(int internalRtspPort)
+    {
+        this.internalRtspPort = internalRtspPort;
+        return this;
+    }
+
+    public CameraBuilder setExternalHost(String externalHost)
+    {
+        this.externalHost = externalHost;
+        return this;
+    }
+
+    public CameraBuilder setExternalHttpPort(int externalHttpPort)
+    {
+        this.externalHttpPort = externalHttpPort;
+        return this;
+    }
+
+    public CameraBuilder setExternalRtspPort(int externalRtspPort)
+    {
+        this.externalRtspPort = externalRtspPort;
         return this;
     }
 

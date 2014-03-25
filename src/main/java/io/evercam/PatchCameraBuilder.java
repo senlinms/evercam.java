@@ -10,8 +10,12 @@ public class PatchCameraBuilder
     String timezone;
     String macAddress;
     String jpgUrl;
-    String internalUrl;
-    String externalUrl;
+    String internalHost;
+    int internalHttpPort;
+    int internalRtspPort;
+    String externalHost;
+    int externalHttpPort;
+    int externalRtspPort;
     String cameraUsername;
     String cameraPassword;
 
@@ -45,15 +49,39 @@ public class PatchCameraBuilder
         return this;
     }
 
-    public PatchCameraBuilder setInternalUrl(String internalUrl)
+    public PatchCameraBuilder setInternalHost(String internalHost)
     {
-        this.internalUrl = internalUrl;
+        this.internalHost = internalHost;
         return this;
     }
 
-    public PatchCameraBuilder setExternalUrl(String externalUrl)
+    public PatchCameraBuilder setInternalHttpPort(int internalHttpPort)
     {
-        this.externalUrl = externalUrl;
+        this.internalHttpPort = internalHttpPort;
+        return this;
+    }
+
+    public PatchCameraBuilder setInternalRtspPort(int internalRtspPort)
+    {
+        this.internalRtspPort = internalRtspPort;
+        return this;
+    }
+
+    public PatchCameraBuilder setExternalHost(String externalHost)
+    {
+        this.externalHost = externalHost;
+        return this;
+    }
+
+    public PatchCameraBuilder setExternalHttpPort(int externalHttpPort)
+    {
+        this.externalHttpPort = externalHttpPort;
+        return this;
+    }
+
+    public PatchCameraBuilder setExternalRtspPort(int externalRtspPort)
+    {
+        this.externalRtspPort = externalRtspPort;
         return this;
     }
 
