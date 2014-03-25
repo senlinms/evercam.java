@@ -17,6 +17,12 @@ public class User extends EvercamObject
 
     private static String URL = API.URL + "users";
 
+
+    User(JSONObject userJSONObject)
+    {
+        this.jsonObject = userJSONObject;
+    }
+
     public String getCountry() throws EvercamException
     {
         try
@@ -84,18 +90,13 @@ public class User extends EvercamObject
         }
     }
 
-    User(JSONObject userJSONObject)
-    {
-        this.jsonObject = userJSONObject;
-    }
-
     public User(String id) throws EvercamException
     {
         if (API.hasUserKeyPair())
         {
                 try
                 {
-                    HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id + '/' + "?app_key=" + API.getUserKeyPair()[0] + "&app_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                    HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
                     if (response.getCode() == CODE_OK)
                     {
                         JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
@@ -133,11 +134,11 @@ public class User extends EvercamObject
         userMap.put("username", userDetail.getUsername());
         userMap.put("country", userDetail.getCountrycode());
 
-        if (API.hasDeveloperKeyPair())
+        if (API.hasUserKeyPair())
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.post(URL + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").fields(userMap).field("parameter", "value").asJson();
+                HttpResponse<JsonNode> response = Unirest.post(URL + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").fields(userMap).asJson();
                 if (response.getCode() == CODE_CREATE)
                 {
                     JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
@@ -158,7 +159,7 @@ public class User extends EvercamObject
         }
         else
         {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
         return user;
     }
@@ -166,24 +167,29 @@ public class User extends EvercamObject
     public static ArrayList<Camera> getCameras(String userId) throws EvercamException
     {
         ArrayList<Camera> cameraList = new ArrayList<Camera>();
-        if (API.hasDeveloperKeyPair())
-        {
             try
             {
                 HttpResponse<JsonNode> response;
-                if (API.isAuth())
+                if (API.hasUserKeyPair())
                 {
-                    response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
+                    response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").basicAuth(API.getAuth()[0], API.getAuth()[1]).asJson();
                 }
                 else
                 {
-                    response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
+                    response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
                 }
+                if(response.getCode() == CODE_OK)
+                {
                 JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
                 for (int count = 0; count < camerasJSONArray.length(); count++)
                 {
                     JSONObject cameraJSONObject = camerasJSONArray.getJSONObject(count);
                     cameraList.add(new Camera(cameraJSONObject));
+                }
+                }
+                else
+                {
+                    //FIXME: ALL POSSIBLE RETURN CODES?
                 }
             } catch (JSONException e)
             {
@@ -192,11 +198,6 @@ public class User extends EvercamObject
             {
                 throw new EvercamException(e);
             }
-        }
-        else
-        {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
-        }
         return cameraList;
     }
 }

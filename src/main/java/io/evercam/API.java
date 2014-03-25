@@ -21,7 +21,7 @@ import java.util.Map;
 public abstract class API
 {
     public static String VERSION = "v1";
-    public static String URL = "https://api.evercam.io/" + VERSION + "/";
+    public static String URL = "https://dashboard.evercam.io/" + VERSION + "/";
 
     private static String[] auth = {null, null};
     private static String[] developerKeyPair = {null, null};
@@ -33,16 +33,16 @@ public abstract class API
         auth[1] = password;
     }
 
-    public static void setKeyPair(String developerApiKey, String developerApiID)
+    public static void setDeveloperKeyPair(String developerApiKey, String developerApiID)
     {
         developerKeyPair[0] = developerApiKey;
         developerKeyPair[1] = developerApiID;
     }
 
-    public static void setUserKeyPair(String clientApiKey, String clientApiID)
+    public static void setUserKeyPair(String userApiKey, String userApiID)
     {
-        userKeyPair[0] = clientApiKey;
-        userKeyPair[1] = clientApiID;
+        userKeyPair[0] = userApiKey;
+        userKeyPair[1] = userApiID;
     }
 
     public static String[] getAuth()
@@ -57,7 +57,7 @@ public abstract class API
 
     public static String[] getUserKeyPair()
     {
-        return developerKeyPair;
+        return userKeyPair;
     }
 
     public static boolean isAuth()

@@ -33,13 +33,13 @@ public class CameraTest
     public void testCreateCamera() throws EvercamException, JSONException
     {
         API.setAuth("joeyb", "12345");
-        API.setKeyPair("apikey", "apiid");
+        API.setDeveloperKeyPair("apikey", "apiid");
         CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true).setExternalUrl("http://127.0.0.1:8080").setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
         Camera camera = Camera.create(cameraDetail);
         assertEquals("testcamera", camera.getId());
 
         API.setAuth(null, null);
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
         exception.expect(EvercamException.class);
         Camera.create(cameraDetail);
     }
@@ -69,7 +69,7 @@ public class CameraTest
     public void testGetByIdCamera() throws EvercamException, IOException
     {
         API.setAuth(null, null);
-        API.setKeyPair("apikey", "apiid");
+        API.setDeveloperKeyPair("apikey", "apiid");
         Camera camera = Camera.getById("testcamera");
         assertEquals("testcamera", camera.getId());
         assertEquals("joeyb", camera.getOwner());
@@ -92,7 +92,7 @@ public class CameraTest
         Camera cameraPrivate = Camera.getById("privatecamera");
         assertFalse(cameraPrivate.isPublic());
         assertEquals("privatecamera", cameraPrivate.getId());
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
     }
 
     private static byte[] getBytes(InputStream is) throws IOException

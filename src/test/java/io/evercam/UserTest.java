@@ -25,7 +25,7 @@ public class UserTest
     @Test
     public void testCreateUser() throws EvercamException, JSONException
     {
-        API.setKeyPair("apikey", "apiid");
+        API.setDeveloperKeyPair("apikey", "apiid");
         UserDetail detail = new UserDetail();
         detail.setFirstname("Joe");
         detail.setLastname("Bloggs");
@@ -39,14 +39,14 @@ public class UserTest
         assertEquals("joeyb", user.getId());
         assertEquals("joeyb", user.getUsername());
         assertEquals("us", user.getCountry());
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
     }
 
     @Test
     public void testGetUser() throws EvercamException
     {
         API.setAuth("joeyb", "12345");
-        API.setKeyPair("apikey", "apiid");
+        API.setDeveloperKeyPair("apikey", "apiid");
         User user = new User("joeyb");
         assertEquals("Joe", user.getForename());
         assertEquals("Bloggs", user.getLastname());
@@ -55,7 +55,7 @@ public class UserTest
         assertEquals("joeyb", user.getUsername());
         assertEquals("us", user.getCountry());
         API.setAuth(null, null);
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
     }
 
     @Test
@@ -90,20 +90,20 @@ public class UserTest
     public void testGetCameras() throws EvercamException
     {
         API.setAuth(null, null);
-        API.setKeyPair("apikey", "apiid");
+        API.setDeveloperKeyPair("apikey", "apiid");
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(1, cameras.size());
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
     }
 
     @Test
     public void testGetCamerasWithAuth() throws EvercamException
     {
         API.setAuth("joeyb", "12345");
-        API.setKeyPair("apikey", "apiid");
+        API.setDeveloperKeyPair("apikey", "apiid");
         ArrayList<Camera> cameras = User.getCameras("joeyb");
         assertEquals(2, cameras.size());
         API.setAuth(null, null);
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
     }
 }

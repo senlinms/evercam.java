@@ -26,19 +26,30 @@ public class APITest
     }
 
     @Test
-    public void testAPIKeyAndId()
+    public void testDeveloperAPIKeyAndId()
     {
         assertFalse(API.hasDeveloperKeyPair());
-        API.setKeyPair(TEST_KEY, TEST_ID);
+        API.setDeveloperKeyPair(TEST_KEY, TEST_ID);
         assertTrue(API.hasDeveloperKeyPair());
         assertEquals(TEST_KEY, API.getDeveloperKeyPair()[0]);
         assertEquals(TEST_ID, API.getDeveloperKeyPair()[1]);
     }
 
+    @Test
+    public void testUserAPIKeyAndId()
+    {
+        assertFalse(API.hasUserKeyPair());
+        API.setUserKeyPair(TEST_KEY, TEST_ID);
+        assertTrue(API.hasUserKeyPair());
+        assertEquals(TEST_KEY, API.getUserKeyPair()[0]);
+        assertEquals(TEST_ID, API.getUserKeyPair()[1]);
+    }
+
     @AfterClass
     public static void resetAPI()
     {
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
+        API.setUserKeyPair(null, null);
         API.setAuth(null, null);
     }
 }

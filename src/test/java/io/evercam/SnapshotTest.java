@@ -18,7 +18,7 @@ public class SnapshotTest
     {
         API.URL = TestURL.URL;
         API.setAuth("joeyb", "12345");
-        API.setKeyPair("apikey", "apiid");
+        API.setDeveloperKeyPair("apikey", "apiid");
     }
 
     @Test
@@ -49,6 +49,6 @@ public class SnapshotTest
     public static void destroyClass()
     {
         API.setAuth(null, null);
-        API.setKeyPair(null, null);
+        API.setDeveloperKeyPair(null, null);
     }
 }
