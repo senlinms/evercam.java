@@ -25,17 +25,22 @@ public class Vendor extends EvercamObject
 
     public static Vendor getById(String vendorId) throws EvercamException
     {
+        ArrayList<Vendor> vendors = Model.getByVendor(vendorId);
+        if(!vendors.isEmpty())
+        {
         return Model.getByVendor(vendorId).get(0);
+        }
+        return null;
     }
 
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
-        return getVendors(URL_VENDORS + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]);
+        return getVendors(URL_VENDORS + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
     }
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
-        return getVendors(URL_VENDORS + '/' + mac + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]);
+        return getVendors(URL_VENDORS + '/' + mac + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
     }
 
     public String getId() throws EvercamException

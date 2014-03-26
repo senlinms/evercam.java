@@ -85,7 +85,7 @@ public class Model extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
                 if (response.getCode() == CODE_NOT_FOUND)
                 {
                     throw new EvercamException("model vendor not found");
@@ -98,6 +98,10 @@ public class Model extends EvercamObject
                         JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
                         vendorList.add(new Vendor(vendorJSONObject));
                     }
+                }
+                else
+                {
+                    throw new EvercamException(response.getBody().toString());
                 }
             } catch (JSONException e)
             {
@@ -121,7 +125,7 @@ public class Model extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(url + '/' + "?app_key=" + API.getDeveloperKeyPair()[0] + "&app_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(url + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
                 JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
                 for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
                 {
@@ -150,7 +154,7 @@ public class Model extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + modelId).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + modelId + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
                 JSONObject modelJSONObject = response.getBody().getObject().getJSONArray("models").getJSONObject(0);
                 model = new Model(modelJSONObject);
             } catch (JSONException e)

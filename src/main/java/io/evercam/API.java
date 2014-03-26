@@ -21,7 +21,7 @@ import java.util.Map;
 public abstract class API
 {
     public static String VERSION = "v1";
-    public static String URL = "https://dashboard.evercam.io/" + VERSION + "/";
+    public static String URL = "https://api.evercam.io/" + VERSION + "/";
 
     private static String[] developerKeyPair = {null, null};
     private static String[] userKeyPair = {null, null};
@@ -58,13 +58,13 @@ public abstract class API
         return (((userKeyPair[0] != null) && (userKeyPair[1] != null)) ? true : false);
     }
 
-    protected static Map<String, Object> keyPairMap() throws EvercamException
+    protected static Map<String, Object> developerKeyPairMap() throws EvercamException
     {
         if (hasDeveloperKeyPair())
         {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("app_key", getDeveloperKeyPair()[0]);
-            map.put("app_id", getDeveloperKeyPair()[1]);
+            map.put("api_key", getDeveloperKeyPair()[0]);
+            map.put("api_id", getDeveloperKeyPair()[1]);
             return map;
         }
         else

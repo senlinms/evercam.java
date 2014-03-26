@@ -134,11 +134,11 @@ public class User extends EvercamObject
         userMap.put("username", userDetail.getUsername());
         userMap.put("country", userDetail.getCountrycode());
 
-        if (API.hasUserKeyPair())
+        if (API.hasDeveloperKeyPair())
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.post(URL + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").fields(userMap).asJson();
+                HttpResponse<JsonNode> response = Unirest.post(URL + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").fields(userMap).asJson();
                 if (response.getCode() == CODE_CREATE)
                 {
                     JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
@@ -159,7 +159,7 @@ public class User extends EvercamObject
         }
         else
         {
-            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
         }
         return user;
     }
