@@ -27,7 +27,6 @@ public class UserTest
     {
         API.setDeveloperKeyPair(TestForReal.DEVELOPER_KEY, TestForReal.DEVELOPER_ID);
         RandomUser randomUser = new RandomUser();
-        System.out.print(randomUser.getUsername()+"___" + randomUser.getPassword());
 
         assertEquals(randomUser.getUsername(), randomUser.getUser().getUsername());
         assertEquals(randomUser.getEmail(), randomUser.getUser().getEmail());
