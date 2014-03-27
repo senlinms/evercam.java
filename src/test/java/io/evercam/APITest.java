@@ -4,45 +4,39 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class APITest
 {
-
-    String TEST_USERNAME = "username";
-    String TEST_PASSWORD = "password";
-    String TEST_KEY = "testkey";
-    String TEST_ID = "testid";
-
-
-//    @Test
-//    public void testAuth()
-//    {
-//        assertFalse(API.isAuth());
-//        API.setAuth(TEST_USERNAME, TEST_PASSWORD);
-//        String[] auth = API.getAuth();
-//        assertEquals(auth[0], TEST_USERNAME);
-//        assertEquals(auth[1], TEST_PASSWORD);
-//        assertTrue(API.isAuth());
-//    }
+    String DEVELOPER_TEST_KEY = "developertestkey";
+    String DEVELOPER_TEST_ID = "developertestid";
+    String USER_TEST_KEY = "usertestkey";
+    String USER_TEST_ID = "usertestid";
 
     @Test
-    public void testDeveloperAPIKeyAndId()
+    public void testDeveloperAPIKeyAndId() throws EvercamException
     {
         assertFalse(API.hasDeveloperKeyPair());
-        API.setDeveloperKeyPair(TEST_KEY, TEST_ID);
+        API.setDeveloperKeyPair(DEVELOPER_TEST_KEY, DEVELOPER_TEST_ID);
         assertTrue(API.hasDeveloperKeyPair());
-        assertEquals(TEST_KEY, API.getDeveloperKeyPair()[0]);
-        assertEquals(TEST_ID, API.getDeveloperKeyPair()[1]);
+        assertEquals(DEVELOPER_TEST_KEY, API.getDeveloperKeyPair()[0]);
+        assertEquals(DEVELOPER_TEST_ID, API.getDeveloperKeyPair()[1]);
+
+        assertEquals(DEVELOPER_TEST_KEY, API.developerKeyPairMap().get("api_key"));
+        assertEquals(DEVELOPER_TEST_ID, API.developerKeyPairMap().get("api_id"));
     }
 
     @Test
-    public void testUserAPIKeyAndId()
+    public void testUserAPIKeyAndId() throws EvercamException
     {
         assertFalse(API.hasUserKeyPair());
-        API.setUserKeyPair(TEST_KEY, TEST_ID);
+        API.setUserKeyPair(USER_TEST_KEY, USER_TEST_ID);
         assertTrue(API.hasUserKeyPair());
-        assertEquals(TEST_KEY, API.getUserKeyPair()[0]);
-        assertEquals(TEST_ID, API.getUserKeyPair()[1]);
+        assertEquals(USER_TEST_KEY, API.getUserKeyPair()[0]);
+        assertEquals(USER_TEST_ID, API.getUserKeyPair()[1]);
+
+        assertEquals(USER_TEST_KEY, API.userKeyPairMap().get("api_key"));
+        assertEquals(USER_TEST_ID, API.userKeyPairMap().get("api_id"));
     }
 
     @AfterClass

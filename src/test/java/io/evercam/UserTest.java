@@ -9,10 +9,10 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 public class UserTest
 {
-
     @BeforeClass
     public static void setUpClass()
     {
@@ -22,25 +22,20 @@ public class UserTest
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-//    @Test
-//    public void testCreateUser() throws EvercamException, JSONException
-//    {
-//        API.setDeveloperKeyPair("apikey", "apiid");
-//        UserDetail detail = new UserDetail();
-//        detail.setFirstname("Joe");
-//        detail.setLastname("Bloggs");
-//        detail.setCountrycode("us");
-//        detail.setEmail("joe.bloggs@example.org");
-//        detail.setUsername("joeyb");
-//        User user = User.create(detail);
-//        assertEquals("Joe", user.getForename());
-//        assertEquals("Bloggs", user.getLastname());
-//        assertEquals("joe.bloggs@example.org", user.getEmail());
-//        assertEquals("joeyb", user.getId());
-//        assertEquals("joeyb", user.getUsername());
-//        assertEquals("us", user.getCountry());
-//        API.setDeveloperKeyPair(null, null);
-//    }
+    @Test
+    public void testCreateUser() throws EvercamException, JSONException
+    {
+        API.setDeveloperKeyPair(TestForReal.DEVELOPER_KEY, TestForReal.DEVELOPER_ID);
+        RandomUser randomUser = new RandomUser();
+        System.out.print(randomUser.getUsername()+"___" + randomUser.getPassword());
+
+        assertEquals(randomUser.getUsername(), randomUser.getUser().getUsername());
+        assertEquals(randomUser.getEmail(), randomUser.getUser().getEmail());
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        assertNotNull(apiKeyPair.getApiId());
+        assertNotNull(apiKeyPair.getApiKey());
+        API.setDeveloperKeyPair(null, null);
+    }
 
 //    @Test
 //    public void testGetUser() throws EvercamException
@@ -58,33 +53,33 @@ public class UserTest
 //        API.setDeveloperKeyPair(null, null);
 //    }
 
-    @Test
-    public void testUserExists() throws EvercamException
-    {
-        UserDetail detail = new UserDetail();
-        detail.setFirstname("Joe");
-        detail.setLastname("Bloggs");
-        detail.setCountrycode("us");
-        detail.setEmail("joe.bloggs@example.org");
-        detail.setUsername("fail");
-        exception.expect(EvercamException.class);
-        User.create(detail);
-    }
-
-    @Test
-    public void testMissingUserDetail() throws EvercamException
-    {
-        UserDetail detail = new UserDetail();
-
-        exception.expect(EvercamException.class);
-        User.create(detail);
-
-        detail.setFirstname("Joe");
-        detail.setLastname("Bloggs");
-        detail.setCountrycode("us");
-        detail.setEmail("joe.bloggs@example.org");
-        detail.setUsername("fail");
-    }
+//    @Test
+//    public void testUserExists() throws EvercamException
+//    {
+//        UserDetail detail = new UserDetail();
+//        detail.setFirstname("Joe");
+//        detail.setLastname("Bloggs");
+//        detail.setCountrycode("us");
+//        detail.setEmail("joe.bloggs@example.org");
+//        detail.setUsername("fail");
+//        exception.expect(EvercamException.class);
+//        User.create(detail);
+//    }
+//
+//    @Test
+//    public void testMissingUserDetail() throws EvercamException
+//    {
+//        UserDetail detail = new UserDetail();
+//
+//        exception.expect(EvercamException.class);
+//        User.create(detail);
+//
+//        detail.setFirstname("Joe");
+//        detail.setLastname("Bloggs");
+//        detail.setCountrycode("us");
+//        detail.setEmail("joe.bloggs@example.org");
+//        detail.setUsername("fail");
+//    }
 
 //    @Test
 //    public void testGetCameras() throws EvercamException

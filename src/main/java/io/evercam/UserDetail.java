@@ -36,6 +36,15 @@ public class UserDetail
         return username;
     }
 
+    public String getPassword() throws EvercamException
+    {
+        if (password == null)
+        {
+            throw new EvercamException("password is missing");
+        }
+        return password;
+    }
+
     public String getEmail() throws EvercamException
     {
         if (email == null)
@@ -67,6 +76,11 @@ public class UserDetail
     public void setUsername(String username)
     {
         this.username = username;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 
     public void setEmail(String email)

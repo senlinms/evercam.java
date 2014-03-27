@@ -133,6 +133,7 @@ public class User extends EvercamObject
         userMap.put("email", userDetail.getEmail());
         userMap.put("username", userDetail.getUsername());
         userMap.put("country", userDetail.getCountrycode());
+        userMap.put("password", userDetail.getPassword());
 
         if (API.hasDeveloperKeyPair())
         {

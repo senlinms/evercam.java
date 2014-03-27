@@ -88,7 +88,6 @@ public abstract class API
         }
     }
 
-    //FIXME: Mock test code for this method
     public static ApiKeyPair requestUserKeyPairFromEvercam(String username, String password) throws EvercamException
     {
         ApiKeyPair userKeyPair = null;
