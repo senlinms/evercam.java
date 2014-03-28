@@ -15,3 +15,4 @@ dependency-reduced-pom.xml
 
 #Local tests
 TestForReal.java
+LocalConstants.java
