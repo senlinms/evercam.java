@@ -102,7 +102,11 @@ public class User extends EvercamObject
                         JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
                         this.jsonObject = userJSONObject;
                     }
-                    else if (response.getCode() == CODE_UNAUTHORISED)
+                    else if (response.getCode() == CODE_FORBIDDEN)
+                    {
+                        throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                    }
+                    else if(response.getCode() == CODE_UNAUTHORISED)
                     {
                         throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                     }

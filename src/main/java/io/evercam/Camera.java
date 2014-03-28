@@ -4,9 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.http.utils.Base64Coder;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -18,7 +16,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Map;
 
 
 public class Camera extends EvercamObject
@@ -432,9 +429,20 @@ public class Camera extends EvercamObject
             String url = getFullURL(endpoint, getJpgUrl());
             try
             {
-                HttpResponse<String> response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asString();
+                System.out.println("http://" + getCameraUsername() + ":" + getCameraPassword() + "@192.168.1.106:8080/back.jpg");
+//                DefaultHttpClient client = new DefaultHttpClient();
+//                HttpGet get = new HttpGet(url);
+//                String encoding = Base64Coder.encodeString(getCameraUsername() + ":" + getCameraPassword());
+//                get.setHeader("Authorization", "Basic " + encoding);
+//                org.apache.http.HttpResponse response = client.execute(get);
+//                String result = EntityUtils.toString(response.getEntity());
+//                response.getEntity().toString();
+        //        Unirest.setTimeouts(500000, 600000);
+             //   HttpResponse response = Unirest.get("http://" + getCameraUsername() + ":" + getCameraPassword() + "@192.168.1.106:8080/back.jpg").asBinary();
+                HttpResponse response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
                 inputStream = response.getRawBody();
-            } catch (UnirestException e)
+            //    inputStream = new ByteArrayInputStream(result.getBytes());
+            }  catch (UnirestException e)
             {
                 throw new EvercamException(e);
             }
@@ -548,7 +556,7 @@ public class Camera extends EvercamObject
         {
             endpoint = endpoint.substring(0, endpoint.lastIndexOf("/"));
         }
-        else if (!(endpoint.endsWith("/") && snapshot.startsWith("/")))
+        else if (!(endpoint.endsWith("/") || snapshot.startsWith("/")))
         {
             endpoint += '/';
         }
