@@ -33,47 +33,47 @@ public class Camera extends EvercamObject
         Camera camera = null;
         if (API.hasUserKeyPair())
         {
-                try
+            try
+            {
+                JSONObject cameraJSONObject = buildJSONObject(cameraDetail);
+                DefaultHttpClient client = new DefaultHttpClient();
+                HttpPost post = new HttpPost(URL);
+                post.setHeader("Content-type", "application/json");
+                post.setHeader("Accept", "application/json");
+                post.setEntity(new StringEntity(cameraJSONObject.toString()));
+                org.apache.http.HttpResponse response = client.execute(post);
+                String result = EntityUtils.toString(response.getEntity());
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == CODE_UNAUTHORISED)
                 {
-                    JSONObject cameraJSONObject = buildJSONObject(cameraDetail);
-                    DefaultHttpClient client = new DefaultHttpClient();
-                    HttpPost post = new HttpPost(URL);
-                    post.setHeader("Content-type", "application/json");
-                    post.setHeader("Accept", "application/json");
-                    post.setEntity(new StringEntity(cameraJSONObject.toString()));
-                    org.apache.http.HttpResponse response = client.execute(post);
-                    String result = EntityUtils.toString(response.getEntity());
-                    int statusCode = response.getStatusLine().getStatusCode();
-                    if (statusCode == CODE_UNAUTHORISED)
-                    {
-                        throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
-                    }
-                    else if (statusCode == CODE_ERROR)
-                    {
-                        JsonNode jsonNode = new JsonNode(result);
-                        String message = jsonNode.getObject().getString("message");
-                        throw new EvercamException(message);
-                    }
-                    else if (statusCode == CODE_CREATE)
-                    {
-                        JsonNode jsonNode = new JsonNode(result);
-                        JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
-                        return new Camera(jsonObject);
-                    }
-                    else if (statusCode == CODE_SERVER_ERROR)
-                    {
-                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
-                    }
-                } catch (JSONException e)
-                {
-                    throw new EvercamException(e);
-                } catch (ClientProtocolException e)
-                {
-                    throw new EvercamException(e);
-                } catch (IOException e)
-                {
-                    throw new EvercamException(e);
+                    throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
                 }
+                else if (statusCode == CODE_ERROR)
+                {
+                    JsonNode jsonNode = new JsonNode(result);
+                    String message = jsonNode.getObject().getString("message");
+                    throw new EvercamException(message);
+                }
+                else if (statusCode == CODE_CREATE)
+                {
+                    JsonNode jsonNode = new JsonNode(result);
+                    JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
+                    return new Camera(jsonObject);
+                }
+                else if (statusCode == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            } catch (ClientProtocolException e)
+            {
+                throw new EvercamException(e);
+            } catch (IOException e)
+            {
+                throw new EvercamException(e);
+            }
         }
         else
         {
@@ -86,33 +86,33 @@ public class Camera extends EvercamObject
     {
         if (API.hasUserKeyPair())
         {
-                try
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.delete(URL + '/' + cameraId).fields(API.userKeyPairMap()).asJson();
+                if (response.getCode() == CODE_OK)
                 {
-                    HttpResponse<JsonNode> response = Unirest.delete(URL + '/' + cameraId).fields(API.userKeyPairMap()).asJson() ;
-                    if(response.getCode() == CODE_OK)
-                    {
-                        return true;
-                    }
-                    else if (response.getCode() == CODE_UNAUTHORISED)
-                    {
-                        throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
-                    }
-                    else if(response.getCode() == CODE_NOT_FOUND)
-                    {
-                        throw new EvercamException(response.getBody().toString());
-                    }
-                    else if(response.getCode() == CODE_SERVER_ERROR)
-                    {
-                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }catch (UnirestException e)
-                {
-                    throw new EvercamException(e);
+                    return true;
                 }
+                else if (response.getCode() == CODE_UNAUTHORISED)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
+                else if (response.getCode() == CODE_NOT_FOUND)
+                {
+                    throw new EvercamException(response.getBody().toString());
+                }
+                else if (response.getCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                    return false;
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
         }
         else
         {
@@ -125,46 +125,46 @@ public class Camera extends EvercamObject
         Camera camera = null;
         if (API.hasUserKeyPair())
         {
-                try
+            try
+            {
+                JSONObject cameraJSONObject = buildJSONObject(cameraDetail);
+                DefaultHttpClient client = new DefaultHttpClient();
+                HttpPatch patch = new HttpPatch(URL + '/' + cameraDetail.id);
+                patch.setHeader("Content-type", "application/json");
+                patch.setHeader("Accept", "application/json");
+                patch.setEntity(new StringEntity(cameraJSONObject.toString()));
+                org.apache.http.HttpResponse response = client.execute(patch);
+                String result = EntityUtils.toString(response.getEntity());
+                if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
                 {
-                    JSONObject cameraJSONObject = buildJSONObject(cameraDetail);
-                    DefaultHttpClient client = new DefaultHttpClient();
-                    HttpPatch patch = new HttpPatch(URL + '/' + cameraDetail.id);
-                    patch.setHeader("Content-type", "application/json");
-                    patch.setHeader("Accept", "application/json");
-                    patch.setEntity(new StringEntity(cameraJSONObject.toString()));
-                    org.apache.http.HttpResponse response = client.execute(patch);
-                    String result = EntityUtils.toString(response.getEntity());
-                    if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
-                    {
-                        throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
-                    }
-                    else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
-                    {
-                        JsonNode jsonNode = new JsonNode(result);
-                        String message = jsonNode.getObject().getString("message");
-                        throw new EvercamException(message);
-                    }
-                    else if (response.getStatusLine().getStatusCode() == CODE_OK)
-                    {
-                        JsonNode jsonNode = new JsonNode(result);
-                        JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
-                        return new Camera(jsonObject);
-                    }
-                    else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
-                    {
-                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
-                    }
-                } catch (JSONException e)
-                {
-                    throw new EvercamException(e);
-                } catch (ClientProtocolException e)
-                {
-                    throw new EvercamException(e);
-                } catch (IOException e)
-                {
-                    throw new EvercamException(e);
+                    throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
                 }
+                else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
+                {
+                    JsonNode jsonNode = new JsonNode(result);
+                    String message = jsonNode.getObject().getString("message");
+                    throw new EvercamException(message);
+                }
+                else if (response.getStatusLine().getStatusCode() == CODE_OK)
+                {
+                    JsonNode jsonNode = new JsonNode(result);
+                    JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
+                    return new Camera(jsonObject);
+                }
+                else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            } catch (ClientProtocolException e)
+            {
+                throw new EvercamException(e);
+            } catch (IOException e)
+            {
+                throw new EvercamException(e);
+            }
         }
         else
         {
@@ -176,37 +176,37 @@ public class Camera extends EvercamObject
     public static Camera getById(String cameraId) throws EvercamException
     {
         Camera camera = null;
-            try
+        try
+        {
+            HttpResponse<JsonNode> response;
+            if (API.hasUserKeyPair())
             {
-                HttpResponse<JsonNode> response;
-                if (API.hasUserKeyPair())
-                {
-                    response = Unirest.get(URL + '/' + cameraId + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
-                }
-                else
-                {
-                    response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").asJson();
-                }
-                if(response.getCode() == CODE_OK)
-                {
-                    JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
-                    camera = new Camera(userJSONObject);
-                }
-                else if (response.getCode() == CODE_UNAUTHORISED)
-                {
-                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
-                }
-                else
-                {
-                    throw new EvercamException(response.getBody().toString());
-                }
-            } catch (JSONException e)
-            {
-                throw new EvercamException(e);
-            } catch (UnirestException e)
-            {
-                throw new EvercamException(e);
+                response = Unirest.get(URL + '/' + cameraId + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
             }
+            else
+            {
+                response = Unirest.get(URL + '/' + cameraId).header("accept", "application/json").asJson();
+            }
+            if (response.getCode() == CODE_OK)
+            {
+                JSONObject userJSONObject = response.getBody().getObject().getJSONArray("cameras").getJSONObject(0);
+                camera = new Camera(userJSONObject);
+            }
+            else if (response.getCode() == CODE_UNAUTHORISED)
+            {
+                throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+            }
+            else
+            {
+                throw new EvercamException(response.getBody().toString());
+            }
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        } catch (UnirestException e)
+        {
+            throw new EvercamException(e);
+        }
         return camera;
     }
 
@@ -420,7 +420,7 @@ public class Camera extends EvercamObject
             {
                 HttpResponse response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
                 inputStream = response.getRawBody();
-            }  catch (UnirestException e)
+            } catch (UnirestException e)
             {
                 throw new EvercamException(e);
             }
@@ -437,16 +437,16 @@ public class Camera extends EvercamObject
         ArrayList<String> endpointsArray = new ArrayList<String>();
         try
         {
-        if (getInternalHost() != null && !getInternalHost().equals("null"))
-        {
-            String internalUrl = "http://" + getInternalHost() + ":" + getInternalHttpPort();
-            endpointsArray.add(internalUrl);
-        }
-        if (getExternalHost() != null && !getExternalHost().equals("null"))
-        {
-            String externalUrl = "http://" + getExternalHost() + ":" + getExternalHttpPort();
-            endpointsArray.add(externalUrl);
-        }
+            if (getInternalHost() != null && !getInternalHost().equals("null"))
+            {
+                String internalUrl = "http://" + getInternalHost() + ":" + getInternalHttpPort();
+                endpointsArray.add(internalUrl);
+            }
+            if (getExternalHost() != null && !getExternalHost().equals("null"))
+            {
+                String externalUrl = "http://" + getExternalHost() + ":" + getExternalHttpPort();
+                endpointsArray.add(externalUrl);
+            }
         } catch (EvercamException e)
         {
             e.printStackTrace();
@@ -459,45 +459,45 @@ public class Camera extends EvercamObject
         Snapshot snapshot;
         if (API.hasUserKeyPair())
         {
-                try
+            try
+            {
+                HttpResponse<JsonNode> response;
+                if (notes == null)
                 {
-                    HttpResponse<JsonNode> response;
-                    if (notes == null)
-                    {
-                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(API.userKeyPairMap()).asJson();
-                    }
-                    else
-                    {
-                        response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(API.userKeyPairMap()).field("notes", notes).asJson();
-                    }
-                    if (response.getCode() == CODE_CREATE)
-                    {
-                        JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
-                        snapshot = new Snapshot(snapshotJsonObject);
-                    }
-                    else if (response.getCode() == CODE_NOT_FOUND)
-                    {
-                        throw new EvercamException("camera does not exist");
-                    }
-                    else if (response.getCode() == CODE_ERROR)
-                    {
-                        throw new EvercamException("camera is offline");
-                    }
-                    else if (response.getCode() == CODE_SERVER_ERROR)
-                    {
-                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
-                    }
-                    else
-                    {
-                        throw new EvercamException(response.getCode() + response.getBody().toString());
-                    }
-                } catch (UnirestException e)
-                {
-                    throw new EvercamException(e);
-                } catch (JSONException e)
-                {
-                    throw new EvercamException(e);
+                    response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(API.userKeyPairMap()).asJson();
                 }
+                else
+                {
+                    response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(API.userKeyPairMap()).field("notes", notes).asJson();
+                }
+                if (response.getCode() == CODE_CREATE)
+                {
+                    JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
+                    snapshot = new Snapshot(snapshotJsonObject);
+                }
+                else if (response.getCode() == CODE_NOT_FOUND)
+                {
+                    throw new EvercamException("camera does not exist");
+                }
+                else if (response.getCode() == CODE_ERROR)
+                {
+                    throw new EvercamException("camera is offline");
+                }
+                else if (response.getCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                    throw new EvercamException(response.getCode() + response.getBody().toString());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            }
         }
         else
         {
@@ -509,15 +509,15 @@ public class Camera extends EvercamObject
     public static ArrayList<Snapshot> getArchivedSnapshots(String cameraId) throws EvercamException
     {
         ArrayList<Snapshot> snapshots = new ArrayList<Snapshot>();
-        if(API.hasUserKeyPair())
+        if (API.hasUserKeyPair())
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/snapshots"+ "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
-                if(response.getCode() == CODE_OK)
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/snapshots" + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                if (response.getCode() == CODE_OK)
                 {
                     JSONArray snapshotJsonArray = response.getBody().getObject().getJSONArray("snapshots");
-                    for(int count = 0 ; count < snapshotJsonArray.length() ; count++)
+                    for (int count = 0; count < snapshotJsonArray.length(); count++)
                     {
                         JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(count);
                         snapshots.add(new Snapshot(snapshotJsonObject));

@@ -99,7 +99,7 @@ public class Model extends EvercamObject
                         vendorList.add(new Vendor(vendorJSONObject));
                     }
                 }
-                else if(response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
@@ -130,20 +130,20 @@ public class Model extends EvercamObject
             try
             {
                 HttpResponse<JsonNode> response = Unirest.get(url + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
-                if(response.getCode() == CODE_OK)
+                if (response.getCode() == CODE_OK)
                 {
-                JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
-                for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
-                {
-                    JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
-                    vendorList.add(new Vendor(vendorJSONObject));
-                }
+                    JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
+                    for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
+                    {
+                        JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
+                        vendorList.add(new Vendor(vendorJSONObject));
+                    }
                 }
                 else if (response.getCode() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }
-                else if(response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }

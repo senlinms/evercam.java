@@ -26,18 +26,18 @@ public class Vendor extends EvercamObject
     public static Vendor getById(String vendorId) throws EvercamException
     {
         ArrayList<Vendor> vendors = Model.getByVendor(vendorId);
-        if(!vendors.isEmpty())
+        if (!vendors.isEmpty())
         {
-        return Model.getByVendor(vendorId).get(0);
+            return Model.getByVendor(vendorId).get(0);
         }
         return null;
     }
 
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
-        if(API.hasDeveloperKeyPair())
+        if (API.hasDeveloperKeyPair())
         {
-        return getVendors(URL_VENDORS + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+            return getVendors(URL_VENDORS + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
         }
         else
         {
@@ -47,9 +47,9 @@ public class Vendor extends EvercamObject
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
-        if(API.hasDeveloperKeyPair())
+        if (API.hasDeveloperKeyPair())
         {
-        return getVendors(URL_VENDORS + '/' + mac + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+            return getVendors(URL_VENDORS + '/' + mac + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
         }
         else
         {
@@ -127,7 +127,7 @@ public class Vendor extends EvercamObject
             try
             {
                 HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
-                if(response.getCode() == CODE_OK)
+                if (response.getCode() == CODE_OK)
                 {
                     JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
                     for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
@@ -136,11 +136,11 @@ public class Vendor extends EvercamObject
                         vendorList.add(new Vendor(vendorJSONObject));
                     }
                 }
-                else if(response.getCode() == CODE_FORBIDDEN || response.getCode() == CODE_UNAUTHORISED)
+                else if (response.getCode() == CODE_FORBIDDEN || response.getCode() == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_DEVELOPER_KEY);
                 }
-                else if(response.getCode() == CODE_SERVER_ERROR)
+                else if (response.getCode() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }

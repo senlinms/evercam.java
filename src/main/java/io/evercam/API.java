@@ -84,18 +84,18 @@ public abstract class API
     public static ApiKeyPair requestUserKeyPairFromEvercam(String username, String password) throws EvercamException
     {
         ApiKeyPair userKeyPair = null;
-        if(hasDeveloperKeyPair())
+        if (hasDeveloperKeyPair())
         {
             try
             {
                 DefaultHttpClient client = new DefaultHttpClient();
-                HttpGet get = new HttpGet(URL + "/users/" +username + "/credentials?api_key=" +getDeveloperKeyPair()[0] + "&api_id=" + getDeveloperKeyPair()[1] + "&password="+ password);
+                HttpGet get = new HttpGet(URL + "/users/" + username + "/credentials?api_key=" + getDeveloperKeyPair()[0] + "&api_id=" + getDeveloperKeyPair()[1] + "&password=" + password);
                 get.setHeader("Accept", "application/json");
                 org.apache.http.HttpResponse response = client.execute(get);
                 String result = EntityUtils.toString(response.getEntity());
                 int statusCode = response.getStatusLine().getStatusCode();
 
-                if(statusCode == EvercamObject.CODE_OK)
+                if (statusCode == EvercamObject.CODE_OK)
                 {
                     JSONObject keyPairJsonObject = new JSONObject(result);
                     userKeyPair = new ApiKeyPair(keyPairJsonObject);
@@ -104,7 +104,7 @@ public abstract class API
                 {
                     throw new EvercamException(new JSONObject(result).getString("message"));
                 }
-            }  catch (ClientProtocolException e)
+            } catch (ClientProtocolException e)
             {
                 throw new EvercamException(e);
             } catch (IOException e)
