@@ -35,12 +35,26 @@ public class Vendor extends EvercamObject
 
     public static ArrayList<Vendor> getAll() throws EvercamException
     {
+        if(API.hasDeveloperKeyPair())
+        {
         return getVendors(URL_VENDORS + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
     }
 
     public static ArrayList<Vendor> getByMac(String mac) throws EvercamException
     {
+        if(API.hasDeveloperKeyPair())
+        {
         return getVendors(URL_VENDORS + '/' + mac + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
     }
 
     public String getId() throws EvercamException
@@ -52,24 +66,6 @@ public class Vendor extends EvercamObject
         {
             throw new EvercamException(e);
         }
-    }
-
-    public ArrayList<String> getModels() throws EvercamException
-    {
-        ArrayList<String> models = new ArrayList<String>();
-        try
-        {
-            JSONArray modelsJSONArray = jsonObject.getJSONArray("models");
-            for (int count = 0; count < modelsJSONArray.length(); count++)
-            {
-                models.add(count, modelsJSONArray.getString(count));
-            }
-
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
-        return models;
     }
 
     public String getName() throws EvercamException
@@ -131,7 +127,7 @@ public class Vendor extends EvercamObject
             try
             {
                 HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
-                try
+                if(response.getCode() == CODE_OK)
                 {
                     JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
                     for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
@@ -139,11 +135,24 @@ public class Vendor extends EvercamObject
                         JSONObject vendorJSONObject = vendorsJSONArray.getJSONObject(vendorIndex);
                         vendorList.add(new Vendor(vendorJSONObject));
                     }
-                } catch (JSONException e)
-                {
-                    throw new EvercamException(e);
                 }
+                else if(response.getCode() == CODE_FORBIDDEN || response.getCode() == CODE_UNAUTHORISED)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_DEVELOPER_KEY);
+                }
+                else if(response.getCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                    throw new EvercamException(response.getBody().toString());
+                }
+
             } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            } catch (JSONException e)
             {
                 throw new EvercamException(e);
             }
