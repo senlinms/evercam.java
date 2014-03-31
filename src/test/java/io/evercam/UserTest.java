@@ -6,6 +6,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.ArrayList;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
@@ -50,52 +52,31 @@ public class UserTest
         API.setUserKeyPair(null, null);
     }
 
-//    @Test
-//    public void testUserExists() throws EvercamException
-//    {
-//        UserDetail detail = new UserDetail();
-//        detail.setFirstname("Joe");
-//        detail.setLastname("Bloggs");
-//        detail.setCountrycode("us");
-//        detail.setEmail("joe.bloggs@example.org");
-//        detail.setUsername("fail");
-//        exception.expect(EvercamException.class);
-//        User.create(detail);
-//    }
-//
-//    @Test
-//    public void testMissingUserDetail() throws EvercamException
-//    {
-//        UserDetail detail = new UserDetail();
-//
-//        exception.expect(EvercamException.class);
-//        User.create(detail);
-//
-//        detail.setFirstname("Joe");
-//        detail.setLastname("Bloggs");
-//        detail.setCountrycode("us");
-//        detail.setEmail("joe.bloggs@example.org");
-//        detail.setUsername("fail");
-//    }
 
-//    @Test
-//    public void testGetCameras() throws EvercamException
-//    {
-//        API.setAuth(null, null);
-//        API.setDeveloperKeyPair("apikey", "apiid");
-//        ArrayList<Camera> cameras = User.getCameras("joeyb");
-//        assertEquals(1, cameras.size());
-//        API.setDeveloperKeyPair(null, null);
-//    }
+    @Test
+    public void testMissingUserDetail() throws EvercamException
+    {
+        UserDetail detail = new UserDetail();
+        exception.expect(EvercamException.class);
+        User.create(detail);
+    }
 
-//    @Test
-//    public void testGetCamerasWithAuth() throws EvercamException
-//    {
-//        API.setAuth("joeyb", "12345");
-//        API.setDeveloperKeyPair("apikey", "apiid");
-//        ArrayList<Camera> cameras = User.getCameras("joeyb");
-//        assertEquals(2, cameras.size());
-//        API.setAuth(null, null);
-//        API.setDeveloperKeyPair(null, null);
-//    }
+    @Test
+    public void testGetCameras() throws EvercamException
+    {
+        RandomUser randomUser = new RandomUser();
+        randomUser.addRandomCamera(true);
+        randomUser.addRandomCamera(false);
+
+        ArrayList<Camera> privateCameras = User.getCameras(randomUser.getUsername());
+        assertEquals(1, privateCameras.size());
+
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+
+        ArrayList<Camera> allCameras = User.getCameras(randomUser.getUsername());
+        assertEquals(2, allCameras.size());
+
+        API.setUserKeyPair(null, null);
+    }
 }

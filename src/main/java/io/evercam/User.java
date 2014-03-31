@@ -94,33 +94,33 @@ public class User extends EvercamObject
     {
         if (API.hasUserKeyPair())
         {
-                try
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                if (response.getCode() == CODE_OK)
                 {
-                    HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
-                    if (response.getCode() == CODE_OK)
-                    {
-                        JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
-                        this.jsonObject = userJSONObject;
-                    }
-                    else if (response.getCode() == CODE_FORBIDDEN)
-                    {
-                        throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
-                    }
-                    else if(response.getCode() == CODE_UNAUTHORISED)
-                    {
-                        throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
-                    }
-                    else if (response.getCode() == CODE_NOT_FOUND)
-                    {
-                        throw new EvercamException(response.getBody().getObject().getString("message"));
-                    }
-                } catch (UnirestException e)
-                {
-                    throw new EvercamException(e);
-                } catch (JSONException e)
-                {
-                    throw new EvercamException(e);
+                    JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
+                    this.jsonObject = userJSONObject;
                 }
+                else if (response.getCode() == CODE_FORBIDDEN || response.getCode() == CODE_UNAUTHORISED)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
+                else if (response.getCode() == CODE_NOT_FOUND)
+                {
+                    throw new EvercamException(response.getBody().getObject().getString("message"));
+                }
+                else
+                {
+                    throw new EvercamException(response.getBody().toString());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            }
         }
         else
         {
@@ -149,10 +149,18 @@ public class User extends EvercamObject
                     JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
                     user = new User(userJSONObject);
                 }
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
                 else if (response.getCode() == CODE_ERROR)
                 {
                     String message = response.getBody().getObject().getJSONArray("message").toString();
                     throw new EvercamException(message);
+                }
+                else
+                {
+                    throw new EvercamException(response.getBody().toString());
                 }
             } catch (JSONException e)
             {
@@ -172,37 +180,37 @@ public class User extends EvercamObject
     public static ArrayList<Camera> getCameras(String userId) throws EvercamException
     {
         ArrayList<Camera> cameraList = new ArrayList<Camera>();
-            try
+        try
+        {
+            HttpResponse<JsonNode> response;
+            if (API.hasUserKeyPair())
             {
-                HttpResponse<JsonNode> response;
-                if (API.hasUserKeyPair())
-                {
-                    response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
-                }
-                else
-                {
-                    response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
-                }
-                if(response.getCode() == CODE_OK)
-                {
+                response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+            }
+            else
+            {
+                response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
+            }
+            if (response.getCode() == CODE_OK)
+            {
                 JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
                 for (int count = 0; count < camerasJSONArray.length(); count++)
                 {
                     JSONObject cameraJSONObject = camerasJSONArray.getJSONObject(count);
                     cameraList.add(new Camera(cameraJSONObject));
                 }
-                }
-                else
-                {
-                    //FIXME: ALL POSSIBLE RETURN CODES?
-                }
-            } catch (JSONException e)
-            {
-                throw new EvercamException(e);
-            } catch (UnirestException e)
-            {
-                throw new EvercamException(e);
             }
+            else
+            {
+                throw new EvercamException(response.getBody().toString());
+            }
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        } catch (UnirestException e)
+        {
+            throw new EvercamException(e);
+        }
         return cameraList;
     }
 }

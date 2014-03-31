@@ -40,7 +40,6 @@ public class Camera extends EvercamObject
                     post.setHeader("Content-type", "application/json");
                     post.setHeader("Accept", "application/json");
                     post.setEntity(new StringEntity(cameraJSONObject.toString()));
-                    System.out.println(cameraJSONObject.toString());
                     org.apache.http.HttpResponse response = client.execute(post);
                     String result = EntityUtils.toString(response.getEntity());
                     int statusCode = response.getStatusLine().getStatusCode();
@@ -89,22 +88,6 @@ public class Camera extends EvercamObject
                 try
                 {
                     HttpResponse<JsonNode> response = Unirest.delete(URL + '/' + cameraId).fields(API.userKeyPairMap()).asJson() ;
-//                    DefaultHttpClient client = new DefaultHttpClient();
-//                    HttpDelete delete = new HttpDelete(URL + '/' + cameraId);
-//                    org.apache.http.HttpResponse response = client.execute(delete);
-//                    if (response.getStatusLine().getStatusCode() == CODE_OK)
-//                    {
-//                        return true;
-//                    }
-//                    else if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
-//                    {
-//                         throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
-//                    }
-//                    else
-//                    {
-//                        System.out.println(response.getStatusLine().getStatusCode() + response.getEntity().toString());
-//                        return false;
-//                    }
                     if(response.getCode()==CODE_OK)
                     {
                         return true;
@@ -429,19 +412,8 @@ public class Camera extends EvercamObject
             String url = getFullURL(endpoint, getJpgUrl());
             try
             {
-                System.out.println("http://" + getCameraUsername() + ":" + getCameraPassword() + "@192.168.1.106:8080/back.jpg");
-//                DefaultHttpClient client = new DefaultHttpClient();
-//                HttpGet get = new HttpGet(url);
-//                String encoding = Base64Coder.encodeString(getCameraUsername() + ":" + getCameraPassword());
-//                get.setHeader("Authorization", "Basic " + encoding);
-//                org.apache.http.HttpResponse response = client.execute(get);
-//                String result = EntityUtils.toString(response.getEntity());
-//                response.getEntity().toString();
-        //        Unirest.setTimeouts(500000, 600000);
-             //   HttpResponse response = Unirest.get("http://" + getCameraUsername() + ":" + getCameraPassword() + "@192.168.1.106:8080/back.jpg").asBinary();
                 HttpResponse response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
                 inputStream = response.getRawBody();
-            //    inputStream = new ByteArrayInputStream(result.getBytes());
             }  catch (UnirestException e)
             {
                 throw new EvercamException(e);
