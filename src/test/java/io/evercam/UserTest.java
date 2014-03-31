@@ -1,6 +1,7 @@
 package io.evercam;
 
 import org.json.JSONException;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -78,5 +79,11 @@ public class UserTest
         assertEquals(2, allCameras.size());
 
         API.setUserKeyPair(null, null);
+    }
+
+    @AfterClass
+    public static void destroyClass()
+    {
+        API.setDeveloperKeyPair(null, null);
     }
 }

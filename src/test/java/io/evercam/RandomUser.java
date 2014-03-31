@@ -17,7 +17,7 @@ public class RandomUser
     public static final int CAMERA_EXTERNAL_RTSP = 554554;
     public static final String CAMERA_USERNAME = "username";
     public static final String CAMERA_PASSWORD = "password";
-    public static final String CAMERA_JPG_URL = "snapshot.jpg";
+    public static final String CAMERA_JPG_URL = "/snapshot.jpg";
     public static final String CAMERA_TIMEZONE = "Etc/UTC";
     public static final String CAMERA_VENDOR = "hikvision";
     public static final String CAMERA_MODEL = "*";
@@ -59,6 +59,29 @@ public class RandomUser
                 .setCameraUsername(CAMERA_USERNAME).setCameraPassword(CAMERA_PASSWORD)
                 .setJpgUrl(CAMERA_JPG_URL).setTimeZone(CAMERA_TIMEZONE)
                 .setVendor(CAMERA_VENDOR).setModel(CAMERA_MODEL).setMacAddress(CAMERA_MAC).build();
+        Camera camera = Camera.create(detail);
+        API.setUserKeyPair(null, null);
+        return camera;
+    }
+
+    public Camera addBasicCamera() throws EvercamException
+    {
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        CameraDetail detail = new CameraBuilder(randomUUID(),CAMERA_NAME, true).build();
+        Camera camera = Camera.create(detail);
+        API.setUserKeyPair(null, null);
+        return camera;
+    }
+
+    public Camera addRealCamera() throws EvercamException
+    {
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        CameraDetail detail = new CameraBuilder(randomUUID(),CAMERA_NAME, true)
+                .setExternalHost("89.101.225.158").setExternalHttpPort(8101)
+                .setCameraUsername("admin").setCameraPassword("12345")
+                .setJpgUrl("/Streaming/channels/1/picture").build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;

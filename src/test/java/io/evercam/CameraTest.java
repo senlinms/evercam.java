@@ -1,6 +1,8 @@
 package io.evercam;
 
 
+import javafx.scene.control.RadioMenuItem;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -17,8 +20,6 @@ import static org.junit.Assert.assertFalse;
 
 public class CameraTest
 {
-    private final String MOCK_URL = "http://ec2-54-194-83-178.eu-west-1.compute.amazonaws.com:3000/";
-
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -26,95 +27,109 @@ public class CameraTest
     public static void setUpClass()
     {
         API.URL = TestURL.URL;
-    }
-
-//    @Test
-//    public void testCreateCamera() throws EvercamException, JSONException
-//    {
-//        API.setAuth("joeyb", "12345");
-//        API.setDeveloperKeyPair("apikey", "apiid");
-//        CameraDetail cameraDetail = new CameraBuilder("testcamera", "testcameraname", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
-//        Camera camera = Camera.create(cameraDetail);
-//        assertEquals("testcamera", camera.getId());
-//
-//        API.setAuth(null, null);
-//        API.setDeveloperKeyPair(null, null);
-//        exception.expect(EvercamException.class);
-//        Camera.create(cameraDetail);
-//    }
-
-//    @Test
-//    public void testCreateBoundary() throws EvercamException, JSONException
-//    {
-//        CameraDetail failDetail = new CameraBuilder("fail", "name", true).setExternalHost("127.0.0.1").setExternalHttpPort(8080).setJpgUrl("/onvif/snapshot").setCameraUsername("user1").setCameraPassword("abcde").build();
-//        API.setAuth("joeyb", "12345");
-//        exception.expect(EvercamException.class);
-//        Camera.create(failDetail);
-//    }
-
-    @Test
-    public void testDeleteCamera()
-    {
-        //FIXME: Missing camera delete tests.
+        API.setDeveloperKeyPair(LocalConstants.DEVELOPER_KEY, LocalConstants.DEVELOPER_ID);
     }
 
     @Test
-    public void testPatchCamera()
+    public void testCreateAndDeleteCamera() throws EvercamException
     {
-        //FIXME: Missing camera patch tests.
-    }
-//
-//    @Test
-//    public void testGetByIdCamera() throws EvercamException, IOException
-//    {
-//        API.setAuth(null, null);
-//        API.setDeveloperKeyPair("apikey", "apiid");
-//        Camera camera = Camera.getById("testcamera");
-//        assertEquals("testcamera", camera.getId());
-//        assertEquals("joeyb", camera.getOwner());
-//        assertTrue(camera.isPublic());
-//        assertEquals("user1", camera.getCameraUsername());
-//        assertEquals("abcde", camera.getCameraPassword());
-//        assertEquals(MOCK_URL + "basicauth", camera.getInternalHost());
-//        assertEquals(MOCK_URL + "noauth", camera.getExternalHost());
-//        assertEquals(2, camera.getEndpoints().size());
-//        assertEquals("/snapshot.jpg", camera.getJpgUrl());
-//        assertEquals(105708, getBytes(camera.getSnapshotImage()).length);
-//        assertEquals("Public Camera", camera.getName());
-//        assertEquals("axis", camera.getVendor());
-//        assertEquals("null", camera.getModel());
-//        assertEquals("Etc/UTC", camera.getTimezone());
-//        assertEquals("null", camera.isOnline());
-//        assertEquals("null", camera.getMacAddress());
-//
-//        API.setAuth("joeyb", "12345");
-//        Camera cameraPrivate = Camera.getById("privatecamera");
-//        assertFalse(cameraPrivate.isPublic());
-//        assertEquals("privatecamera", cameraPrivate.getId());
-//        API.setDeveloperKeyPair(null, null);
-//    }
+        RandomUser randomUser = new RandomUser();
 
-    private static byte[] getBytes(InputStream is) throws IOException
-    {
+        Camera camera = randomUser.addRandomCamera(true);
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        assertEquals(1, User.getCameras(randomUser.getUsername()).size());
 
-        int len;
-        int size = 1024;
-        byte[] buf;
+        Camera.delete(camera.getId());
+        assertEquals(0, User.getCameras(randomUser.getUsername()).size());
 
-        if (is instanceof ByteArrayInputStream)
-        {
-            size = is.available();
-            buf = new byte[size];
-        }
-        else
-        {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            buf = new byte[size];
-            while ((len = is.read(buf, 0, size)) != -1)
-                bos.write(buf, 0, len);
-            buf = bos.toByteArray();
-        }
-        return buf;
+        API.setUserKeyPair(null, null);
     }
 
+    @Test
+    public void testPatchCamera() throws EvercamException
+    {
+        final String PATCH_CAMERA_NAME = "Patch Camera";
+        RandomUser randomUser = new RandomUser();
+        Camera camera = randomUser.addBasicCamera();
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+
+        CameraDetail detail = new PatchCameraBuilder(camera.getId())
+                .setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
+                        CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP)
+                .setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP)
+                .setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD)
+                .setJpgUrl(RandomUser.CAMERA_JPG_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE)
+                .setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC)
+        .setName(PATCH_CAMERA_NAME).setPublic(false).build();
+        Camera patchCamera = Camera.patch(detail);
+        assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());
+        assertEquals(false, patchCamera.isPublic());
+        assertEquals(RandomUser.CAMERA_INTERNAL_HOST, patchCamera.getInternalHost());
+        assertEquals(RandomUser.CAMERA_INTERNAL_HTTP, patchCamera.getInternalHttpPort());
+        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP, patchCamera.getInternalRtspPort());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_HOST, patchCamera.getExternalHost());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_HTTP, patchCamera.getExternalHttpPort());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP, patchCamera.getExternalRtspPort());
+        assertEquals(RandomUser.CAMERA_USERNAME, patchCamera.getCameraUsername());
+        assertEquals(RandomUser.CAMERA_PASSWORD, patchCamera.getCameraPassword());
+        assertEquals(RandomUser.CAMERA_JPG_URL, patchCamera.getJpgUrl());
+        assertEquals(RandomUser.CAMERA_TIMEZONE, patchCamera.getTimezone());
+        assertEquals(RandomUser.CAMERA_VENDOR, patchCamera.getVendor());
+        assertEquals(RandomUser.CAMERA_MAC, patchCamera.getMacAddress());
+        assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
+
+        API.setUserKeyPair(null, null);
+    }
+
+    @Test
+    public void testCameraGetById() throws EvercamException
+    {
+        RandomUser randomUser = new RandomUser();
+        Camera randomCamera = randomUser.addRandomCamera(true);
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        Camera camera = Camera.getById(randomCamera.getId());
+        assertEquals(randomCamera.getId(), camera.getId());
+        assertEquals(randomUser.getUsername(), camera.getOwner());
+        assertEquals(2, camera.getEndpoints().size());
+        assertEquals("null", camera.isOnline());
+
+        API.setUserKeyPair(null, null);
+    }
+
+    @Test
+    public void testCameraGetByIdWithoutUserKeyPair() throws EvercamException
+    {
+        RandomUser randomUser = new RandomUser();
+        Camera randomCamera = randomUser.addRandomCamera(true);
+        Camera camera = Camera.getById(randomCamera.getId());
+
+        exception.expect(EvercamException.class);
+        camera.getOwner();
+    }
+
+    @Test
+    public void testArchiveSnapshot() throws EvercamException
+    {
+        final String SNAPSHOT_NOTE = "note";
+        RandomUser randomUser = new RandomUser();
+        Camera camera = randomUser.addRealCamera();
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+
+        Camera.archiveSnapshot(camera.getId(), SNAPSHOT_NOTE);
+        ArrayList<Snapshot> snapshots = Camera.getArchivedSnapshots(camera.getId());
+        assertEquals(1, snapshots.size());
+        Snapshot snapshot = snapshots.get(0);
+        assertEquals(SNAPSHOT_NOTE, snapshot.getNotes());
+        assertEquals(camera.getId(), snapshot.getCameraId());
+    }
+
+    @AfterClass
+    public static void destroyClass()
+    {
+        API.setDeveloperKeyPair(null, null);
+    }
 }

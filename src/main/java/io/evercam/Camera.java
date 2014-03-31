@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,10 +69,10 @@ public class Camera extends EvercamObject
                     throw new EvercamException(e);
                 } catch (ClientProtocolException e)
                 {
-                    e.printStackTrace();
+                    throw new EvercamException(e);
                 } catch (IOException e)
                 {
-                    e.printStackTrace();
+                    throw new EvercamException(e);
                 }
         }
         else
@@ -88,7 +89,7 @@ public class Camera extends EvercamObject
                 try
                 {
                     HttpResponse<JsonNode> response = Unirest.delete(URL + '/' + cameraId).fields(API.userKeyPairMap()).asJson() ;
-                    if(response.getCode()==CODE_OK)
+                    if(response.getCode() == CODE_OK)
                     {
                         return true;
                     }
@@ -99,6 +100,10 @@ public class Camera extends EvercamObject
                     else if(response.getCode() == CODE_NOT_FOUND)
                     {
                         throw new EvercamException(response.getBody().toString());
+                    }
+                    else if(response.getCode() == CODE_SERVER_ERROR)
+                    {
+                        throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                     }
                     else
                     {
@@ -155,10 +160,10 @@ public class Camera extends EvercamObject
                     throw new EvercamException(e);
                 } catch (ClientProtocolException e)
                 {
-                    e.printStackTrace();
+                    throw new EvercamException(e);
                 } catch (IOException e)
                 {
-                    e.printStackTrace();
+                    throw new EvercamException(e);
                 }
         }
         else
@@ -403,6 +408,7 @@ public class Camera extends EvercamObject
         }
     }
 
+    //FIXME: tests for this method
     public InputStream getSnapshotImage() throws EvercamException
     {
         InputStream inputStream;
@@ -471,7 +477,7 @@ public class Camera extends EvercamObject
                     }
                     else if (response.getCode() == CODE_NOT_FOUND)
                     {
-                        throw new EvercamException("Camera does not exist");
+                        throw new EvercamException("camera does not exist");
                     }
                     else if (response.getCode() == CODE_ERROR)
                     {
@@ -498,6 +504,50 @@ public class Camera extends EvercamObject
             throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
         return snapshot;
+    }
+
+    public static ArrayList<Snapshot> getArchivedSnapshots(String cameraId) throws EvercamException
+    {
+        ArrayList<Snapshot> snapshots = new ArrayList<Snapshot>();
+        if(API.hasUserKeyPair())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/snapshots"+ "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                if(response.getCode() == CODE_OK)
+                {
+                    JSONArray snapshotJsonArray = response.getBody().getObject().getJSONArray("snapshots");
+                    for(int count = 0 ; count < snapshotJsonArray.length() ; count++)
+                    {
+                        JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(count);
+                        snapshots.add(new Snapshot(snapshotJsonObject));
+                    }
+                }
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
+                else if (response.getCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                    throw new EvercamException(response.getBody().toString());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+        return snapshots;
     }
 
     private String selectEndpoint() throws EvercamException
