@@ -67,6 +67,12 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_MAC, patchCamera.getMacAddress());
         assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
 
+        //tests for get full URLs
+        String expectedInternalJpgUrl = "http://127.0.0.1:80/snapshot.jpg";
+        String expectedExternalJpgUrl = "http://123.123.123.123:8080/snapshot.jpg";
+        assertEquals(expectedInternalJpgUrl,patchCamera.getJpgInternalFullUrl());
+        assertEquals(expectedExternalJpgUrl,patchCamera.getJpgExternalFullUrl());
+
         API.setUserKeyPair(null, null);
     }
 

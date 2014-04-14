@@ -550,6 +550,26 @@ public class Camera extends EvercamObject
         return snapshots;
     }
 
+    public String getInternalFullUrl() throws EvercamException
+    {
+       return "http://" + getInternalHost() + ":" + getInternalHttpPort();
+    }
+
+    public String getExternalFullUrl() throws EvercamException
+    {
+        return "http://" + getExternalHost() + ":" + getExternalHttpPort();
+    }
+
+    public String getJpgInternalFullUrl() throws EvercamException
+    {
+        return getFullURL(getInternalFullUrl(), getJpgUrl());
+    }
+
+    public String getJpgExternalFullUrl() throws EvercamException
+    {
+        return getFullURL(getExternalFullUrl(), getJpgUrl());
+    }
+
     private String selectEndpoint() throws EvercamException
     {
         String snapshot = getJpgUrl();
@@ -572,17 +592,17 @@ public class Camera extends EvercamObject
         return null;
     }
 
-    private String getFullURL(String endpoint, String snapshot)
+    private String getFullURL(String endpoint, String relativePath)
     {
-        if (endpoint.endsWith("/") && snapshot.startsWith("/"))
+        if (endpoint.endsWith("/") && relativePath.startsWith("/"))
         {
             endpoint = endpoint.substring(0, endpoint.lastIndexOf("/"));
         }
-        else if (!(endpoint.endsWith("/") || snapshot.startsWith("/")))
+        else if (!(endpoint.endsWith("/") || relativePath.startsWith("/")))
         {
             endpoint += '/';
         }
-        return endpoint + snapshot;
+        return endpoint + relativePath;
     }
 
     private static JSONObject buildJSONObject(CameraDetail cameraDetail) throws JSONException
