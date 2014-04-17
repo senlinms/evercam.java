@@ -397,14 +397,14 @@ public class Camera extends EvercamObject
         }
     }
 
-    public String isOnline() throws EvercamException
+    public boolean isOnline() throws EvercamException
     {
         try
         {
-            return jsonObject.getString("is_online");
+            return jsonObject.getBoolean("is_online");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return false;
         }
     }
 

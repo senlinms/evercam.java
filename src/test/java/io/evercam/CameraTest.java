@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class CameraTest
 {
@@ -49,7 +50,10 @@ public class CameraTest
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
 
         CameraDetail detail = new PatchCameraBuilder(camera.getId()).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
-                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).build();
+                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP)
+                .setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD)
+                .setJpgUrl(RandomUser.CAMERA_JPG_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL)
+                .setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).build();
         Camera patchCamera = Camera.patch(detail);
         assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());
         assertEquals(false, patchCamera.isPublic());
@@ -66,6 +70,7 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_VENDOR, patchCamera.getVendor());
         assertEquals(RandomUser.CAMERA_MAC, patchCamera.getMacAddress());
         assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
+        assertFalse(patchCamera.isOnline());
 
         //tests for get full URLs
         String expectedInternalJpgUrl = "http://127.0.0.1:80/snapshot.jpg";
@@ -87,7 +92,6 @@ public class CameraTest
         assertEquals(randomCamera.getId(), camera.getId());
         assertEquals(randomUser.getUsername(), camera.getOwner());
         assertEquals(2, camera.getEndpoints().size());
-        assertEquals("null", camera.isOnline());
 
         API.setUserKeyPair(null, null);
     }
