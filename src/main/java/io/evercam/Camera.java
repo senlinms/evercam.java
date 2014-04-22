@@ -228,7 +228,7 @@ public class Camera extends EvercamObject
             return jsonObject.getInt("external_http_port");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return 0;
         }
     }
 
@@ -239,7 +239,7 @@ public class Camera extends EvercamObject
             return jsonObject.getInt("external_rtsp_port");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return 0;
         }
     }
 
@@ -261,7 +261,7 @@ public class Camera extends EvercamObject
             return jsonObject.getInt("internal_http_port");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return 0;
         }
     }
 
@@ -272,7 +272,7 @@ public class Camera extends EvercamObject
             return jsonObject.getInt("internal_rtsp_port");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return 0;
         }
     }
 
