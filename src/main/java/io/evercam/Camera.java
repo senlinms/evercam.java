@@ -550,6 +550,54 @@ public class Camera extends EvercamObject
         return snapshots;
     }
 
+    public static Snapshot getLatestArchivedSnapshot(String cameraId, boolean withData) throws EvercamException
+    {
+        Snapshot snapshot;
+        HttpResponse<JsonNode> response;
+        if(API.hasUserKeyPair())
+        {
+        try
+        {
+            if(withData)
+            {
+                response = Unirest.get(URL + "/" + cameraId + "/snapshots/latest" + "?with_data=true&api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+            }
+            else
+            {
+                response = Unirest.get(URL + "/" + cameraId + "/snapshots/latest" + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+            }
+            if(response.getCode() == CODE_OK)
+            {
+                JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
+                snapshot = new Snapshot(snapshotJsonObject);
+            }
+            else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+            {
+                throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+            }
+            else if (response.getCode() == CODE_SERVER_ERROR)
+            {
+                throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+            }
+            else
+            {
+                throw new EvercamException(response.getBody().toString());
+            }
+        } catch (UnirestException e)
+        {
+            throw new EvercamException(e);
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+        return snapshot;
+    }
+
     public String getInternalFullUrl() throws EvercamException
     {
        return "http://" + getInternalHost() + ":" + getInternalHttpPort();

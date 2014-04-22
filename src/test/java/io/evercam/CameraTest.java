@@ -107,23 +107,6 @@ public class CameraTest
         camera.getOwner();
     }
 
-    @Test
-    public void testArchiveSnapshot() throws EvercamException
-    {
-        final String SNAPSHOT_NOTE = "note";
-        RandomUser randomUser = new RandomUser();
-        Camera camera = randomUser.addRealCamera();
-        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
-        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-
-        Camera.archiveSnapshot(camera.getId(), SNAPSHOT_NOTE);
-        ArrayList<Snapshot> snapshots = Camera.getArchivedSnapshots(camera.getId());
-        assertEquals(1, snapshots.size());
-        Snapshot snapshot = snapshots.get(0);
-        assertEquals(SNAPSHOT_NOTE, snapshot.getNotes());
-        assertEquals(camera.getId(), snapshot.getCameraId());
-    }
-
     @AfterClass
     public static void destroyClass()
     {
