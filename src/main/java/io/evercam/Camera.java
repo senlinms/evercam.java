@@ -408,6 +408,31 @@ public class Camera extends EvercamObject
         }
     }
 
+    public String getInternalJpgUrl() throws EvercamException
+    {
+        return getFullUrls().getInternalJpgUrl();
+    }
+
+    public String getExternalJpgUrl() throws EvercamException
+    {
+        return getFullUrls().getExternalJpgUrl();
+    }
+
+    public String getInternalRtspUrl() throws EvercamException
+    {
+        return getFullUrls().getInternalRtspUrl();
+    }
+
+    public String getExternalRtspUrl() throws EvercamException
+    {
+        return getFullUrls().getExternalRtspUrl();
+    }
+
+    public String getShortJpgUrl() throws EvercamException
+    {
+        return getFullUrls().getShortJpgUrl();
+    }
+
     //FIXME: tests for this method
     public InputStream getSnapshotImage() throws EvercamException
     {
@@ -598,26 +623,6 @@ public class Camera extends EvercamObject
         return snapshot;
     }
 
-    public String getInternalFullUrl() throws EvercamException
-    {
-       return "http://" + getInternalHost() + ":" + getInternalHttpPort();
-    }
-
-    public String getExternalFullUrl() throws EvercamException
-    {
-        return "http://" + getExternalHost() + ":" + getExternalHttpPort();
-    }
-
-    public String getJpgInternalFullUrl() throws EvercamException
-    {
-        return getFullURL(getInternalFullUrl(), getJpgUrl());
-    }
-
-    public String getJpgExternalFullUrl() throws EvercamException
-    {
-        return getFullURL(getExternalFullUrl(), getJpgUrl());
-    }
-
     private String selectEndpoint() throws EvercamException
     {
         String snapshot = getJpgUrl();
@@ -721,5 +726,19 @@ public class Camera extends EvercamObject
         }
 
         return cameraJSONObject;
+    }
+
+    private FullUrls getFullUrls() throws EvercamException
+    {
+        FullUrls fullUrls;
+        try
+        {
+            JSONObject fullUrlJsonObject = jsonObject.getJSONObject("extra_urls");
+            fullUrls = new FullUrls(fullUrlJsonObject);
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        return  fullUrls;
     }
 }

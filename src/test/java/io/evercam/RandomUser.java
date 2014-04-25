@@ -23,6 +23,11 @@ public class RandomUser
     public static final String CAMERA_MODEL = "*";
     public static final String CAMERA_MAC = "11:11:11:11:11:11";
 
+    public static final String CAMERA_INTERNAL_JPG_URL =  "http://127.0.0.1:80/snapshot.jpg";
+    public static final String CAMERA_EXTERNAL_JPG_URL =  "http://123.123.123.123:8080/snapshot.jpg";
+    public static final String CAMERA_INTERNAL_RTSP_URL =  "http://127.0.0.1:80/snapshot.jpg";
+    public static final String CAMERA_EXTERNAL_RTSP_URL =  "http://123.123.123.123:8080/snapshot.jpg";
+    public static final String CAMERA_SHORT_JPG_URL =  "http://127.0.0.1:80/snapshot.jpg";
 
     private User user;
     private String username;
