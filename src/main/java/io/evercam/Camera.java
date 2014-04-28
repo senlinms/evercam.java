@@ -438,6 +438,28 @@ public class Camera extends EvercamObject
         return getFullUrls().getExternalRtspUrl();
     }
 
+    public String getInternalRtspUrlWithCredential() throws EvercamException
+    {
+        return replaceUrlWithCredential(getInternalRtspUrl(), RTSP_PREFIX);
+    }
+
+    public String getExternalRtspUrlWithCredential()  throws EvercamException
+    {
+        return replaceUrlWithCredential(getExternalRtspUrl(), RTSP_PREFIX);
+    }
+
+    private String replaceUrlWithCredential(String url, String prefix)throws EvercamException
+    {
+        if(!url.isEmpty() && url.startsWith(prefix))
+        {
+            return url.replace(prefix, prefix+ getCameraUsername() + ":" + getCameraPassword() + "@");
+        }
+        else
+        {
+            return "";
+        }
+    }
+
     public String getShortJpgUrl() throws EvercamException
     {
         return getFullUrls().getShortJpgUrl();

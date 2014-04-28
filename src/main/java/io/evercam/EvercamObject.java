@@ -13,6 +13,9 @@ public abstract class EvercamObject
     static final int CODE_ERROR = 400;
     static final int CODE_NOT_FOUND = 404;
     static final int CODE_SERVER_ERROR = 500;
+
+    final String RTSP_PREFIX = "rtsp://";
+
     JSONObject jsonObject;
 
     @Override

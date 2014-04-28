@@ -71,10 +71,12 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_VENDOR, patchCamera.getVendor());
         assertEquals(RandomUser.CAMERA_MAC, patchCamera.getMacAddress());
         assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
-        assertEquals("" ,patchCamera.getInternalJpgUrl());
+        assertEquals(RandomUser.CAMERA_INTERNAL_JPG_URL ,patchCamera.getInternalJpgUrl());
         assertEquals(RandomUser.CAMERA_EXTERNAL_JPG_URL,patchCamera.getExternalJpgUrl());
         assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL,patchCamera.getInternalRtspUrl());
         assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL,patchCamera.getExternalRtspUrl());
+        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL_WITH_AUTH,patchCamera.getInternalRtspUrlWithCredential());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH,patchCamera.getExternalRtspUrlWithCredential());
         assertNotSame("", patchCamera.getShortJpgUrl());
         assertFalse(patchCamera.isOnline());
 
