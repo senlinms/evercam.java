@@ -5,6 +5,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -88,20 +89,26 @@ public class Camera extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.delete(URL + '/' + cameraId).fields(API.userKeyPairMap()).asJson();
-                if (response.getCode() == CODE_OK)
+                DefaultHttpClient client = new DefaultHttpClient();
+                HttpDelete delete = new HttpDelete(URL + '/' + cameraId + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]);
+                delete.setHeader("Content-type", "application/json");
+                delete.setHeader("Accept", "application/json");
+                org.apache.http.HttpResponse response = client.execute(delete);
+                String result = EntityUtils.toString(response.getEntity());
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == CODE_OK)
                 {
                     return true;
                 }
-                else if (response.getCode() == CODE_UNAUTHORISED)
+                else if (statusCode == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
-                else if (response.getCode() == CODE_NOT_FOUND)
+                else if (statusCode == CODE_NOT_FOUND)
                 {
-                    throw new EvercamException(response.getBody().toString());
+                    throw new EvercamException(result);
                 }
-                else if (response.getCode() == CODE_SERVER_ERROR)
+                else if (statusCode == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }
@@ -109,7 +116,10 @@ public class Camera extends EvercamObject
                 {
                     return false;
                 }
-            } catch (UnirestException e)
+            }  catch (ClientProtocolException e)
+            {
+                throw new EvercamException(e);
+            } catch (IOException e)
             {
                 throw new EvercamException(e);
             }

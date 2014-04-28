@@ -9,7 +9,7 @@ public class RandomUser
     public static final String COUNTRY_CODE = "us";
 
     public static final String CAMERA_NAME = "Random Camera";
-    public static final String CAMERA_INTERNAL_HOST = "127.0.0.1";
+    public static final String CAMERA_INTERNAL_HOST = "192.168.1.2";
     public static final String CAMERA_EXTERNAL_HOST = "123.123.123.123";
     public static final int CAMERA_INTERNAL_HTTP = 80;
     public static final int CAMERA_INTERNAL_RTSP = 554;
@@ -25,9 +25,8 @@ public class RandomUser
 
     public static final String CAMERA_INTERNAL_JPG_URL =  "http://127.0.0.1:80/snapshot.jpg";
     public static final String CAMERA_EXTERNAL_JPG_URL =  "http://123.123.123.123:8080/snapshot.jpg";
-    public static final String CAMERA_INTERNAL_RTSP_URL =  "http://127.0.0.1:80/snapshot.jpg";
-    public static final String CAMERA_EXTERNAL_RTSP_URL =  "http://123.123.123.123:8080/snapshot.jpg";
-    public static final String CAMERA_SHORT_JPG_URL =  "http://127.0.0.1:80/snapshot.jpg";
+    public static final String CAMERA_INTERNAL_RTSP_URL =  "rtsp://192.168.1.2:554/h264/ch1/main/av_stream";
+    public static final String CAMERA_EXTERNAL_RTSP_URL =  "rtsp://123.123.123.123:554554/h264/ch1/main/av_stream";
 
     private User user;
     private String username;

@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
 import static org.junit.Assert.assertFalse;
 
 public class CameraTest
@@ -70,11 +71,11 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_VENDOR, patchCamera.getVendor());
         assertEquals(RandomUser.CAMERA_MAC, patchCamera.getMacAddress());
         assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
-        assertEquals(RandomUser.CAMERA_INTERNAL_JPG_URL ,patchCamera.getInternalJpgUrl());
+        assertEquals("" ,patchCamera.getInternalJpgUrl());
         assertEquals(RandomUser.CAMERA_EXTERNAL_JPG_URL,patchCamera.getExternalJpgUrl());
         assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL,patchCamera.getInternalRtspUrl());
         assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL,patchCamera.getExternalRtspUrl());
-        assertEquals(randomUser.CAMERA_SHORT_JPG_URL,patchCamera.getShortJpgUrl());
+        assertNotSame("", patchCamera.getShortJpgUrl());
         assertFalse(patchCamera.isOnline());
 
         API.setUserKeyPair(null, null);
