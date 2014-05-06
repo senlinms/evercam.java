@@ -60,6 +60,86 @@ public class CameraDetail
         cameraPassword = builder.cameraPassword;
     }
 
+    public String getId()
+    {
+        return id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public Boolean getIsPublic()
+    {
+        return isPublic;
+    }
+
+    public String getVendor()
+    {
+        return vendor;
+    }
+
+    public String getModel()
+    {
+        return model;
+    }
+
+    public String getTimezone()
+    {
+        return timezone;
+    }
+
+    public String getMacAddress()
+    {
+        return macAddress;
+    }
+
+    public String getJpgUrl()
+    {
+        return jpgUrl;
+    }
+
+    public String getInternalHost()
+    {
+        return internalHost;
+    }
+
+    public int getInternalHttpPort()
+    {
+        return internalHttpPort;
+    }
+
+    public int getExternalHttpPort()
+    {
+        return externalHttpPort;
+    }
+
+    public String getExternalHost()
+    {
+        return externalHost;
+    }
+
+    public int getInternalRtspPort()
+    {
+        return internalRtspPort;
+    }
+
+    public int getExternalRtspPort()
+    {
+        return externalRtspPort;
+    }
+
+    public String getCameraUsername()
+    {
+        return cameraUsername;
+    }
+
+    public String getCameraPassword()
+    {
+        return cameraPassword;
+    }
+
     @Override
     public String toString()
     {
