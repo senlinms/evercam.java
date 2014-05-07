@@ -98,17 +98,6 @@ public class CameraTest
         API.setUserKeyPair(null, null);
     }
 
-    @Test
-    public void testCameraGetByIdWithoutUserKeyPair() throws EvercamException
-    {
-        RandomUser randomUser = new RandomUser();
-        Camera randomCamera = randomUser.addRandomCamera(true);
-        Camera camera = Camera.getById(randomCamera.getId());
-
-        exception.expect(EvercamException.class);
-        camera.getOwner();
-    }
-
     @AfterClass
     public static void destroyClass()
     {
