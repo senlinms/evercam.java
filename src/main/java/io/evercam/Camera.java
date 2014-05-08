@@ -4,6 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPatch;
@@ -192,6 +193,27 @@ public class Camera extends EvercamObject
     public static ArrayList<Camera> getByIdSet(String idSetString) throws EvercamException
     {
         return getByUrl(URL + "?ids=" + idSetString);
+    }
+
+    public static InputStream getSnapshotByCameraId(String cameraId) throws EvercamException
+    {
+        InputStream inputStream;
+        if (API.hasUserKeyPair())
+        {
+            try
+            {
+                HttpResponse response = Unirest.get(URL + "/" + cameraId + "/snapshot.jpg").fields(API.userKeyPairMap()).asBinary();
+                inputStream = response.getRawBody();
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+        return inputStream;
     }
 
     public boolean hasCredentials() throws EvercamException
@@ -444,28 +466,96 @@ public class Camera extends EvercamObject
         return getFullUrls().getShortJpgUrl();
     }
 
-    //FIXME: tests for this method
-    public InputStream getSnapshotImage() throws EvercamException
+    public String getDynamicDnsJpgUrl() throws EvercamException
+    {
+        return getFullUrls().getDynamicDnsJpgUrl();
+    }
+
+    public String getDynamicDnsRtspUrl() throws EvercamException
+    {
+        return getFullUrls().getDynamicDnsRtspUrl();
+    }
+
+    public InputStream getSnapshotImageFromUrl(String url) throws EvercamException
     {
         InputStream inputStream;
-        String endpoint = selectEndpoint();
-        if (endpoint != null)
+        try
         {
-            String url = getFullURL(endpoint, getJpgUrl());
-            try
-            {
-                HttpResponse response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
-                inputStream = response.getRawBody();
-            } catch (UnirestException e)
-            {
-                throw new EvercamException(e);
-            }
-        }
-        else
+            HttpResponse response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
+            inputStream = response.getRawBody();
+        } catch (UnirestException e)
         {
-            throw new EvercamException("Endpoint not available");
+            throw new EvercamException(e);
         }
         return inputStream;
+    }
+
+    public InputStream getSnapshotFromEvercam() throws EvercamException
+    {
+        return getSnapshotByCameraId(getId());
+    }
+
+    //    //FIXME: tests for this method
+    //    public InputStream getSnapshotImage() throws EvercamException
+    //    {
+    //        String internalJpgUrl = getInternalJpgUrl();
+    //        String externalJpgUrl = getExternalJpgUrl();
+    //
+    //        try
+    //        {
+    //        if(hasCredentials())
+    //        {
+    //            if(!internalJpgUrl.isEmpty() && isValidUrl(internalJpgUrl))
+    //            {
+    //                HttpResponse response = Unirest.get(internalJpgUrl).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
+    //
+    //                InputStream rawImageData = response.getRawBody();
+    //                byte[] bytes = IOUtils.toByteArray(rawImageData);
+    //                if(bytes.length != 0)
+    //                {
+    //                    System.out.println("returned by local URL");
+    //                    return response.getRawBody();
+    //                }
+    //            }
+    //
+    //            if(!externalJpgUrl.isEmpty() && isValidUrl(externalJpgUrl))
+    //            {
+    //                System.out.println("returned by external URL");
+    //                HttpResponse response = Unirest.get(externalJpgUrl).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
+    //                return response.getRawBody();
+    //            }
+    //            else
+    //            {
+    //                return getSnapshotFromShortUrl();
+    //            }
+    //        }
+    //        else
+    //        {
+    //            return getSnapshotFromShortUrl();
+    //        }
+    //        } catch (UnirestException e)
+    //        {
+    //            throw new EvercamException(e);
+    //        } catch (IOException e)
+    //        {
+    //            throw new EvercamException(e);
+    //        }
+    //    }
+
+    private boolean isValidUrl(String url)
+    {
+        try
+        {
+            HttpResponse response = Unirest.get(url).asBinary();
+            if (response.getCode() != CODE_ERROR)
+            {
+                return true;
+            }
+        } catch (UnirestException e)
+        {
+
+        }
+        return false;
     }
 
     public ArrayList<String> getEndpoints()
@@ -632,28 +722,6 @@ public class Camera extends EvercamObject
             throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
         return snapshot;
-    }
-
-    private String selectEndpoint() throws EvercamException
-    {
-        String snapshot = getJpgUrl();
-
-        for (String endpoint : getEndpoints())
-        {
-            String url = getFullURL(endpoint, snapshot);
-            try
-            {
-                HttpResponse<String> response = Unirest.get(url).asString();
-                if (response.getCode() != CODE_ERROR)
-                {
-                    return endpoint;
-                }
-            } catch (UnirestException e)
-            {
-                throw new EvercamException(e);
-            }
-        }
-        return null;
     }
 
     private String getFullURL(String endpoint, String relativePath)

@@ -1,12 +1,7 @@
 package io.evercam;
 
-import com.mashape.unirest.http.utils.Base64Coder;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 public class Snapshot
 {

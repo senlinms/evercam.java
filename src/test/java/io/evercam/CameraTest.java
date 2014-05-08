@@ -75,6 +75,9 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL_WITH_AUTH,patchCamera.getInternalRtspUrlWithCredential());
         assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH,patchCamera.getExternalRtspUrlWithCredential());
         assertNotSame("", patchCamera.getShortJpgUrl());
+        //FIXME: Test server not updated yet.
+//        assertEquals("", patchCamera.getDynamicDnsJpgUrl());
+//        assertEquals("", patchCamera.getDynamicDnsRtspUrl());
         assertFalse(patchCamera.isOnline());
 
         API.setUserKeyPair(null, null);

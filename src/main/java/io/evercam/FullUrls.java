@@ -20,6 +20,11 @@ public class FullUrls extends EvercamObject
         return getUrlFromJsonObject("external_jpg_url");
     }
 
+    public String getDynamicDnsJpgUrl() throws EvercamException
+    {
+        return getUrlFromJsonObject("dyndns_jpg_url");
+    }
+
     public String getInternalRtspUrl() throws EvercamException
     {
         return getUrlFromJsonObject("internal_rtsp_url");
@@ -28,6 +33,11 @@ public class FullUrls extends EvercamObject
     public String getExternalRtspUrl() throws EvercamException
     {
         return getUrlFromJsonObject("external_rtsp_url");
+    }
+
+    public String getDynamicDnsRtspUrl() throws EvercamException
+    {
+        return getUrlFromJsonObject("dyndns_rtsp_url");
     }
 
     public String getShortJpgUrl() throws EvercamException
