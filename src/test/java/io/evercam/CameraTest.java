@@ -1,10 +1,7 @@
 package io.evercam;
 
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
@@ -84,17 +81,21 @@ public class CameraTest
     }
 
     @Test
-    public void testCameraGetById() throws EvercamException
+    public void testCameraGetByIdAndIdSet() throws EvercamException
     {
         RandomUser randomUser = new RandomUser();
-        Camera randomCamera = randomUser.addRandomCamera(true);
+        Camera randomCamera1 = randomUser.addRandomCamera(true);
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        Camera camera = Camera.getById(randomCamera.getId());
-        assertEquals(randomCamera.getId(), camera.getId());
+        Camera camera = Camera.getById(randomCamera1.getId());
+        assertEquals(randomCamera1.getId(), camera.getId());
         assertEquals(randomUser.getUsername(), camera.getOwner());
         assertEquals(2, camera.getEndpoints().size());
 
+        Camera randomCamera2 = randomUser.addRandomCamera(true);
+        String idSet = randomCamera1.getId() + "," + randomCamera2.getId();
+        ArrayList<Camera> camerasSet = Camera.getByIdSet(idSet);
+        Assert.assertEquals(2,camerasSet.size());
         API.setUserKeyPair(null, null);
     }
 

@@ -214,9 +214,12 @@ public class User extends EvercamObject
         return cameraList;
     }
 
-//    public static ArrayList<Camera> getCamerasIncludingShares(String userId) throws EvercamException
-//    {
-//        ArrayList<Camera> cameraList = getCameras(userId);
-//        String shareNameSet = CameraShare.getNameSetString(userId);
-//    }
+    public static ArrayList<Camera> getCamerasIncludeShares(String userId) throws EvercamException
+    {
+        ArrayList<Camera> cameraList = getCameras(userId);
+        String shareNameSet = CameraShare.getNameSetString(userId);
+        ArrayList<Camera> sharedCameraList = Camera.getByIdSet(shareNameSet);
+        cameraList.addAll(sharedCameraList);
+        return cameraList;
+    }
 }
