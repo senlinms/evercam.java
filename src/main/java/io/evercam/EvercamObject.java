@@ -18,6 +18,17 @@ public abstract class EvercamObject
 
     JSONObject jsonObject;
 
+    protected JSONObject getJsonObjectByString(String key) throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getJSONObject(key);
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
     @Override
     public String toString()
     {

@@ -298,6 +298,17 @@ public class Camera extends EvercamObject
         }
     }
 
+    public String getRtspUrl() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("rtsp_url");
+        } catch (JSONException e)
+        {
+            return "";
+        }
+    }
+
     public String getCameraUsername() throws EvercamException
     {
         try
@@ -353,6 +364,17 @@ public class Camera extends EvercamObject
         }
     }
 
+    public boolean isDiscoverable() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getBoolean("discoverable");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
     public String getName() throws EvercamException
     {
         try
@@ -369,6 +391,17 @@ public class Camera extends EvercamObject
         try
         {
             return jsonObject.getString("vendor");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    public String getVendorName() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("vendor_name");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -421,22 +454,22 @@ public class Camera extends EvercamObject
 
     public String getInternalJpgUrl() throws EvercamException
     {
-        return getFullUrls().getInternalJpgUrl();
+        return getInternalFullUrls().getJpgUrl();
     }
 
     public String getExternalJpgUrl() throws EvercamException
     {
-        return getFullUrls().getExternalJpgUrl();
+        return getExternalFullUrls().getJpgUrl();
     }
 
     public String getInternalRtspUrl() throws EvercamException
     {
-        return getFullUrls().getInternalRtspUrl();
+        return getInternalFullUrls().getRtspUrl();
     }
 
     public String getExternalRtspUrl() throws EvercamException
     {
-        return getFullUrls().getExternalRtspUrl();
+        return getExternalFullUrls().getRtspUrl();
     }
 
     public String getInternalRtspUrlWithCredential() throws EvercamException
@@ -463,17 +496,17 @@ public class Camera extends EvercamObject
 
     public String getShortJpgUrl() throws EvercamException
     {
-        return getFullUrls().getShortJpgUrl();
+        return getShortUrls().getJpgUrl();
     }
 
     public String getDynamicDnsJpgUrl() throws EvercamException
     {
-        return getFullUrls().getDynamicDnsJpgUrl();
+        return getDynamicDnsUrls().getJpgUrl();
     }
 
     public String getDynamicDnsRtspUrl() throws EvercamException
     {
-        return getFullUrls().getDynamicDnsRtspUrl();
+        return getDynamicDnsUrls().getRtspUrl();
     }
 
     public InputStream getSnapshotImageFromUrl(String url) throws EvercamException
@@ -815,18 +848,36 @@ public class Camera extends EvercamObject
         return cameraJSONObject;
     }
 
-    private FullUrls getFullUrls() throws EvercamException
+    private InternalFullUrl getInternalFullUrls() throws EvercamException
     {
-        FullUrls fullUrls;
-        try
-        {
-            JSONObject fullUrlJsonObject = jsonObject.getJSONObject("extra_urls");
-            fullUrls = new FullUrls(fullUrlJsonObject);
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
-        return fullUrls;
+        InternalFullUrl internalFullUrl;
+        JSONObject fullUrlJsonObject = getJsonObjectByString("internal");
+        internalFullUrl = new InternalFullUrl(fullUrlJsonObject);
+        return internalFullUrl;
+    }
+
+    private ExternalFullUrl getExternalFullUrls() throws EvercamException
+    {
+        ExternalFullUrl externalFullUrl;
+        JSONObject fullUrlJsonObject = getJsonObjectByString("external");
+        externalFullUrl = new ExternalFullUrl(fullUrlJsonObject);
+        return externalFullUrl;
+    }
+
+    private DynamicDnsUrl getDynamicDnsUrls() throws EvercamException
+    {
+        DynamicDnsUrl dnsFullUrl;
+        JSONObject fullUrlJsonObject = getJsonObjectByString("dyndns");
+        dnsFullUrl = new DynamicDnsUrl(fullUrlJsonObject);
+        return dnsFullUrl;
+    }
+
+    private ShortUrl getShortUrls() throws EvercamException
+    {
+        ShortUrl dnsFullUrl;
+        JSONObject fullUrlJsonObject = getJsonObjectByString("short");
+        dnsFullUrl = new ShortUrl(fullUrlJsonObject);
+        return dnsFullUrl;
     }
 
     public static ArrayList<Camera> getByUrl(String url) throws EvercamException

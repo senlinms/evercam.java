@@ -3,49 +3,25 @@ package io.evercam;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FullUrls extends EvercamObject
+class FullUrls extends EvercamObject
 {
     FullUrls(JSONObject jsonObject)
     {
         this.jsonObject = jsonObject;
     }
 
-    public String getInternalJpgUrl() throws EvercamException
+
+    public String getJpgUrl() throws EvercamException
     {
-        return getUrlFromJsonObject("internal_jpg_url");
+        return getUrlFromJsonObject("jpg_url");
     }
 
-    public String getExternalJpgUrl() throws EvercamException
+    public String getRtspUrl() throws EvercamException
     {
-        return getUrlFromJsonObject("external_jpg_url");
+        return getUrlFromJsonObject("rtsp_url");
     }
 
-    public String getDynamicDnsJpgUrl() throws EvercamException
-    {
-        return getUrlFromJsonObject("dyndns_jpg_url");
-    }
-
-    public String getInternalRtspUrl() throws EvercamException
-    {
-        return getUrlFromJsonObject("internal_rtsp_url");
-    }
-
-    public String getExternalRtspUrl() throws EvercamException
-    {
-        return getUrlFromJsonObject("external_rtsp_url");
-    }
-
-    public String getDynamicDnsRtspUrl() throws EvercamException
-    {
-        return getUrlFromJsonObject("dyndns_rtsp_url");
-    }
-
-    public String getShortJpgUrl() throws EvercamException
-    {
-        return getUrlFromJsonObject("short_jpg_url");
-    }
-
-    private String getUrlFromJsonObject(String key) throws EvercamException
+    protected String getUrlFromJsonObject(String key) throws EvercamException
     {
         String url;
         try
