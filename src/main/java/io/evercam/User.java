@@ -177,19 +177,33 @@ public class User extends EvercamObject
         return user;
     }
 
-    public static ArrayList<Camera> getCameras(String userId) throws EvercamException
+    public static ArrayList<Camera> getCameras(String userId, boolean includeShared) throws EvercamException
     {
         ArrayList<Camera> cameraList = new ArrayList<Camera>();
         try
         {
             HttpResponse<JsonNode> response;
+            if(includeShared)
+            {
             if (API.hasUserKeyPair())
             {
-                response = Unirest.get(URL + "/" + userId + "/cameras" + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                response = Unirest.get(URL + "/" + userId + "/cameras").fields(API.userKeyPairMap()).field("include_shared", "true").header("accept", "application/json").asJson();
             }
             else
             {
-                response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
+                response = Unirest.get(URL + "/" + userId + "/cameras").field("include_shared", "true").header("accept", "application/json").asJson();
+            }
+            }
+            else
+            {
+                if (API.hasUserKeyPair())
+                {
+                    response = Unirest.get(URL + "/" + userId + "/cameras").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
+                }
+                else
+                {
+                    response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
+                }
             }
             if (response.getCode() == CODE_OK)
             {
@@ -214,12 +228,12 @@ public class User extends EvercamObject
         return cameraList;
     }
 
-    public static ArrayList<Camera> getCamerasIncludeShares(String userId) throws EvercamException
-    {
-        ArrayList<Camera> cameraList = getCameras(userId);
-        String shareNameSet = CameraShare.getNameSetString(userId);
-        ArrayList<Camera> sharedCameraList = Camera.getByIdSet(shareNameSet);
-        cameraList.addAll(sharedCameraList);
-        return cameraList;
-    }
+//    public static ArrayList<Camera> getCamerasIncludeShares(String userId) throws EvercamException
+//    {
+//        ArrayList<Camera> cameraList = getCameras(userId);
+//        String shareNameSet = CameraShare.getNameSetString(userId);
+//        ArrayList<Camera> sharedCameraList = Camera.getByIdSet(shareNameSet);
+//        cameraList.addAll(sharedCameraList);
+//        return cameraList;
+//    }
 }

@@ -30,10 +30,10 @@ public class CameraTest
         Camera camera = randomUser.addRandomCamera(true);
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        assertEquals(1, User.getCameras(randomUser.getUsername()).size());
+        assertEquals(1, User.getCameras(randomUser.getUsername(),false).size());
 
         Camera.delete(camera.getId());
-        assertEquals(0, User.getCameras(randomUser.getUsername()).size());
+        assertEquals(0, User.getCameras(randomUser.getUsername(),false).size());
 
         API.setUserKeyPair(null, null);
     }

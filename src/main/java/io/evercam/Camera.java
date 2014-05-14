@@ -694,8 +694,16 @@ public class Camera extends EvercamObject
                 }
                 if (response.getCode() == CODE_OK)
                 {
-                    JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
-                    snapshot = new Snapshot(snapshotJsonObject);
+                    JSONArray snapshotJsonArray = response.getBody().getObject().getJSONArray("snapshots");
+                    if(snapshotJsonArray.length() != 0)
+                    {
+                        JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(0);
+                        snapshot = new Snapshot(snapshotJsonObject);
+                    }
+                    else
+                    {
+                        throw new EvercamException("No snapshot saved for camera:" + cameraId);
+                    }
                 }
                 else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
                 {

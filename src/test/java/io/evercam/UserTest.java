@@ -69,14 +69,18 @@ public class UserTest
         randomUser.addRandomCamera(true);
         randomUser.addRandomCamera(false);
 
-        ArrayList<Camera> privateCameras = User.getCameras(randomUser.getUsername());
+        ArrayList<Camera> privateCameras = User.getCameras(randomUser.getUsername(),false);
         assertEquals(1, privateCameras.size());
 
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
 
-        ArrayList<Camera> allCameras = User.getCameras(randomUser.getUsername());
+        ArrayList<Camera> allCameras = User.getCameras(randomUser.getUsername(),false);
         assertEquals(2, allCameras.size());
+
+        //FIXME: Tests for get camera list including shares
+//        ArrayList<Camera> allCamerasIncludingShared = User.getCameras(randomUser.getUsername(),true);
+//        assertEquals(3, allCamerasIncludingShared.size());
 
         API.setUserKeyPair(null, null);
     }
