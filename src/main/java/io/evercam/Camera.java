@@ -60,7 +60,7 @@ public class Camera extends EvercamObject
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
-                    return new Camera(jsonObject);
+                    camera =  new Camera(jsonObject);
                 }
                 else if (statusCode == CODE_SERVER_ERROR)
                 {
@@ -160,7 +160,7 @@ public class Camera extends EvercamObject
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
-                    return new Camera(jsonObject);
+                    camera =  new Camera(jsonObject);
                 }
                 else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
                 {
@@ -218,7 +218,7 @@ public class Camera extends EvercamObject
 
     public boolean hasCredentials() throws EvercamException
     {
-        return (getCameraUsername().isEmpty() && getCameraPassword().isEmpty()) ? false : true;
+        return !(getCameraUsername().isEmpty() && getCameraPassword().isEmpty());
     }
 
     public String getExternalHost() throws EvercamException
@@ -528,53 +528,6 @@ public class Camera extends EvercamObject
         return getSnapshotByCameraId(getId());
     }
 
-    //    //FIXME: tests for this method
-    //    public InputStream getSnapshotImage() throws EvercamException
-    //    {
-    //        String internalJpgUrl = getInternalJpgUrl();
-    //        String externalJpgUrl = getExternalJpgUrl();
-    //
-    //        try
-    //        {
-    //        if(hasCredentials())
-    //        {
-    //            if(!internalJpgUrl.isEmpty() && isValidUrl(internalJpgUrl))
-    //            {
-    //                HttpResponse response = Unirest.get(internalJpgUrl).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
-    //
-    //                InputStream rawImageData = response.getRawBody();
-    //                byte[] bytes = IOUtils.toByteArray(rawImageData);
-    //                if(bytes.length != 0)
-    //                {
-    //                    System.out.println("returned by local URL");
-    //                    return response.getRawBody();
-    //                }
-    //            }
-    //
-    //            if(!externalJpgUrl.isEmpty() && isValidUrl(externalJpgUrl))
-    //            {
-    //                System.out.println("returned by external URL");
-    //                HttpResponse response = Unirest.get(externalJpgUrl).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
-    //                return response.getRawBody();
-    //            }
-    //            else
-    //            {
-    //                return getSnapshotFromShortUrl();
-    //            }
-    //        }
-    //        else
-    //        {
-    //            return getSnapshotFromShortUrl();
-    //        }
-    //        } catch (UnirestException e)
-    //        {
-    //            throw new EvercamException(e);
-    //        } catch (IOException e)
-    //        {
-    //            throw new EvercamException(e);
-    //        }
-    //    }
-
     private boolean isValidUrl(String url)
     {
         try
@@ -586,7 +539,7 @@ public class Camera extends EvercamObject
             }
         } catch (UnirestException e)
         {
-
+            //do nothing
         }
         return false;
     }
@@ -598,12 +551,12 @@ public class Camera extends EvercamObject
         {
             if (getInternalHost() != null && !getInternalHost().equals("null"))
             {
-                String internalUrl = "http://" + getInternalHost() + ":" + getInternalHttpPort();
+                String internalUrl = HTTP_PREFIX + getInternalHost() + ":" + getInternalHttpPort();
                 endpointsArray.add(internalUrl);
             }
             if (getExternalHost() != null && !getExternalHost().equals("null"))
             {
-                String externalUrl = "http://" + getExternalHost() + ":" + getExternalHttpPort();
+                String externalUrl = HTTP_PREFIX + getExternalHost() + ":" + getExternalHttpPort();
                 endpointsArray.add(externalUrl);
             }
         } catch (EvercamException e)
@@ -880,7 +833,7 @@ public class Camera extends EvercamObject
         return dnsFullUrl;
     }
 
-    public static ArrayList<Camera> getByUrl(String url) throws EvercamException
+    private static ArrayList<Camera> getByUrl(String url) throws EvercamException
     {
         ArrayList<Camera> cameraList = new ArrayList<Camera>();
         try

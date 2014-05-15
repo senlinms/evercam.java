@@ -1,6 +1,7 @@
 package io.evercam;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +16,7 @@ public abstract class EvercamObject
     static final int CODE_SERVER_ERROR = 500;
 
     final String RTSP_PREFIX = "rtsp://";
+    final String HTTP_PREFIX = "http://";
 
     JSONObject jsonObject;
 
@@ -23,6 +25,17 @@ public abstract class EvercamObject
         try
         {
             return jsonObject.getJSONObject(key);
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    protected JSONArray getJsonArrayByString(String key) throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getJSONArray(key);
         } catch (JSONException e)
         {
             throw new EvercamException(e);
