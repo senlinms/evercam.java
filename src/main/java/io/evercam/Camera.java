@@ -218,7 +218,7 @@ public class Camera extends EvercamObject
 
     public boolean hasCredentials() throws EvercamException
     {
-        return !(getCameraUsername().isEmpty() && getCameraPassword().isEmpty());
+        return jsonObject.toString().contains("\"cam_username\":") && jsonObject.toString().contains("\"cam_password\":");
     }
 
     public String getExternalHost() throws EvercamException
