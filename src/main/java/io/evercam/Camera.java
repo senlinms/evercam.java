@@ -53,7 +53,7 @@ public class Camera extends EvercamObject
                 else if (statusCode == CODE_ERROR)
                 {
                     JsonNode jsonNode = new JsonNode(result);
-                    String message = jsonNode.getObject().getString("message");
+                    String message = jsonNode.getObject().getJSONArray("message").toString();
                     throw new EvercamException(message);
                 }
                 else if (statusCode == CODE_CREATE)
@@ -568,7 +568,7 @@ public class Camera extends EvercamObject
 
     public static Snapshot archiveSnapshot(String cameraId, String notes) throws EvercamException
     {
-        Snapshot snapshot;
+        Snapshot snapshot = null;
         if (API.hasUserKeyPair())
         {
             try
@@ -603,10 +603,10 @@ public class Camera extends EvercamObject
                 {
                     throw new EvercamException(response.getCode() + response.getBody().toString());
                 }
-            } catch (UnirestException e)
+            } catch (JSONException e)
             {
                 throw new EvercamException(e);
-            } catch (JSONException e)
+            }  catch (UnirestException e)
             {
                 throw new EvercamException(e);
             }

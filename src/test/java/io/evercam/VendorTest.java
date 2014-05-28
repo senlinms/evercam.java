@@ -36,7 +36,7 @@ public class VendorTest
     @Test
     public void testGetAllVendors() throws EvercamException
     {
-        assertEquals(38, Vendor.getAll().size());
+        assertEquals(39, Vendor.getAll().size());
     }
 
     @Test
@@ -49,11 +49,11 @@ public class VendorTest
     @Test
     public void testGetModel() throws EvercamException
     {
-        Model model = Vendor.getById(TEST_VENDOR_ID).getModel("*");
+        Model model = Vendor.getById(TEST_VENDOR_ID).getModel("default");
         ArrayList<String> models = model.getKnownModels();
         assertEquals(1, models.size());
         assertEquals(TEST_VENDOR_ID, model.getVendor());
-        assertEquals("*", model.getName());
+        assertEquals("Default", model.getName());
         assertEquals(1, model.getKnownModels().size());
         assertEquals("admin", model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername());
         assertEquals("12345", model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword());
@@ -69,7 +69,7 @@ public class VendorTest
     public void testGetSupportedVendors() throws EvercamException
     {
         ArrayList<Vendor> vendors = Vendor.getSupportedVendors();
-        assertEquals(38, vendors.size());
+        assertEquals(39, vendors.size());
     }
 
     @AfterClass

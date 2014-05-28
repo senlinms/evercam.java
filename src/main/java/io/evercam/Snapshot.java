@@ -30,7 +30,7 @@ public class Snapshot
             return jsonObject.getString("notes");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return "";
         }
     }
 
