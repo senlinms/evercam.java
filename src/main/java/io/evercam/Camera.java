@@ -454,22 +454,38 @@ public class Camera extends EvercamObject
 
     public String getInternalJpgUrl() throws EvercamException
     {
-        return getInternalFullUrls().getJpgUrl();
+        if(getInternalFullUrls()!=null)
+        {
+            return getInternalFullUrls().getJpgUrl();
+        }
+        return "";
     }
 
     public String getExternalJpgUrl() throws EvercamException
     {
-        return getExternalFullUrls().getJpgUrl();
+        if(getExternalFullUrls()!=null)
+        {
+            return getExternalFullUrls().getJpgUrl();
+        }
+        return "";
     }
 
     public String getInternalRtspUrl() throws EvercamException
     {
-        return getInternalFullUrls().getRtspUrl();
+        if(getInternalFullUrls()!=null)
+        {
+            return getInternalFullUrls().getRtspUrl();
+        }
+        return "";
     }
 
     public String getExternalRtspUrl() throws EvercamException
     {
-        return getExternalFullUrls().getRtspUrl();
+        if(getExternalFullUrls()!=null)
+        {
+            return getExternalFullUrls().getRtspUrl();
+        }
+        return "";
     }
 
     public String getInternalRtspUrlWithCredential() throws EvercamException
@@ -801,20 +817,36 @@ public class Camera extends EvercamObject
         return cameraJSONObject;
     }
 
+    /**
+     * Return the 'internal' information of this camera,
+     * could return null if it's a shared camera with no internal details.
+     */
     private InternalFullUrl getInternalFullUrls() throws EvercamException
     {
-        InternalFullUrl internalFullUrl;
-        JSONObject fullUrlJsonObject = getJsonObjectByString("internal");
-        internalFullUrl = new InternalFullUrl(fullUrlJsonObject);
-        return internalFullUrl;
+        try
+        {
+            JSONObject fullUrlJsonObject = getJsonObjectByString("internal");
+            return new InternalFullUrl(fullUrlJsonObject);
+        } catch (EvercamException e)
+        {
+            return null;
+        }
     }
 
-    private ExternalFullUrl getExternalFullUrls() throws EvercamException
+    /**
+     * Return the 'external' information of this camera,
+     * could return null if it's a shared camera with no external details.
+     */
+    private ExternalFullUrl getExternalFullUrls()
     {
-        ExternalFullUrl externalFullUrl;
-        JSONObject fullUrlJsonObject = getJsonObjectByString("external");
-        externalFullUrl = new ExternalFullUrl(fullUrlJsonObject);
-        return externalFullUrl;
+        try
+        {
+            JSONObject fullUrlJsonObject = getJsonObjectByString("external");
+            return new ExternalFullUrl(fullUrlJsonObject);
+        } catch (EvercamException e)
+        {
+            return null;
+        }
     }
 
     private DynamicDnsUrl getDynamicDnsUrls() throws EvercamException
