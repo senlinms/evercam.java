@@ -29,6 +29,14 @@ public class CameraShare extends EvercamObject
         return getSharesByUrl(URL + "/camera/" + cameraId);
     }
 
+    /**
+     * Return the camera list owned by the specific user as a string
+     * for requesting data for a specified set of cameras
+     *
+     * @param userId Evercam user unique identifier
+     * @return a comma separated list of camera identifiers owned by this user
+     * @throws EvercamException
+     */
     public static String getNameSetString(String userId) throws EvercamException
     {
         ArrayList<CameraShare> cameraShares = getByUser(userId);
@@ -47,7 +55,7 @@ public class CameraShare extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(url + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(url).fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
                 if(response.getCode() == CODE_OK)
                 {
                     JSONArray sharesJSONArray = response.getBody().getObject().getJSONArray("shares");
@@ -80,6 +88,10 @@ public class CameraShare extends EvercamObject
         return cameraShares;
     }
 
+    /**
+     * @return Unique identifier for a camera share.
+     * @throws EvercamException
+     */
     public int getId() throws EvercamException
     {
         try
@@ -102,6 +114,10 @@ public class CameraShare extends EvercamObject
         }
     }
 
+    /**
+     * @return The unique identifier of the user who shared the camera.
+     * @throws EvercamException
+     */
     public String getSharerId() throws EvercamException
     {
         try

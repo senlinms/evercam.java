@@ -86,7 +86,7 @@ public class Model extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
                 if (response.getCode() == CODE_NOT_FOUND)
                 {
                     throw new EvercamException("model vendor not found");
@@ -130,7 +130,7 @@ public class Model extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(url + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(url).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
                 if (response.getCode() == CODE_OK)
                 {
                     JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
@@ -174,7 +174,7 @@ public class Model extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + modelId + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + '/' + vendorId + '/' + modelId).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
                 JSONObject modelJSONObject = response.getBody().getObject().getJSONArray("models").getJSONObject(0);
                 model = new Model(modelJSONObject);
             } catch (JSONException e)

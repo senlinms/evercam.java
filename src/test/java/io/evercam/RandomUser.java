@@ -20,6 +20,7 @@ public class RandomUser
     public static final String CAMERA_JPG_URL = "/snapshot.jpg";
     public static final String CAMERA_TIMEZONE = "Etc/UTC";
     public static final String CAMERA_VENDOR = "hikvision";
+    public static final String CAMERA_VENDOR_NAME = "Hikvision Digital Technology";
     public static final String CAMERA_MODEL = Model.DEFAULT_MODEL;
     public static final String CAMERA_MAC = "11:11:11:11:11:11";
 

@@ -96,7 +96,7 @@ public class User extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id + '/' + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + id).fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
                 if (response.getCode() == CODE_OK)
                 {
                     JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
@@ -227,13 +227,4 @@ public class User extends EvercamObject
         }
         return cameraList;
     }
-
-//    public static ArrayList<Camera> getCamerasIncludeShares(String userId) throws EvercamException
-//    {
-//        ArrayList<Camera> cameraList = getCameras(userId);
-//        String shareNameSet = CameraShare.getNameSetString(userId);
-//        ArrayList<Camera> sharedCameraList = Camera.getByIdSet(shareNameSet);
-//        cameraList.addAll(sharedCameraList);
-//        return cameraList;
-//    }
 }

@@ -641,7 +641,7 @@ public class Camera extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/snapshots" + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/snapshots").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
                 if (response.getCode() == CODE_OK)
                 {
                     JSONArray snapshotJsonArray = response.getBody().getObject().getJSONArray("snapshots");
@@ -688,11 +688,11 @@ public class Camera extends EvercamObject
             {
                 if (withData)
                 {
-                    response = Unirest.get(URL + "/" + cameraId + "/snapshots/latest" + "?with_data=true&api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                    response = Unirest.get(URL + "/" + cameraId + "/snapshots/latest" + "?with_data=true").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
                 }
                 else
                 {
-                    response = Unirest.get(URL + "/" + cameraId + "/snapshots/latest" + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1]).header("accept", "application/json").asJson();
+                    response = Unirest.get(URL + "/" + cameraId + "/snapshots/latest").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
                 }
                 if (response.getCode() == CODE_OK)
                 {
@@ -732,19 +732,6 @@ public class Camera extends EvercamObject
             throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
         return snapshot;
-    }
-
-    private String getFullURL(String endpoint, String relativePath)
-    {
-        if (endpoint.endsWith("/") && relativePath.startsWith("/"))
-        {
-            endpoint = endpoint.substring(0, endpoint.lastIndexOf("/"));
-        }
-        else if (!(endpoint.endsWith("/") || relativePath.startsWith("/")))
-        {
-            endpoint += '/';
-        }
-        return endpoint + relativePath;
     }
 
     private static JSONObject buildJSONObject(CameraDetail cameraDetail) throws JSONException
