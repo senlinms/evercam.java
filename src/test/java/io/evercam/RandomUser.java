@@ -39,7 +39,7 @@ public class RandomUser
     public RandomUser() throws EvercamException
     {
         String randomUsername = randomUUID();
-        String randomEmail = randomUUID();
+        String randomEmail = randomEmail();
         String randomPassword = randomUUID();
         this.username = randomUsername;
         this.email = randomEmail;
@@ -70,7 +70,7 @@ public class RandomUser
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).build();
+        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;
@@ -90,6 +90,15 @@ public class RandomUser
     public static String randomUUID()
     {
         return String.valueOf(UUID.randomUUID()).replace("-", "");
+    }
+
+    public static String randomEmail()
+    {
+        String randomUuid = randomUUID();
+        char[] emailChars = randomUuid.toCharArray();
+        emailChars[8] = '@';
+        emailChars[15] = '.';
+        return String.valueOf(emailChars);
     }
 
     public User getUser()

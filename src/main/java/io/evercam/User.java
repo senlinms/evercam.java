@@ -155,7 +155,7 @@ public class User extends EvercamObject
                 }
                 else if (response.getCode() == CODE_ERROR)
                 {
-                    String message = response.getBody().getObject().getJSONArray("message").toString();
+                    String message = response.getBody().toString();
                     throw new EvercamException(message);
                 }
                 else

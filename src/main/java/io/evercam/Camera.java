@@ -53,7 +53,7 @@ public class Camera extends EvercamObject
                 else if (statusCode == CODE_ERROR)
                 {
                     JsonNode jsonNode = new JsonNode(result);
-                    String message = jsonNode.getObject().getJSONArray("message").toString();
+                    String message = jsonNode.getObject().toString();
                     throw new EvercamException(message);
                 }
                 else if (statusCode == CODE_CREATE)
@@ -525,12 +525,12 @@ public class Camera extends EvercamObject
         return getDynamicDnsUrls().getRtspUrl();
     }
 
-    public InputStream getSnapshotImageFromUrl(String url) throws EvercamException
+    public static InputStream getStreamFromUrl(String url, String username, String password) throws EvercamException
     {
         InputStream inputStream;
         try
         {
-            HttpResponse response = Unirest.get(url).basicAuth(getCameraUsername(), getCameraPassword()).asBinary();
+            HttpResponse response = Unirest.get(url).basicAuth(username, password).asBinary();
             inputStream = response.getRawBody();
         } catch (UnirestException e)
         {
@@ -598,6 +598,7 @@ public class Camera extends EvercamObject
                 {
                     response = Unirest.post(URL + '/' + cameraId + "/" + "snapshots").fields(API.userKeyPairMap()).field("notes", notes).asJson();
                 }
+
                 if (response.getCode() == CODE_CREATE)
                 {
                     JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
