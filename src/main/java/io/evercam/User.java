@@ -72,7 +72,7 @@ public class User extends EvercamObject
     {
         try
         {
-            return jsonObject.getString("forename");
+            return jsonObject.getString("firstname");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -132,7 +132,7 @@ public class User extends EvercamObject
     {
         User user = null;
         Map<String, Object> userMap = new HashMap<String, Object>();
-        userMap.put("forename", userDetail.getFirstname());
+        userMap.put("firstname", userDetail.getFirstname());
         userMap.put("lastname", userDetail.getLastname());
         userMap.put("email", userDetail.getEmail());
         userMap.put("username", userDetail.getUsername());

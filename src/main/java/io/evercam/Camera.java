@@ -43,9 +43,11 @@ public class Camera extends EvercamObject
                 post.setHeader("Content-type", "application/json");
                 post.setHeader("Accept", "application/json");
                 post.setEntity(new StringEntity(cameraJSONObject.toString()));
+             //   System.out.println(cameraJSONObject.toString());
                 org.apache.http.HttpResponse response = client.execute(post);
                 String result = EntityUtils.toString(response.getEntity());
                 int statusCode = response.getStatusLine().getStatusCode();
+            //    System.out.println(statusCode + result.toString());
                 if (statusCode == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
@@ -65,6 +67,12 @@ public class Camera extends EvercamObject
                 else if (statusCode == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else if (statusCode == CODE_CONFLICT)
+                {
+                    JsonNode jsonNode = new JsonNode(result);
+                    String message = jsonNode.getObject().getString("message");
+                    throw new EvercamException(message);
                 }
             } catch (JSONException e)
             {
@@ -802,7 +810,18 @@ public class Camera extends EvercamObject
             cameraJSONObject.put("mac_address", cameraDetail.macAddress);
         }
 
+        //For testing location data only:
+     //   cameraJSONObject.put("location", getLocationJsonObject());
+
         return cameraJSONObject;
+    }
+
+    private static JSONObject getLocationJsonObject()
+    {
+        JSONObject locationJsonObject = new JSONObject();
+        locationJsonObject.put("lng", -122.086966);
+        locationJsonObject.put("lat", 37.377166);
+        return locationJsonObject;
     }
 
     /**
