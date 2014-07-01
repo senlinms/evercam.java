@@ -31,6 +31,7 @@ public class CameraTest
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         assertEquals(1, User.getCameras(randomUser.getUsername(),false).size());
+        Assert.assertEquals(RandomUser.CAMERA_RTSP_URL, camera.getRtspUrl());
 
         Camera.delete(camera.getId());
         assertEquals(0, User.getCameras(randomUser.getUsername(),false).size());
@@ -50,7 +51,7 @@ public class CameraTest
         CameraDetail detail = new PatchCameraBuilder(camera.getId()).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
                 CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP)
                 .setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD)
-                .setJpgUrl(RandomUser.CAMERA_JPG_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL)
+                .setJpgUrl(RandomUser.CAMERA_JPG_URL).setRtspUrl(RandomUser.CAMERA_RTSP_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL)
                 .setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).build();
         Camera patchCamera = Camera.patch(detail);
         assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());
@@ -64,6 +65,7 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_USERNAME, patchCamera.getCameraUsername());
         assertEquals(RandomUser.CAMERA_PASSWORD, patchCamera.getCameraPassword());
         assertEquals(RandomUser.CAMERA_JPG_URL, patchCamera.getJpgUrl());
+        assertEquals(RandomUser.CAMERA_RTSP_URL, patchCamera.getRtspUrl());
         assertEquals(RandomUser.CAMERA_TIMEZONE, patchCamera.getTimezone());
         assertEquals(RandomUser.CAMERA_VENDOR, patchCamera.getVendor());
         assertEquals(RandomUser.CAMERA_VENDOR_NAME, patchCamera.getVendorName());

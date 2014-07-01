@@ -11,6 +11,7 @@ public class CameraDetail
     String timezone;
     String macAddress;
     String jpgUrl;
+    String rtspUrl;
     String internalHost;
     int internalHttpPort;
     int internalRtspPort;
@@ -30,6 +31,7 @@ public class CameraDetail
         timezone = builder.timezone;
         macAddress = builder.macAddress;
         jpgUrl = builder.jpgUrl;
+        rtspUrl = builder.rtspUrl;
         internalHost = builder.internalHost;
         internalHttpPort = builder.internalHttpPort;
         internalRtspPort = builder.internalRtspPort;
@@ -50,6 +52,7 @@ public class CameraDetail
         timezone = builder.timezone;
         macAddress = builder.macAddress;
         jpgUrl = builder.jpgUrl;
+        rtspUrl = builder.rtspUrl;
         internalHost = builder.internalHost;
         internalHttpPort = builder.internalHttpPort;
         internalRtspPort = builder.internalRtspPort;

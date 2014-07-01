@@ -43,11 +43,11 @@ public class Camera extends EvercamObject
                 post.setHeader("Content-type", "application/json");
                 post.setHeader("Accept", "application/json");
                 post.setEntity(new StringEntity(cameraJSONObject.toString()));
-             //   System.out.println(cameraJSONObject.toString());
+                System.out.println(cameraJSONObject.toString());
                 org.apache.http.HttpResponse response = client.execute(post);
                 String result = EntityUtils.toString(response.getEntity());
                 int statusCode = response.getStatusLine().getStatusCode();
-            //    System.out.println(statusCode + result.toString());
+                System.out.println(statusCode + result.toString());
                 if (statusCode == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
@@ -776,6 +776,10 @@ public class Camera extends EvercamObject
         if (cameraDetail.jpgUrl != null)
         {
             cameraJSONObject.put("jpg_url", cameraDetail.jpgUrl);
+        }
+        if (cameraDetail.rtspUrl != null)
+        {
+            cameraJSONObject.put("rtsp_url", cameraDetail.rtspUrl);
         }
         if (cameraDetail.isPublic != null)
         {
