@@ -30,6 +30,15 @@ public class Camera extends EvercamObject
         this.jsonObject = cameraJSONObject;
     }
 
+    /**
+     * Create a new camera owned by the authenticating user
+     *
+     * @param cameraDetail Evercam camera detail object that produced by CameraBuilder
+     * @return Evercam camera object.
+     * @throws EvercamException If camera is not successfully created.
+     * @see CameraDetail
+     * @see CameraBuilder
+     */
     public static Camera create(CameraDetail cameraDetail) throws EvercamException
     {
         Camera camera = null;
@@ -43,11 +52,9 @@ public class Camera extends EvercamObject
                 post.setHeader("Content-type", "application/json");
                 post.setHeader("Accept", "application/json");
                 post.setEntity(new StringEntity(cameraJSONObject.toString()));
-                System.out.println(cameraJSONObject.toString());
                 org.apache.http.HttpResponse response = client.execute(post);
                 String result = EntityUtils.toString(response.getEntity());
                 int statusCode = response.getStatusLine().getStatusCode();
-                System.out.println(statusCode + result.toString());
                 if (statusCode == CODE_UNAUTHORISED)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
@@ -62,7 +69,7 @@ public class Camera extends EvercamObject
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
-                    camera =  new Camera(jsonObject);
+                    camera = new Camera(jsonObject);
                 }
                 else if (statusCode == CODE_SERVER_ERROR)
                 {
@@ -92,6 +99,13 @@ public class Camera extends EvercamObject
         return camera;
     }
 
+    /**
+     * Delete a camera from Evercam along with any stored media.
+     *
+     * @param cameraId the unique identifier of the camera
+     * @return If the camera delete is successful, return true, otherwise return false.
+     * @throws EvercamException If camera not exists or user unauthorized
+     */
     public static boolean delete(String cameraId) throws EvercamException
     {
         if (API.hasUserKeyPair())
@@ -139,6 +153,15 @@ public class Camera extends EvercamObject
         }
     }
 
+    /**
+     * Updates full or partial data for an existing camera
+     *
+     * @param cameraDetail Evercam camera detail object that produced by PatchCameraBuilder
+     * @return Evercam camera object.
+     * @throws EvercamException If user unauthorized or error occurred with Evercam
+     * @see CameraDetail
+     * @see PatchCameraBuilder
+     */
     public static Camera patch(CameraDetail cameraDetail) throws EvercamException
     {
         Camera camera = null;
@@ -168,7 +191,7 @@ public class Camera extends EvercamObject
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
-                    camera =  new Camera(jsonObject);
+                    camera = new Camera(jsonObject);
                 }
                 else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
                 {
@@ -192,17 +215,40 @@ public class Camera extends EvercamObject
         return camera;
     }
 
+    /**
+     * Retrieve a camera from Evercam by camera unique identifier
+     *
+     * @param cameraId the camera's unique identifier with Evercam
+     * @return Evercam camera object with all data of this camera
+     * @throws EvercamException If user unauthorized or error occurred with Evercam
+     */
     public static Camera getById(String cameraId) throws EvercamException
     {
         ArrayList<Camera> cameraArrayList = getByUrl(URL + '/' + cameraId);
         return cameraArrayList.isEmpty() ? null : cameraArrayList.get(0);
     }
 
+    /**
+     * Returns data for a specified set of cameras.
+     * The ultimate intention would be to expand this functionality to be a more general search.
+     * The current implementation is as a basic absolute match list capability.
+     *
+     * @param idSetString comma separated list of camera identifiers for the cameras being queried.
+     * @return the list of specified set of cameras
+     * @throws EvercamException If user unauthorized or error occurred with Evercam
+     */
     public static ArrayList<Camera> getByIdSet(String idSetString) throws EvercamException
     {
         return getByUrl(URL + "?ids=" + idSetString);
     }
 
+    /**
+     * Request camera live snapshot from Evercam.
+     *
+     * @param cameraId the camera's unique identifier
+     * @return the stream of camera live image
+     * @throws EvercamException
+     */
     public static InputStream getSnapshotByCameraId(String cameraId) throws EvercamException
     {
         InputStream inputStream;
@@ -229,93 +275,125 @@ public class Camera extends EvercamObject
         return jsonObject.toString().contains("\"cam_username\":") && jsonObject.toString().contains("\"cam_password\":");
     }
 
+    /**
+     * Return external host name of the camera, return an empty string if
+     * the host name does not exist.
+     *
+     * @return external host name of the camera
+     * @throws EvercamException
+     */
     public String getExternalHost() throws EvercamException
     {
-        try
+        ExternalObject externalObject = getExternalObject();
+        if (externalObject != null)
         {
-            return jsonObject.getString("external_host");
-        } catch (JSONException e)
-        {
-            return "";
+            return externalObject.getHost();
         }
+        return "";
     }
 
-    public int getExternalHttpPort() throws EvercamException
-    {
-        try
-        {
-            return jsonObject.getInt("external_http_port");
-        } catch (JSONException e)
-        {
-            return 0;
-        }
-    }
-
-    public int getExternalRtspPort() throws EvercamException
-    {
-        try
-        {
-            return jsonObject.getInt("external_rtsp_port");
-        } catch (JSONException e)
-        {
-            return 0;
-        }
-    }
-
+    /**
+     * Return internal host name of the camera, return an empty string if
+     * the host name does not exist.
+     *
+     * @return internal host name of the camera
+     * @throws EvercamException
+     */
     public String getInternalHost() throws EvercamException
     {
-        try
+        InternalObject internalObject = getInternalObject();
+        if (internalObject != null)
         {
-            return jsonObject.getString("internal_host");
-        } catch (JSONException e)
-        {
-            return "";
+            return internalObject.getHost();
         }
+        return "";
     }
 
+    /**
+     * Return external HTTP port number of the camera,
+     * return 0 if no internal HTTP port associated with this camera.
+     * @return external HTTP port of the camera
+     * @throws EvercamException
+     */
+    public int getExternalHttpPort() throws EvercamException
+    {
+        ExternalObject externalObject = getExternalObject();
+        if (externalObject != null)
+        {
+            return externalObject.getHttp().getPort();
+        }
+        return 0;
+    }
+
+    /**
+     * Return internal HTTP port number of the camera,
+     * return 0 if no internal HTTP port associated with this camera.
+     * @return internal HTTP port of the camera
+     * @throws EvercamException
+     */
     public int getInternalHttpPort() throws EvercamException
     {
-        try
+        InternalObject internalObject = getInternalObject();
+        if (internalObject != null)
         {
-            return jsonObject.getInt("internal_http_port");
-        } catch (JSONException e)
-        {
-            return 0;
+            return internalObject.getHttp().getPort();
         }
+        return 0;
     }
 
+    /**
+     * Return external RTSP port number of the camera,
+     * return 0 if no external RTSP port associated with this camera.
+     * @return external RTSP port of the camera
+     * @throws EvercamException
+     */
+    public int getExternalRtspPort() throws EvercamException
+    {
+        ExternalObject externalObject = getExternalObject();
+        if (externalObject != null)
+        {
+            return externalObject.getRtsp().getPort();
+        }
+        return 0;
+    }
+
+    /**
+     * Return internal RTSP port number of the camera,
+     * return 0 if no internal RTSP port associated with this camera.
+     * @return internal RTSP port of the camera
+     * @throws EvercamException
+     */
     public int getInternalRtspPort() throws EvercamException
     {
-        try
+        InternalObject internalObject = getInternalObject();
+        if (internalObject != null)
         {
-            return jsonObject.getInt("internal_rtsp_port");
-        } catch (JSONException e)
-        {
-            return 0;
+            return internalObject.getRtsp().getPort();
         }
+        return 0;
     }
 
-    public String getJpgUrl() throws EvercamException
-    {
-        try
-        {
-            return jsonObject.getString("jpg_url");
-        } catch (JSONException e)
-        {
-            return "";
-        }
-    }
-
-    public String getRtspUrl() throws EvercamException
-    {
-        try
-        {
-            return jsonObject.getString("rtsp_url");
-        } catch (JSONException e)
-        {
-            return "";
-        }
-    }
+//    public String getJpgUrl() throws EvercamException
+//    {
+//        try
+//        {
+//            return jsonObject.getString("jpg_url");
+//        } catch (JSONException e)
+//        {
+//            return "";
+//        }
+//    }
+//
+//    public String getRtspUrl() throws EvercamException
+//    {
+//        try
+//        {
+//            return jsonObject.getString("rtsp_url");
+//        } catch (JSONException e)
+//        {
+//            return "";
+//        }
+//    }
 
     public String getCameraUsername() throws EvercamException
     {
@@ -394,11 +472,11 @@ public class Camera extends EvercamObject
         }
     }
 
-    public String getVendor() throws EvercamException
+    public String getVendorId() throws EvercamException
     {
         try
         {
-            return jsonObject.getString("vendor");
+            return jsonObject.getString("vendor_id");
         } catch (JSONException e)
         {
             throw new EvercamException(e);
@@ -460,52 +538,106 @@ public class Camera extends EvercamObject
         }
     }
 
+    /**
+     * Return internal full jpg URL of this camera that can be
+     * used to request a camera live image. Return an empty string
+     * if the URL does not exist.
+     *
+     * @return full internal snapshot URL (jpg) of this camera.
+     * @throws EvercamException
+     */
     public String getInternalJpgUrl() throws EvercamException
     {
-        if(getInternalFullUrls()!=null)
+        InternalObject internalObject = getInternalObject();
+        if (internalObject != null)
         {
-            return getInternalFullUrls().getJpgUrl();
+            return internalObject.getHttp().getJpgUrl();
         }
         return "";
     }
 
+    /**
+     * Return external full jpg URL of this camera that can be
+     * used to request a camera live image. Return an empty string
+     * if the URL does not exist.
+     *
+     * @return full external snapshot URL (jpg) of this camera.
+     * @throws EvercamException
+     */
     public String getExternalJpgUrl() throws EvercamException
     {
-        if(getExternalFullUrls()!=null)
+        ExternalObject externalObject = getExternalObject();
+        if (externalObject != null)
         {
-            return getExternalFullUrls().getJpgUrl();
+            return externalObject.getHttp().getJpgUrl();
         }
         return "";
     }
 
-    public String getInternalRtspUrl() throws EvercamException
+    /**
+     * Return internal RTSP stream (H264) URL of this camera for
+     * video playing. Return an empty string if the URL does not exist.
+     *
+     * @return full internal stream URL (h264) of this camera.
+     * @throws EvercamException
+     */
+    public String getInternalH264Url() throws EvercamException
     {
-        if(getInternalFullUrls()!=null)
+        InternalObject internalObject = getInternalObject();
+        if (internalObject != null)
         {
-            return getInternalFullUrls().getRtspUrl();
+            return internalObject.getRtsp().getH264Url();
         }
         return "";
     }
 
-    public String getExternalRtspUrl() throws EvercamException
+    /**
+     * Return internal RTSP stream (H264) URL of this camera for
+     * video playing. Return an empty string if the URL does not exist.
+     *
+     * @return full internal stream URL (h264) of this camera.
+     * @throws EvercamException
+     */
+    public String getExternalH264Url() throws EvercamException
     {
-        if(getExternalFullUrls()!=null)
+        ExternalObject externalObject = getExternalObject();
+        if (externalObject != null)
         {
-            return getExternalFullUrls().getRtspUrl();
+            return externalObject.getRtsp().getH264Url();
         }
         return "";
     }
 
-    public String getInternalRtspUrlWithCredential() throws EvercamException
+    /**
+     * Return the internal full stream URL (H264) with username and password
+     * for the basic authentication of media player.
+     *
+     * @return the H264 URL with credential.
+     * @throws EvercamException
+     */
+    public String getInternalH264UrlWithCredential() throws EvercamException
     {
-        return replaceUrlWithCredential(getInternalRtspUrl(), RTSP_PREFIX);
+        return replaceUrlWithCredential(getInternalH264Url(), RTSP_PREFIX);
     }
 
-    public String getExternalRtspUrlWithCredential() throws EvercamException
+    /**
+     * Return the external full stream URL (H264) with username and password
+     * for the basic authentication of media player.
+     *
+     * @return the H264 URL with credential.
+     * @throws EvercamException
+     */
+    public String getExternalH264UrlWithCredential() throws EvercamException
     {
-        return replaceUrlWithCredential(getExternalRtspUrl(), RTSP_PREFIX);
+        return replaceUrlWithCredential(getExternalH264Url(), RTSP_PREFIX);
     }
 
+    /**
+     * @param url    the full URL without credentials.
+     * @param prefix the prefix of the URL.
+     * @return the full URL with credentials as prefix://username:password@host
+     * @throws EvercamException
+     */
     private String replaceUrlWithCredential(String url, String prefix) throws EvercamException
     {
         if (!url.isEmpty() && url.startsWith(prefix))
@@ -517,21 +649,21 @@ public class Camera extends EvercamObject
             return "";
         }
     }
-
-    public String getShortJpgUrl() throws EvercamException
-    {
-        return getShortUrls().getJpgUrl();
-    }
-
-    public String getDynamicDnsJpgUrl() throws EvercamException
-    {
-        return getDynamicDnsUrls().getJpgUrl();
-    }
-
-    public String getDynamicDnsRtspUrl() throws EvercamException
-    {
-        return getDynamicDnsUrls().getRtspUrl();
-    }
+    //
+    //    public String getShortJpgUrl() throws EvercamException
+    //    {
+    //        return getShortUrls().getJpgUrl();
+    //    }
+    //
+    //    public String getDynamicDnsJpgUrl() throws EvercamException
+    //    {
+    //        return getDynamicDnsUrls().getJpgUrl();
+    //    }
+    //
+    //    public String getDynamicDnsRtspUrl() throws EvercamException
+    //    {
+    //        return getDynamicDnsUrls().getRtspUrl();
+    //    }
 
     public static InputStream getStreamFromUrl(String url, String username, String password) throws EvercamException
     {
@@ -631,7 +763,7 @@ public class Camera extends EvercamObject
             } catch (JSONException e)
             {
                 throw new EvercamException(e);
-            }  catch (UnirestException e)
+            } catch (UnirestException e)
             {
                 throw new EvercamException(e);
             }
@@ -706,7 +838,7 @@ public class Camera extends EvercamObject
                 if (response.getCode() == CODE_OK)
                 {
                     JSONArray snapshotJsonArray = response.getBody().getObject().getJSONArray("snapshots");
-                    if(snapshotJsonArray.length() != 0)
+                    if (snapshotJsonArray.length() != 0)
                     {
                         JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(0);
                         snapshot = new Snapshot(snapshotJsonObject);
@@ -815,7 +947,7 @@ public class Camera extends EvercamObject
         }
 
         //For testing location data only:
-     //   cameraJSONObject.put("location", getLocationJsonObject());
+        //   cameraJSONObject.put("location", getLocationJsonObject());
 
         return cameraJSONObject;
     }
@@ -828,16 +960,32 @@ public class Camera extends EvercamObject
         return locationJsonObject;
     }
 
+    //    /**
+    //     * Return the 'internal' information of this camera,
+    //     * could return null if it's a shared camera with no internal details.
+    //     */
+    //    private InternalFullUrl getInternalFullUrls() throws EvercamException
+    //    {
+    //        try
+    //        {
+    //            JSONObject fullUrlJsonObject = getJsonObjectByString("internal");
+    //            return new InternalFullUrl(fullUrlJsonObject);
+    //        } catch (EvercamException e)
+    //        {
+    //            return null;
+    //        }
+    //    }
+
     /**
-     * Return the 'internal' information of this camera,
-     * could return null if it's a shared camera with no internal details.
+     * Return the 'internal' object of this camera.
+     * Return null if it's a shared camera with no internal details.
      */
-    private InternalFullUrl getInternalFullUrls() throws EvercamException
+    private InternalObject getInternalObject() throws EvercamException
     {
         try
         {
-            JSONObject fullUrlJsonObject = getJsonObjectByString("internal");
-            return new InternalFullUrl(fullUrlJsonObject);
+            JSONObject internalJsonObject = getJsonObjectByString("internal");
+            return new InternalObject(internalJsonObject);
         } catch (EvercamException e)
         {
             return null;
@@ -845,35 +993,19 @@ public class Camera extends EvercamObject
     }
 
     /**
-     * Return the 'external' information of this camera,
-     * could return null if it's a shared camera with no external details.
+     * Return the 'external' object of this camera.
+     * Return null if it's a shared camera with no external details.
      */
-    private ExternalFullUrl getExternalFullUrls()
+    private ExternalObject getExternalObject()
     {
         try
         {
-            JSONObject fullUrlJsonObject = getJsonObjectByString("external");
-            return new ExternalFullUrl(fullUrlJsonObject);
+            JSONObject externalJsonObject = getJsonObjectByString("external");
+            return new ExternalObject(externalJsonObject);
         } catch (EvercamException e)
         {
             return null;
         }
-    }
-
-    private DynamicDnsUrl getDynamicDnsUrls() throws EvercamException
-    {
-        DynamicDnsUrl dnsFullUrl;
-        JSONObject fullUrlJsonObject = getJsonObjectByString("dyndns");
-        dnsFullUrl = new DynamicDnsUrl(fullUrlJsonObject);
-        return dnsFullUrl;
-    }
-
-    private ShortUrl getShortUrls() throws EvercamException
-    {
-        ShortUrl dnsFullUrl;
-        JSONObject fullUrlJsonObject = getJsonObjectByString("short");
-        dnsFullUrl = new ShortUrl(fullUrlJsonObject);
-        return dnsFullUrl;
     }
 
     private static ArrayList<Camera> getByUrl(String url) throws EvercamException

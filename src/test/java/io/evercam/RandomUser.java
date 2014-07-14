@@ -17,7 +17,7 @@ public class RandomUser
     public static final int CAMERA_EXTERNAL_RTSP = 554554;
     public static final String CAMERA_USERNAME = "username";
     public static final String CAMERA_PASSWORD = "password";
-    public static final String CAMERA_JPG_URL = "/snapshot.jp";
+    public static final String CAMERA_JPG_URL = "/snapshot.jpg";
     public static final String CAMERA_RTSP_URL = "/rtsp";
     public static final String CAMERA_TIMEZONE = "Etc/UTC";
     public static final String CAMERA_VENDOR = "hikvision";
