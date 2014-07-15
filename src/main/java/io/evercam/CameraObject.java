@@ -14,7 +14,11 @@ class BaseCameraObject extends EvercamObject
         this.jsonObject = jsonObject;
     }
 
-    protected String getHost()
+
+    /**
+     * @return the 'host' URL in corresponding camera object.
+     */
+    public String getHost()
     {
         try
         {
@@ -25,13 +29,19 @@ class BaseCameraObject extends EvercamObject
         }
     }
 
-    protected EvercamHttp getHttp() throws EvercamException
+    /**
+     * @return the 'http' object in corresponding camera object.
+     */
+    public EvercamHttp getHttp() throws EvercamException
     {
         JSONObject httpJsonObject = getJsonObjectByString("http");
         return new EvercamHttp(httpJsonObject);
     }
 
-    protected EvercamRtsp getRtsp() throws EvercamException
+    /**
+     * @return the 'rtsp' object in corresponding camera object.
+     */
+    public EvercamRtsp getRtsp() throws EvercamException
     {
         JSONObject rtspJsonObject = getJsonObjectByString("rtsp");
         return new EvercamRtsp(rtspJsonObject);
@@ -45,7 +55,7 @@ class EvercamHttp extends EvercamObject
         this.jsonObject = jsonObject;
     }
 
-    protected int getPort()
+    public int getPort()
     {
         try
         {
@@ -56,7 +66,7 @@ class EvercamHttp extends EvercamObject
         }
     }
 
-    protected String getCameraUrl()
+    public String getCameraUrl()
     {
         try
         {
@@ -78,7 +88,7 @@ class EvercamHttp extends EvercamObject
         }
     }
 
-    protected String getMjpgUrl()
+    public String getMjpgUrl()
     {
         try
         {
@@ -96,6 +106,7 @@ class EvercamRtsp extends EvercamObject
     {
         this.jsonObject = jsonObject;
     }
+
     protected int getPort()
     {
         try
@@ -107,7 +118,7 @@ class EvercamRtsp extends EvercamObject
         }
     }
 
-    protected String getMpegUrl()
+    public String getMpegUrl()
     {
         try
         {
@@ -118,7 +129,7 @@ class EvercamRtsp extends EvercamObject
         }
     }
 
-    protected String getAudioUrl()
+    public String getAudioUrl()
     {
         try
         {
@@ -140,18 +151,40 @@ class EvercamRtsp extends EvercamObject
         }
     }
 }
-class InternalObject extends BaseCameraObject
+
+class Internal extends BaseCameraObject
 {
-    InternalObject(JSONObject jsonObject)
+    Internal(JSONObject jsonObject)
     {
         super(jsonObject);
     }
 }
 
-class ExternalObject extends BaseCameraObject
+class External extends BaseCameraObject
 {
-    ExternalObject(JSONObject jsonObject)
+    External(JSONObject jsonObject)
     {
         super(jsonObject);
+    }
+}
+
+class DynamicDns extends BaseCameraObject
+{
+    DynamicDns(JSONObject jsonObject)
+    {
+        super(jsonObject);
+    }
+}
+
+class ProxyUrl extends EvercamObject
+{
+    ProxyUrl(JSONObject jsonObject)
+    {
+        this.jsonObject = jsonObject;
+    }
+
+    public String getJpg()
+    {
+        return jsonObject.getString("jpg");
     }
 }

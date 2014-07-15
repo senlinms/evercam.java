@@ -7,8 +7,8 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 public class CameraTest
 {
@@ -30,11 +30,10 @@ public class CameraTest
         Camera camera = randomUser.addRandomCamera(true);
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        assertEquals(1, User.getCameras(randomUser.getUsername(),false).size());
-     //   Assert.assertEquals(RandomUser.CAMERA_RTSP_URL, camera.getRtspUrl());
+        assertEquals(1, User.getCameras(randomUser.getUsername(), false).size());
 
         Camera.delete(camera.getId());
-        assertEquals(0, User.getCameras(randomUser.getUsername(),false).size());
+        assertEquals(0, User.getCameras(randomUser.getUsername(), false).size());
 
         API.setUserKeyPair(null, null);
     }
@@ -49,10 +48,7 @@ public class CameraTest
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
 
         CameraDetail detail = new PatchCameraBuilder(camera.getId()).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
-                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP)
-                .setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD)
-                .setJpgUrl(RandomUser.CAMERA_JPG_URL).setRtspUrl(RandomUser.CAMERA_RTSP_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL)
-                .setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).build();
+                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL).setRtspUrl(RandomUser.CAMERA_RTSP_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).build();
         Camera patchCamera = Camera.patch(detail);
         assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());
         assertEquals(false, patchCamera.isPublic());
@@ -62,10 +58,10 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_EXTERNAL_HOST, patchCamera.getExternalHost());
         assertEquals(RandomUser.CAMERA_EXTERNAL_HTTP, patchCamera.getExternalHttpPort());
         assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP, patchCamera.getExternalRtspPort());
-        assertEquals(RandomUser.CAMERA_USERNAME, patchCamera.getCameraUsername());
-        assertEquals(RandomUser.CAMERA_PASSWORD, patchCamera.getCameraPassword());
-     //   assertEquals(RandomUser.CAMERA_JPG_URL, patchCamera.getJpgUrl());
-     //   assertEquals(RandomUser.CAMERA_RTSP_URL, patchCamera.getRtspUrl());
+        assertEquals(RandomUser.CAMERA_USERNAME, patchCamera.getUsername());
+        assertEquals(RandomUser.CAMERA_PASSWORD, patchCamera.getPassword());
+        //   assertEquals(RandomUser.CAMERA_JPG_URL, patchCamera.getJpgUrl());
+        //   assertEquals(RandomUser.CAMERA_RTSP_URL, patchCamera.getRtspUrl());
         assertEquals(RandomUser.CAMERA_TIMEZONE, patchCamera.getTimezone());
         assertEquals(RandomUser.CAMERA_VENDOR, patchCamera.getVendorId());
         assertEquals(RandomUser.CAMERA_VENDOR_NAME, patchCamera.getVendorName());
@@ -73,15 +69,18 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
         assertFalse(patchCamera.isDiscoverable());
 
-        assertEquals(RandomUser.CAMERA_INTERNAL_JPG_URL ,patchCamera.getInternalJpgUrl());
-        assertEquals(RandomUser.CAMERA_EXTERNAL_JPG_URL,patchCamera.getExternalJpgUrl());
-        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL,patchCamera.getInternalH264Url());
-        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL,patchCamera.getExternalH264Url());
-        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL_WITH_AUTH,patchCamera.getInternalH264UrlWithCredential());
-        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH,patchCamera.getExternalH264UrlWithCredential());
-//        assertNotSame("", patchCamera.getShortJpgUrl());
-//        assertNotSame("", patchCamera.getDynamicDnsJpgUrl());
-//        assertNotSame("", patchCamera.getDynamicDnsRtspUrl());
+        assertNotNull(patchCamera.getDynamicDns());
+        assertNotNull(patchCamera.getProxyUrl().getJpg());
+        //    assertTrue(patchCamera.isOwned()); FIXME!
+
+        assertEquals(RandomUser.CAMERA_INTERNAL_URL, patchCamera.getInternalCameraEndpoint());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_URL, patchCamera.getExternalCameraEndpoint());
+        assertEquals(RandomUser.CAMERA_INTERNAL_JPG_URL, patchCamera.getInternalJpgUrl());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_JPG_URL, patchCamera.getExternalJpgUrl());
+        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL, patchCamera.getInternalH264Url());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL, patchCamera.getExternalH264Url());
+        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL_WITH_AUTH, patchCamera.getInternalH264UrlWithCredential());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH, patchCamera.getExternalH264UrlWithCredential());
         assertFalse(patchCamera.isOnline());
 
         API.setUserKeyPair(null, null);
@@ -102,7 +101,7 @@ public class CameraTest
         Camera randomCamera2 = randomUser.addRandomCamera(true);
         String idSet = randomCamera1.getId() + "," + randomCamera2.getId();
         ArrayList<Camera> camerasSet = Camera.getByIdSet(idSet);
-        Assert.assertEquals(2,camerasSet.size());
+        Assert.assertEquals(2, camerasSet.size());
         API.setUserKeyPair(null, null);
     }
 

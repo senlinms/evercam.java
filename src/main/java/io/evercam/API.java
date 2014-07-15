@@ -19,12 +19,26 @@ public abstract class API
     private static String[] developerKeyPair = {null, null};
     private static String[] userKeyPair = {null, null};
 
+    /**
+     * Set developer app key pair.
+     * Developer key pair will be send along with API requests that without user authentication.
+     *
+     * @param developerAppKey Evercam developer app key
+     * @param developerAppID  Evercam developer app id
+     */
     public static void setDeveloperKeyPair(String developerAppKey, String developerAppID)
     {
         developerKeyPair[0] = developerAppKey;
         developerKeyPair[1] = developerAppID;
     }
 
+    /**
+     * Set developer app key pair.
+     * Developer key pair will be send along with API requests that require user authentication.
+     *
+     * @param userApiKey Evercam user API key
+     * @param userApiID Evercam user API id
+     */
     public static void setUserKeyPair(String userApiKey, String userApiID)
     {
         userKeyPair[0] = userApiKey;

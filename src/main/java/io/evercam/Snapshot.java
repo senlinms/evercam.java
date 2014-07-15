@@ -70,9 +70,9 @@ public class Snapshot
     public String getBase64DataString()
     {
         String completeImageData = getCompleteData();
-        if(completeImageData != null)
+        if (completeImageData != null)
         {
-            return completeImageData.substring(completeImageData.indexOf(",")+1);
+            return completeImageData.substring(completeImageData.indexOf(",") + 1);
         }
         else
         {
@@ -84,7 +84,7 @@ public class Snapshot
     public byte[] getData()
     {
         String base64Data = getBase64DataString();
-        if(base64Data != null)
+        if (base64Data != null)
         {
             return org.apache.commons.codec.binary.Base64.decodeBase64(base64Data);
         }

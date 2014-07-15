@@ -183,16 +183,16 @@ public class User extends EvercamObject
         try
         {
             HttpResponse<JsonNode> response;
-            if(includeShared)
+            if (includeShared)
             {
-            if (API.hasUserKeyPair())
-            {
-                response = Unirest.get(URL + "/" + userId + "/cameras").fields(API.userKeyPairMap()).field("include_shared", "true").header("accept", "application/json").asJson();
-            }
-            else
-            {
-                response = Unirest.get(URL + "/" + userId + "/cameras").field("include_shared", "true").header("accept", "application/json").asJson();
-            }
+                if (API.hasUserKeyPair())
+                {
+                    response = Unirest.get(URL + "/" + userId + "/cameras").fields(API.userKeyPairMap()).field("include_shared", "true").header("accept", "application/json").asJson();
+                }
+                else
+                {
+                    response = Unirest.get(URL + "/" + userId + "/cameras").field("include_shared", "true").header("accept", "application/json").asJson();
+                }
             }
             else
             {

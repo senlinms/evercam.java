@@ -11,7 +11,7 @@ public class RandomUser
     public static final String CAMERA_NAME = "Random Camera";
     public static final String CAMERA_INTERNAL_HOST = "192.168.1.2";
     public static final String CAMERA_EXTERNAL_HOST = "123.123.123.123";
-    public static final int CAMERA_INTERNAL_HTTP = 80;
+    public static final int CAMERA_INTERNAL_HTTP = 81;
     public static final int CAMERA_INTERNAL_RTSP = 554;
     public static final int CAMERA_EXTERNAL_HTTP = 8080;
     public static final int CAMERA_EXTERNAL_RTSP = 554554;
@@ -25,12 +25,14 @@ public class RandomUser
     public static final String CAMERA_MODEL = Model.DEFAULT_MODEL;
     public static final String CAMERA_MAC = "11:11:11:11:11:11";
 
-    public static final String CAMERA_INTERNAL_JPG_URL =  "http://192.168.1.2/snapshot.jpg";
-    public static final String CAMERA_EXTERNAL_JPG_URL =  "http://123.123.123.123:8080/snapshot.jpg";
-    public static final String CAMERA_INTERNAL_RTSP_URL =  "rtsp://192.168.1.2:554/h264/ch1/main/av_stream";
-    public static final String CAMERA_EXTERNAL_RTSP_URL =  "rtsp://123.123.123.123:554554/h264/ch1/main/av_stream";
-    public static final String CAMERA_INTERNAL_RTSP_URL_WITH_AUTH =  "rtsp://username:password@192.168.1.2:554/h264/ch1/main/av_stream";
-    public static final String CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH =  "rtsp://username:password@123.123.123.123:554554/h264/ch1/main/av_stream";
+    public static final String CAMERA_INTERNAL_URL = "http://192.168.1.2:81";
+    public static final String CAMERA_EXTERNAL_URL = "http://123.123.123.123:8080";
+    public static final String CAMERA_INTERNAL_JPG_URL = "http://192.168.1.2:81/snapshot.jpg";
+    public static final String CAMERA_EXTERNAL_JPG_URL = "http://123.123.123.123:8080/snapshot.jpg";
+    public static final String CAMERA_INTERNAL_RTSP_URL = "rtsp://192.168.1.2:554/h264/ch1/main/av_stream";
+    public static final String CAMERA_EXTERNAL_RTSP_URL = "rtsp://123.123.123.123:554554/h264/ch1/main/av_stream";
+    public static final String CAMERA_INTERNAL_RTSP_URL_WITH_AUTH = "rtsp://username:password@192.168.1.2:554/h264/ch1/main/av_stream";
+    public static final String CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH = "rtsp://username:password@123.123.123.123:554554/h264/ch1/main/av_stream";
 
     private User user;
     private String username;
@@ -81,8 +83,7 @@ public class RandomUser
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setExternalHost(TestForReal.REAL_CAMERA_IP).setExternalHttpPort(8101)
-                .setCameraUsername(TestForReal.REAL_CAMERA_USERNAME).setCameraPassword(TestForReal.REAL_CAMERA_PASSWORD).setJpgUrl("/Streaming/channels/1/picture").build();
+        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setExternalHost(TestForReal.REAL_CAMERA_IP).setExternalHttpPort(8101).setCameraUsername(TestForReal.REAL_CAMERA_USERNAME).setCameraPassword(TestForReal.REAL_CAMERA_PASSWORD).setJpgUrl("/Streaming/channels/1/picture").build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;

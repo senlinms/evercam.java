@@ -56,7 +56,7 @@ public class CameraShare extends EvercamObject
             try
             {
                 HttpResponse<JsonNode> response = Unirest.get(url).fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
-                if(response.getCode() == CODE_OK)
+                if (response.getCode() == CODE_OK)
                 {
                     JSONArray sharesJSONArray = response.getBody().getObject().getJSONArray("shares");
                     for (int count = 0; count < sharesJSONArray.length(); count++)
