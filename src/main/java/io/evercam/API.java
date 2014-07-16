@@ -45,26 +45,48 @@ public abstract class API
         userKeyPair[1] = userApiID;
     }
 
+    /**
+     * Return the developer app key pair as an array with two values.
+     * The values will be null if developer key pair has not being set.
+     */
     public static String[] getDeveloperKeyPair()
     {
         return developerKeyPair;
     }
 
+    /**
+     * Return the user key pair as an array with two values.
+     * The values will be null if user key pair has not being set.
+     */
     public static String[] getUserKeyPair()
     {
         return userKeyPair;
     }
 
+    /**
+     * Whether or not the developer app key pair has been added.
+     * @return true if the developer app key pair has been added, otherwise
+     *         return false.
+     */
     public static boolean hasDeveloperKeyPair()
     {
         return (((developerKeyPair[0] != null) && (developerKeyPair[1] != null)) ? true : false);
     }
 
+    /**
+     * Whether or not the user key pair has been added.
+     * @return true if the user key pair has been added, otherwise return false.
+     */
     public static boolean hasUserKeyPair()
     {
         return (((userKeyPair[0] != null) && (userKeyPair[1] != null)) ? true : false);
     }
 
+    /**
+     * Return the hash map of developer key and id.
+     * Useful when add parameters using Unirest library
+     * @throws EvercamException if no developer app key pair added.
+     */
     protected static Map<String, Object> developerKeyPairMap() throws EvercamException
     {
         if (hasDeveloperKeyPair())
@@ -80,6 +102,11 @@ public abstract class API
         }
     }
 
+    /**
+     * Return the hash map of user key and id.
+     * Useful when add parameters using Unirest library
+     * @throws EvercamException if no user key pair added.
+     */
     protected static Map<String, Object> userKeyPairMap() throws EvercamException
     {
         if (hasUserKeyPair())
@@ -95,6 +122,14 @@ public abstract class API
         }
     }
 
+    /**
+     * Fetch API credentials for an authenticated user.
+     *
+     * @param username User name for the user to fetch credentials for
+     * @param password Password for the user to fetch credentials for.
+     * @return the user API credentials (key and id)
+     * @throws EvercamException if developer key and id is not added
+     */
     public static ApiKeyPair requestUserKeyPairFromEvercam(String username, String password) throws EvercamException
     {
         ApiKeyPair userKeyPair = null;

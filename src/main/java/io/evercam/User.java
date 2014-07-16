@@ -23,6 +23,10 @@ public class User extends EvercamObject
         this.jsonObject = userJSONObject;
     }
 
+    /**
+     * Return two letter ISO country code of the user.
+     * @throws EvercamException
+     */
     public String getCountry() throws EvercamException
     {
         try
@@ -34,6 +38,10 @@ public class User extends EvercamObject
         }
     }
 
+    /**
+     * Return unique Evercam username of the user.
+     * @throws EvercamException
+     */
     public String getId() throws EvercamException
     {
         try
@@ -45,6 +53,10 @@ public class User extends EvercamObject
         }
     }
 
+    /**
+     * Return Email address of the user.
+     * @throws EvercamException
+     */
     public String getEmail() throws EvercamException
     {
         try
@@ -56,7 +68,11 @@ public class User extends EvercamObject
         }
     }
 
-    public String getLastname() throws EvercamException
+    /**
+     * Return last name of the user.
+     * @throws EvercamException
+     */
+    public String getLastName() throws EvercamException
     {
         try
         {
@@ -67,8 +83,11 @@ public class User extends EvercamObject
         }
     }
 
-
-    public String getForename() throws EvercamException
+    /**
+     * Return first name of the user.
+     * @throws EvercamException
+     */
+    public String getFirstName() throws EvercamException
     {
         try
         {
@@ -79,6 +98,10 @@ public class User extends EvercamObject
         }
     }
 
+    /**
+     * Return unique Evercam username of the user.
+     * @throws EvercamException
+     */
     public String getUsername() throws EvercamException
     {
         try
@@ -90,6 +113,11 @@ public class User extends EvercamObject
         }
     }
 
+    /**
+     * Returns available information for a user by specifying user unique identifier.
+     * @param id unique Evercam username of the user.
+     * @throws EvercamException if no user API key pair added
+     */
     public User(String id) throws EvercamException
     {
         if (API.hasUserKeyPair())
@@ -128,6 +156,11 @@ public class User extends EvercamObject
         }
     }
 
+    /**
+     * Starts the new user sign up process with Evercam
+     * @param userDetail user detail object with all details for the new user
+     * @throws EvercamException if no developer app API key pair added
+     */
     public static User create(UserDetail userDetail) throws EvercamException
     {
         User user = null;
@@ -177,6 +210,15 @@ public class User extends EvercamObject
         return user;
     }
 
+    /**
+     * Returns the set of cameras associated with a specified user.
+     * Only public cameras will be returned if no user API key added
+     *
+     * @param userId unique Evercam username of the user
+     * @param includeShared whether or not to include cameras shared with the user in the fetch.
+     * @return the camera list that associated with this user
+     * @throws EvercamException
+     */
     public static ArrayList<Camera> getCameras(String userId, boolean includeShared) throws EvercamException
     {
         ArrayList<Camera> cameraList = new ArrayList<Camera>();

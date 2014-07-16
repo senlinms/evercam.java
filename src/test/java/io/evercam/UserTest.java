@@ -44,8 +44,8 @@ public class UserTest
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         User user = new User(randomUser.getUsername());
 
-        assertEquals(RandomUser.FIRST_NAME, user.getForename());
-        assertEquals(RandomUser.LAST_NAME, user.getLastname());
+        assertEquals(RandomUser.FIRST_NAME, user.getFirstName());
+        assertEquals(RandomUser.LAST_NAME, user.getLastName());
         assertEquals(randomUser.getEmail(), user.getEmail());
         assertEquals(randomUser.getUsername(), user.getId());
         assertEquals(randomUser.getUsername(), user.getUsername());
