@@ -276,8 +276,27 @@ public class Camera extends EvercamObject
      */
     public boolean hasCredentials()
     {
-        //FIXME: Should be replace by a better logic, for example by using 'owned' and 'rights'.
+        //FIXME: Should be replace by a better logic, for example by using 'owned' and 'rights' to tell the camera has credential parameters or not.
         return jsonObject.toString().contains("\"cam_username\":") && jsonObject.toString().contains("\"cam_password\":");
+    }
+
+    /**
+     * Return location object of this camera.
+     * Return null if no location data associate with this camera.
+     *
+     * @see io.evercam.Location
+     */
+    public Location getLocation() throws EvercamException
+    {
+        if (jsonObject.isNull("location"))
+        {
+            return null;
+        }
+        else
+        {
+            JSONObject locationJsonObject = getJsonObjectByString("location");
+            return new Location(locationJsonObject);
+        }
     }
 
     /**
@@ -1082,6 +1101,10 @@ public class Camera extends EvercamObject
         {
             cameraJSONObject.put("is_public", cameraDetail.isPublic);
         }
+        if (cameraDetail.isOnline != null)
+        {
+            cameraJSONObject.put("is_online", cameraDetail.isOnline);
+        }
         if (cameraDetail.cameraUsername != null)
         {
             cameraJSONObject.put("cam_username", cameraDetail.cameraUsername);
@@ -1110,19 +1133,16 @@ public class Camera extends EvercamObject
         {
             cameraJSONObject.put("mac_address", cameraDetail.macAddress);
         }
-
-        //For testing location data only:
-        //   cameraJSONObject.put("location", getLocationJsonObject());
+        if (cameraDetail.locationLat != null)
+        {
+            cameraJSONObject.put("location_lat", cameraDetail.locationLat);
+        }
+        if (cameraDetail.locationLng != null)
+        {
+            cameraJSONObject.put("location_lng", cameraDetail.locationLng);
+        }
 
         return cameraJSONObject;
-    }
-
-    private static JSONObject getLocationJsonObject()
-    {
-        JSONObject locationJsonObject = new JSONObject();
-        locationJsonObject.put("lng", -122.086966);
-        locationJsonObject.put("lat", 37.377166);
-        return locationJsonObject;
     }
 
     /**

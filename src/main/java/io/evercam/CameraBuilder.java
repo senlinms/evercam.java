@@ -20,6 +20,8 @@ public class CameraBuilder
     int externalRtspPort;
     String cameraUsername;
     String cameraPassword;
+    float locationLng;
+    float locationLat;
 
     public CameraBuilder(String cameraId, String cameraName, Boolean isPublic) throws EvercamException
     {
@@ -130,6 +132,17 @@ public class CameraBuilder
     public CameraBuilder setMacAddress(String macAddress)
     {
         this.macAddress = macAddress;
+        return this;
+    }
+
+    /**
+     * @param lng GPS longitude coordinate of the camera,
+     * @param lat GPS latitude coordinate of the camera
+     */
+    public CameraBuilder setLocation(float lng, float lat)
+    {
+        this.locationLng = lng;
+        this.locationLat = lat;
         return this;
     }
 

@@ -1,9 +1,12 @@
 package io.evercam;
 
+import javax.sound.midi.Patch;
+
 public class PatchCameraBuilder
 {
     final String id;
     Boolean isPublic;
+    Boolean isOnline;
     String name;
     String vendor;
     String model;
@@ -19,6 +22,8 @@ public class PatchCameraBuilder
     int externalRtspPort;
     String cameraUsername;
     String cameraPassword;
+    float locationLng;
+    float locationLat;
 
     public PatchCameraBuilder(String cameraId) throws EvercamException
     {
@@ -41,6 +46,23 @@ public class PatchCameraBuilder
     public PatchCameraBuilder setPublic(Boolean isPublic)
     {
         this.isPublic = isPublic;
+        return this;
+    }
+
+    public PatchCameraBuilder setOnline(Boolean isOnline)
+    {
+        this.isOnline = isOnline;
+        return this;
+    }
+
+    /**
+     * @param lng GPS longitude coordinate of the camera,
+     * @param lat GPS latitude coordinate of the camera
+     */
+    public PatchCameraBuilder setLocation(float lng, float lat)
+    {
+        this.locationLng = lng;
+        this.locationLat = lat;
         return this;
     }
 

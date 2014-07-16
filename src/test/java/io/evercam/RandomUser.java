@@ -7,7 +7,8 @@ public class RandomUser
     public static final String FIRST_NAME = "JavaWrapper";
     public static final String LAST_NAME = "TestUser";
     public static final String COUNTRY_CODE = "us";
-
+    public static final float LOCATION_LAT = 37.377166f;
+    public static final float LOCATION_LNG = -122.086966f;
     public static final String CAMERA_NAME = "Random Camera";
     public static final String CAMERA_INTERNAL_HOST = "192.168.1.2";
     public static final String CAMERA_EXTERNAL_HOST = "123.123.123.123";
@@ -74,6 +75,16 @@ public class RandomUser
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).build();
+        Camera camera = Camera.create(detail);
+        API.setUserKeyPair(null, null);
+        return camera;
+    }
+
+    public Camera addBasicCameraWithLocation() throws EvercamException
+    {
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).setLocation(LOCATION_LNG, LOCATION_LAT).build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;

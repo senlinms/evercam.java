@@ -1,12 +1,16 @@
 package io.evercam;
 
 
+import junit.framework.*;
 import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -35,6 +39,13 @@ public class CameraTest
         Camera.delete(camera.getId());
         assertEquals(0, User.getCameras(randomUser.getUsername(), false).size());
 
+        /**
+         * Test create camera with location
+         */
+        Camera cameraWithLocation = randomUser.addBasicCameraWithLocation();
+        assertEquals(RandomUser.LOCATION_LNG, cameraWithLocation.getLocation().getLng(), 0);
+        assertEquals(RandomUser.LOCATION_LAT, cameraWithLocation.getLocation().getLat(), 0);
+
         API.setUserKeyPair(null, null);
     }
 
@@ -47,10 +58,15 @@ public class CameraTest
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
 
+        assertFalse(camera.isOnline());
         CameraDetail detail = new PatchCameraBuilder(camera.getId()).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
-                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL).setRtspUrl(RandomUser.CAMERA_RTSP_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).build();
+                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP)
+                .setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL)
+                .setRtspUrl(RandomUser.CAMERA_RTSP_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC)
+                .setName(PATCH_CAMERA_NAME).setPublic(false).setOnline(true).setLocation(RandomUser.LOCATION_LNG, RandomUser.LOCATION_LAT).build();
         Camera patchCamera = Camera.patch(detail);
         assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());
+        assertTrue(patchCamera.isOnline()); //Test patch camera 'is_online'
         assertEquals(false, patchCamera.isPublic());
         assertEquals(RandomUser.CAMERA_INTERNAL_HOST, patchCamera.getInternalHost());
         assertEquals(RandomUser.CAMERA_INTERNAL_HTTP, patchCamera.getInternalHttpPort());
@@ -69,6 +85,9 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
         assertFalse(patchCamera.isDiscoverable());
 
+        assertEquals(RandomUser.LOCATION_LNG, patchCamera.getLocation().getLng(), 0);
+        assertEquals(RandomUser.LOCATION_LAT, patchCamera.getLocation().getLat(), 0);
+
         assertNotNull(patchCamera.getDynamicDns());
         assertNotNull(patchCamera.getProxyUrl().getJpg());
         //    assertTrue(patchCamera.isOwned()); FIXME!
@@ -81,7 +100,6 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL, patchCamera.getExternalH264Url());
         assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL_WITH_AUTH, patchCamera.getInternalH264UrlWithCredential());
         assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH, patchCamera.getExternalH264UrlWithCredential());
-        assertFalse(patchCamera.isOnline());
 
         API.setUserKeyPair(null, null);
     }

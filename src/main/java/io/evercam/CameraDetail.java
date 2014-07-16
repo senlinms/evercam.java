@@ -6,6 +6,7 @@ public class CameraDetail
     public String id;
     String name;
     Boolean isPublic;
+    Boolean isOnline;
     String vendor;
     String model;
     String timezone;
@@ -20,12 +21,15 @@ public class CameraDetail
     int externalRtspPort;
     String cameraUsername;
     String cameraPassword;
+    Float locationLng;
+    Float locationLat;
 
     public CameraDetail(PatchCameraBuilder builder)
     {
         id = builder.id;
         name = builder.name;
         isPublic = builder.isPublic;
+        isOnline = builder.isOnline;
         vendor = builder.vendor;
         model = builder.model;
         timezone = builder.timezone;
@@ -40,6 +44,8 @@ public class CameraDetail
         externalRtspPort = builder.externalRtspPort;
         cameraUsername = builder.cameraUsername;
         cameraPassword = builder.cameraPassword;
+        locationLat = builder.locationLat;
+        locationLng = builder.locationLng;
     }
 
     public CameraDetail(CameraBuilder builder)
@@ -61,6 +67,8 @@ public class CameraDetail
         externalRtspPort = builder.externalRtspPort;
         cameraUsername = builder.cameraUsername;
         cameraPassword = builder.cameraPassword;
+        locationLat = builder.locationLat;
+        locationLng = builder.locationLng;
     }
 
     public String getId()
@@ -141,6 +149,21 @@ public class CameraDetail
     public String getCameraPassword()
     {
         return cameraPassword;
+    }
+
+    public float getLocationLng()
+    {
+        return locationLng;
+    }
+
+    public float getLocationLat()
+    {
+        return locationLat;
+    }
+
+    public Boolean getIsOnline()
+    {
+        return isOnline;
     }
 
     @Override

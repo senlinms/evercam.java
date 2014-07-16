@@ -188,3 +188,21 @@ class ProxyUrl extends EvercamObject
         return jsonObject.getString("jpg");
     }
 }
+
+class Location extends EvercamObject
+{
+    Location(JSONObject jsonObject)
+    {
+        this.jsonObject = jsonObject;
+    }
+
+    public float getLng()
+    {
+        return (float)jsonObject.getDouble("lng");
+    }
+
+    public float getLat()
+    {
+        return (float)jsonObject.getDouble("lat");
+    }
+}
