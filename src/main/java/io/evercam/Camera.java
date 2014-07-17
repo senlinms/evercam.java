@@ -1093,9 +1093,9 @@ public class Camera extends EvercamObject
         {
             cameraJSONObject.put("jpg_url", cameraDetail.jpgUrl);
         }
-        if (cameraDetail.rtspUrl != null)
+        if (cameraDetail.h264Url != null)
         {
-            cameraJSONObject.put("rtsp_url", cameraDetail.rtspUrl);
+            cameraJSONObject.put("h264_url", cameraDetail.h264Url);
         }
         if (cameraDetail.isPublic != null)
         {

@@ -31,20 +31,56 @@ public class CameraTest
     {
         RandomUser randomUser = new RandomUser();
 
-        Camera camera = randomUser.addRandomCamera(true);
+        Camera randomCamera = randomUser.addRandomCamera(true);
+        assertFalse(randomCamera.isOnline());
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         assertEquals(1, User.getCameras(randomUser.getUsername(), false).size());
 
-        Camera.delete(camera.getId());
+        Camera.delete(randomCamera.getId());
         assertEquals(0, User.getCameras(randomUser.getUsername(), false).size());
 
         /**
-         * Test create camera with location
+         * Test create camera with location and online status
          */
-        Camera cameraWithLocation = randomUser.addBasicCameraWithLocation();
-        assertEquals(RandomUser.LOCATION_LNG, cameraWithLocation.getLocation().getLng(), 0);
-        assertEquals(RandomUser.LOCATION_LAT, cameraWithLocation.getLocation().getLat(), 0);
+        Camera camera = randomUser.addFullCamera();
+        assertEquals(RandomUser.LOCATION_LNG, camera.getLocation().getLng(), 0);
+        assertEquals(RandomUser.LOCATION_LAT, camera.getLocation().getLat(), 0);
+        assertTrue(camera.isOnline());
+        assertEquals(RandomUser.CAMERA_NAME, camera.getName());
+        assertEquals(true, camera.isPublic());
+        assertEquals(RandomUser.CAMERA_INTERNAL_HOST, camera.getInternalHost());
+        assertEquals(RandomUser.CAMERA_INTERNAL_HTTP, camera.getInternalHttpPort());
+        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP, camera.getInternalRtspPort());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_HOST, camera.getExternalHost());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_HTTP, camera.getExternalHttpPort());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP, camera.getExternalRtspPort());
+        assertEquals(RandomUser.CAMERA_USERNAME, camera.getUsername());
+        assertEquals(RandomUser.CAMERA_PASSWORD, camera.getPassword());
+        //   assertEquals(RandomUser.CAMERA_JPG_URL, patchCamera.getJpgUrl());
+        //   assertEquals(RandomUser.CAMERA_RTSP_URL, patchCamera.getRtspUrl());
+        assertEquals(RandomUser.CAMERA_TIMEZONE, camera.getTimezone());
+        assertEquals(RandomUser.CAMERA_VENDOR, camera.getVendorId());
+        assertEquals(RandomUser.CAMERA_VENDOR_NAME, camera.getVendorName());
+        assertEquals(RandomUser.CAMERA_MAC, camera.getMacAddress());
+        assertEquals(RandomUser.CAMERA_MODEL, camera.getModel());
+        assertFalse(camera.isDiscoverable());
+
+        assertEquals(RandomUser.LOCATION_LNG, camera.getLocation().getLng(), 0);
+        assertEquals(RandomUser.LOCATION_LAT, camera.getLocation().getLat(), 0);
+
+        assertNotNull(camera.getDynamicDns());
+        assertNotNull(camera.getProxyUrl().getJpg());
+        //    assertTrue(patchCamera.isOwned()); FIXME!
+
+        assertEquals(RandomUser.CAMERA_INTERNAL_URL, camera.getInternalCameraEndpoint());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_URL, camera.getExternalCameraEndpoint());
+        assertEquals(RandomUser.CAMERA_INTERNAL_JPG_URL, camera.getInternalJpgUrl());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_JPG_URL, camera.getExternalJpgUrl());
+        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL, camera.getInternalH264Url());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL, camera.getExternalH264Url());
+        assertEquals(RandomUser.CAMERA_INTERNAL_RTSP_URL_WITH_AUTH, camera.getInternalH264UrlWithCredential());
+        assertEquals(RandomUser.CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH, camera.getExternalH264UrlWithCredential());
 
         API.setUserKeyPair(null, null);
     }
@@ -62,7 +98,7 @@ public class CameraTest
         CameraDetail detail = new PatchCameraBuilder(camera.getId()).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
                 CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP)
                 .setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL)
-                .setRtspUrl(RandomUser.CAMERA_RTSP_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC)
+                .setH264Url(RandomUser.CAMERA_H264_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC)
                 .setName(PATCH_CAMERA_NAME).setPublic(false).setOnline(true).setLocation(RandomUser.LOCATION_LNG, RandomUser.LOCATION_LAT).build();
         Camera patchCamera = Camera.patch(detail);
         assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());

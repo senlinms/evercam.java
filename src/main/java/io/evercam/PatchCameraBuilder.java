@@ -13,7 +13,7 @@ public class PatchCameraBuilder
     String timezone;
     String macAddress;
     String jpgUrl;
-    String rtspUrl;
+    String h264Url;
     String internalHost;
     int internalHttpPort;
     int internalRtspPort;
@@ -72,9 +72,9 @@ public class PatchCameraBuilder
         return this;
     }
 
-    public PatchCameraBuilder setRtspUrl(String rtspUrl)
+    public PatchCameraBuilder setH264Url(String h264Url)
     {
-        this.rtspUrl = rtspUrl;
+        this.h264Url = h264Url;
         return this;
     }
 

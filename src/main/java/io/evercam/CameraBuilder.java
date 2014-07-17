@@ -11,7 +11,7 @@ public class CameraBuilder
     String timezone;
     String macAddress;
     String jpgUrl;
-    String rtspUrl;
+    String h264Url;
     String internalHost;
     int internalHttpPort;
     int internalRtspPort;
@@ -20,8 +20,9 @@ public class CameraBuilder
     int externalRtspPort;
     String cameraUsername;
     String cameraPassword;
-    float locationLng;
-    float locationLat;
+    Float locationLng;
+    Float locationLat;
+    Boolean isOnline;
 
     public CameraBuilder(String cameraId, String cameraName, Boolean isPublic) throws EvercamException
     {
@@ -57,9 +58,9 @@ public class CameraBuilder
         return this;
     }
 
-    public CameraBuilder setRtspUrl(String rtspUrl)
+    public CameraBuilder setH264Url(String h264Url)
     {
-        this.rtspUrl = rtspUrl;
+        this.h264Url = h264Url;
         return this;
     }
 
@@ -135,11 +136,17 @@ public class CameraBuilder
         return this;
     }
 
+    public CameraBuilder setOnline(Boolean isOnline)
+    {
+        this.isOnline = isOnline;
+        return  this;
+    }
+
     /**
      * @param lng GPS longitude coordinate of the camera,
      * @param lat GPS latitude coordinate of the camera
      */
-    public CameraBuilder setLocation(float lng, float lat)
+    public CameraBuilder setLocation(Float lng, Float lat)
     {
         this.locationLng = lng;
         this.locationLat = lat;

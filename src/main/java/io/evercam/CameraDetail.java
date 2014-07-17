@@ -12,7 +12,7 @@ public class CameraDetail
     String timezone;
     String macAddress;
     String jpgUrl;
-    String rtspUrl;
+    String h264Url;
     String internalHost;
     int internalHttpPort;
     int internalRtspPort;
@@ -35,7 +35,7 @@ public class CameraDetail
         timezone = builder.timezone;
         macAddress = builder.macAddress;
         jpgUrl = builder.jpgUrl;
-        rtspUrl = builder.rtspUrl;
+        h264Url = builder.h264Url;
         internalHost = builder.internalHost;
         internalHttpPort = builder.internalHttpPort;
         internalRtspPort = builder.internalRtspPort;
@@ -53,12 +53,13 @@ public class CameraDetail
         id = builder.id;
         name = builder.name;
         isPublic = builder.isPublic;
+        isOnline = builder.isOnline;
         vendor = builder.vendor;
         model = builder.model;
         timezone = builder.timezone;
         macAddress = builder.macAddress;
         jpgUrl = builder.jpgUrl;
-        rtspUrl = builder.rtspUrl;
+        h264Url = builder.h264Url;
         internalHost = builder.internalHost;
         internalHttpPort = builder.internalHttpPort;
         internalRtspPort = builder.internalRtspPort;
@@ -109,6 +110,11 @@ public class CameraDetail
     public String getJpgUrl()
     {
         return jpgUrl;
+    }
+
+    public String getH264Url()
+    {
+        return h264Url;
     }
 
     public String getInternalHost()

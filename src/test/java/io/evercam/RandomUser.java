@@ -19,7 +19,7 @@ public class RandomUser
     public static final String CAMERA_USERNAME = "username";
     public static final String CAMERA_PASSWORD = "password";
     public static final String CAMERA_JPG_URL = "/snapshot.jpg";
-    public static final String CAMERA_RTSP_URL = "/rtsp";
+    public static final String CAMERA_H264_URL = "/h264";
     public static final String CAMERA_TIMEZONE = "Etc/UTC";
     public static final String CAMERA_VENDOR = "hikvision";
     public static final String CAMERA_VENDOR_NAME = "Hikvision Digital Technology";
@@ -30,10 +30,10 @@ public class RandomUser
     public static final String CAMERA_EXTERNAL_URL = "http://123.123.123.123:8080";
     public static final String CAMERA_INTERNAL_JPG_URL = "http://192.168.1.2:81/snapshot.jpg";
     public static final String CAMERA_EXTERNAL_JPG_URL = "http://123.123.123.123:8080/snapshot.jpg";
-    public static final String CAMERA_INTERNAL_RTSP_URL = "rtsp://192.168.1.2:554/h264/ch1/main/av_stream";
-    public static final String CAMERA_EXTERNAL_RTSP_URL = "rtsp://123.123.123.123:554554/h264/ch1/main/av_stream";
-    public static final String CAMERA_INTERNAL_RTSP_URL_WITH_AUTH = "rtsp://username:password@192.168.1.2:554/h264/ch1/main/av_stream";
-    public static final String CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH = "rtsp://username:password@123.123.123.123:554554/h264/ch1/main/av_stream";
+    public static final String CAMERA_INTERNAL_RTSP_URL = "rtsp://192.168.1.2:554/h264";
+    public static final String CAMERA_EXTERNAL_RTSP_URL = "rtsp://123.123.123.123:554554/h264";
+    public static final String CAMERA_INTERNAL_RTSP_URL_WITH_AUTH = "rtsp://username:password@192.168.1.2:554/h264";
+    public static final String CAMERA_EXTERNAL_RTSP_URL_WITH_AUTH = "rtsp://username:password@123.123.123.123:554554/h264";
 
     private User user;
     private String username;
@@ -64,7 +64,7 @@ public class RandomUser
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, isPublic).setInternalHost(CAMERA_INTERNAL_HOST).setInternalHttpPort(CAMERA_INTERNAL_HTTP).setInternalRtspPort(CAMERA_INTERNAL_RTSP).setExternalHost(CAMERA_EXTERNAL_HOST).setExternalHttpPort(CAMERA_EXTERNAL_HTTP).setExternalRtspPort(CAMERA_EXTERNAL_RTSP).setCameraUsername(CAMERA_USERNAME).setCameraPassword(CAMERA_PASSWORD).setJpgUrl(CAMERA_JPG_URL).setRtspUrl(CAMERA_RTSP_URL).setTimeZone(CAMERA_TIMEZONE).setVendor(CAMERA_VENDOR).setModel(CAMERA_MODEL).setMacAddress(CAMERA_MAC).build();
+        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, isPublic).setInternalHost(CAMERA_INTERNAL_HOST).setInternalHttpPort(CAMERA_INTERNAL_HTTP).setInternalRtspPort(CAMERA_INTERNAL_RTSP).setExternalHost(CAMERA_EXTERNAL_HOST).setExternalHttpPort(CAMERA_EXTERNAL_HTTP).setExternalRtspPort(CAMERA_EXTERNAL_RTSP).setCameraUsername(CAMERA_USERNAME).setCameraPassword(CAMERA_PASSWORD).setJpgUrl(CAMERA_JPG_URL).setH264Url(CAMERA_H264_URL).setTimeZone(CAMERA_TIMEZONE).setVendor(CAMERA_VENDOR).setModel(CAMERA_MODEL).setMacAddress(CAMERA_MAC).build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;
@@ -80,14 +80,22 @@ public class RandomUser
         return camera;
     }
 
-    public Camera addBasicCameraWithLocation() throws EvercamException
+    public Camera addFullCamera() throws EvercamException
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).setLocation(LOCATION_LNG, LOCATION_LAT).build();
+        CameraDetail detail = basicCamera().setLocation(LOCATION_LNG, LOCATION_LAT).setOnline(true).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
+            CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP)
+            .setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL)
+            .setH264Url(RandomUser.CAMERA_H264_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC).build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;
+    }
+
+    public CameraBuilder basicCamera() throws EvercamException
+    {
+        return new CameraBuilder(randomUUID(), CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST);
     }
 
     public Camera addRealCamera() throws EvercamException
