@@ -160,17 +160,17 @@ public class CameraBuilder
     public CameraBuilder setOnline(Boolean isOnline)
     {
         this.isOnline = isOnline;
-        return  this;
+        return this;
     }
 
     /**
-     * @param lng GPS longitude coordinate of the camera,
-     * @param lat GPS latitude coordinate of the camera
+     * @param lat GPS latitude coordinate of the camera,
+     * @param lng GPS longitude coordinate of the camera
      */
-    public CameraBuilder setLocation(Float lng, Float lat)
+    public CameraBuilder setLocation(Float lat, Float lng)
     {
-        this.locationLng = lng;
         this.locationLat = lat;
+        this.locationLng = lng;
         return this;
     }
 

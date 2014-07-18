@@ -1,7 +1,5 @@
 package io.evercam;
 
-import javax.sound.midi.Patch;
-
 public class PatchCameraBuilder
 {
     final String id;
@@ -59,13 +57,13 @@ public class PatchCameraBuilder
     }
 
     /**
-     * @param lng GPS longitude coordinate of the camera,
-     * @param lat GPS latitude coordinate of the camera
+     * @param lat GPS latitude coordinate of the camera,
+     * @param lng GPS longitude coordinate of the camera
      */
-    public PatchCameraBuilder setLocation(float lng, float lat)
+    public PatchCameraBuilder setLocation(float lat, float lng)
     {
-        this.locationLng = lng;
         this.locationLat = lat;
+        this.locationLng = lng;
         return this;
     }
 

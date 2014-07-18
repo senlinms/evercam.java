@@ -198,11 +198,11 @@ class Location extends EvercamObject
 
     public float getLng()
     {
-        return (float)jsonObject.getDouble("lng");
+        return (float) jsonObject.getDouble("lng");
     }
 
     public float getLat()
     {
-        return (float)jsonObject.getDouble("lat");
+        return (float) jsonObject.getDouble("lat");
     }
 }

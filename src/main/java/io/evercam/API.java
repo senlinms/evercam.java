@@ -37,7 +37,7 @@ public abstract class API
      * Developer key pair will be send along with API requests that require user authentication.
      *
      * @param userApiKey Evercam user API key
-     * @param userApiID Evercam user API id
+     * @param userApiID  Evercam user API id
      */
     public static void setUserKeyPair(String userApiKey, String userApiID)
     {
@@ -65,8 +65,9 @@ public abstract class API
 
     /**
      * Whether or not the developer app key pair has been added.
+     *
      * @return true if the developer app key pair has been added, otherwise
-     *         return false.
+     * return false.
      */
     public static boolean hasDeveloperKeyPair()
     {
@@ -75,6 +76,7 @@ public abstract class API
 
     /**
      * Whether or not the user key pair has been added.
+     *
      * @return true if the user key pair has been added, otherwise return false.
      */
     public static boolean hasUserKeyPair()
@@ -85,6 +87,7 @@ public abstract class API
     /**
      * Return the hash map of developer key and id.
      * Useful when add parameters using Unirest library
+     *
      * @throws EvercamException if no developer app key pair added.
      */
     protected static Map<String, Object> developerKeyPairMap() throws EvercamException
@@ -105,6 +108,7 @@ public abstract class API
     /**
      * Return the hash map of user key and id.
      * Useful when add parameters using Unirest library
+     *
      * @throws EvercamException if no user key pair added.
      */
     protected static Map<String, Object> userKeyPairMap() throws EvercamException

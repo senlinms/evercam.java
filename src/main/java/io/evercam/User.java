@@ -25,6 +25,7 @@ public class User extends EvercamObject
 
     /**
      * Return two letter ISO country code of the user.
+     *
      * @throws EvercamException
      */
     public String getCountry() throws EvercamException
@@ -40,6 +41,7 @@ public class User extends EvercamObject
 
     /**
      * Return unique Evercam username of the user.
+     *
      * @throws EvercamException
      */
     public String getId() throws EvercamException
@@ -55,6 +57,7 @@ public class User extends EvercamObject
 
     /**
      * Return Email address of the user.
+     *
      * @throws EvercamException
      */
     public String getEmail() throws EvercamException
@@ -70,6 +73,7 @@ public class User extends EvercamObject
 
     /**
      * Return last name of the user.
+     *
      * @throws EvercamException
      */
     public String getLastName() throws EvercamException
@@ -85,6 +89,7 @@ public class User extends EvercamObject
 
     /**
      * Return first name of the user.
+     *
      * @throws EvercamException
      */
     public String getFirstName() throws EvercamException
@@ -100,6 +105,7 @@ public class User extends EvercamObject
 
     /**
      * Return unique Evercam username of the user.
+     *
      * @throws EvercamException
      */
     public String getUsername() throws EvercamException
@@ -115,6 +121,7 @@ public class User extends EvercamObject
 
     /**
      * Returns available information for a user by specifying user unique identifier.
+     *
      * @param id unique Evercam username of the user.
      * @throws EvercamException if no user API key pair added
      */
@@ -158,6 +165,7 @@ public class User extends EvercamObject
 
     /**
      * Starts the new user sign up process with Evercam
+     *
      * @param userDetail user detail object with all details for the new user
      * @throws EvercamException if no developer app API key pair added
      */
@@ -214,7 +222,7 @@ public class User extends EvercamObject
      * Returns the set of cameras associated with a specified user.
      * Only public cameras will be returned if no user API key added
      *
-     * @param userId unique Evercam username of the user
+     * @param userId        unique Evercam username of the user
      * @param includeShared whether or not to include cameras shared with the user in the fetch.
      * @return the camera list that associated with this user
      * @throws EvercamException

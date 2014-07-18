@@ -1096,7 +1096,6 @@ public class Camera extends EvercamObject
         if (cameraDetail.mjpgUrl != null)
         {
             cameraJSONObject.put("mjpg_url", cameraDetail.mjpgUrl);
-       //     System.out.println(cameraJSONObject.toString());
         }
         if (cameraDetail.mpegUrl != null)
         {
