@@ -1093,9 +1093,22 @@ public class Camera extends EvercamObject
         {
             cameraJSONObject.put("jpg_url", cameraDetail.jpgUrl);
         }
+        if (cameraDetail.mjpgUrl != null)
+        {
+            cameraJSONObject.put("mjpg_url", cameraDetail.mjpgUrl);
+       //     System.out.println(cameraJSONObject.toString());
+        }
+        if (cameraDetail.mpegUrl != null)
+        {
+            cameraJSONObject.put("mpeg_url", cameraDetail.mpegUrl);
+        }
         if (cameraDetail.h264Url != null)
         {
             cameraJSONObject.put("h264_url", cameraDetail.h264Url);
+        }
+        if (cameraDetail.audioUrl != null)
+        {
+            cameraJSONObject.put("audio_url", cameraDetail.audioUrl);
         }
         if (cameraDetail.isPublic != null)
         {
@@ -1149,7 +1162,7 @@ public class Camera extends EvercamObject
      * Return the 'internal' object of this camera.
      * Return null if it's a shared camera with no internal details.
      */
-    private Internal getInternalObject() throws EvercamException
+    public Internal getInternalObject() throws EvercamException
     {
         try
         {
@@ -1165,7 +1178,7 @@ public class Camera extends EvercamObject
      * Return the 'external' object of this camera.
      * Return null if it's a shared camera with no external details.
      */
-    private External getExternalObject()
+    public External getExternalObject()
     {
         try
         {

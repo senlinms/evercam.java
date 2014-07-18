@@ -12,6 +12,9 @@ public class CameraBuilder
     String macAddress;
     String jpgUrl;
     String h264Url;
+    String mjpgUrl;
+    String mpegUrl;
+    String audioUrl;
     String internalHost;
     int internalHttpPort;
     int internalRtspPort;
@@ -61,6 +64,24 @@ public class CameraBuilder
     public CameraBuilder setH264Url(String h264Url)
     {
         this.h264Url = h264Url;
+        return this;
+    }
+
+    public CameraBuilder setMjpgUrl(String mjpgUrl)
+    {
+        this.mjpgUrl = mjpgUrl;
+        return this;
+    }
+
+    public CameraBuilder setMpegUrl(String mpegUrl)
+    {
+        this.mpegUrl = mpegUrl;
+        return this;
+    }
+
+    public CameraBuilder setAudioUrl(String audioUrl)
+    {
+        this.audioUrl = audioUrl;
         return this;
     }
 
