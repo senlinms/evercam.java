@@ -10,7 +10,7 @@ import io.evercam.*;
 API.setDeveloperKeypair("developerApiKey","developerApiId")
 
 //Request user's key and id from Evercam
-ApiKeyPair userKeyPair = API.requestUserKeyPairFromEvercam(username, password);
+ApiKeyPair userKeyPair = API.requestUserKeyPairFromEvercam("username/Email", "password");
 String userApiKey = userKeyPair.getApiKey();
 String userApiId = userKeyPair.getApiId();
 
@@ -20,22 +20,23 @@ API.setUserKeypair(userApiKey, userApiId)
 ### Cameras
 ```java
 //Create new camera
-Camera camera = Camera.create(new CameraBuilder("cameraid", //unique id
-                                               "cameraname", //name
+Camera camera = Camera.create(new CameraBuilder("cameraid", //unique identifier
+                                               "cameraname", //friendly name
                                                true) //is public or not
                               .setJpgUrl("/Streaming/channels/1/picture")
                               .setCameraUsername("username")
                               .setCameraPassword("password")
+                              .setExternalHost("89.101.225.158")
                               .setExternalHttpPort(80)
+                              .setLocation(latitude, longtitute)
                               .build());
 
 //Updates full or partial data for an existing camera
 Camera.patch(new PatchCameraBuilder("cameraid")
                               .setName("cameraname")
                               .setJpgUrl("/Streaming/channels/1/picture")
-                              .setCameraUsername("username")
-                              .setCameraPassword("password")
-                              .setExternalRtspPort(554)
+                              .setInternalHost("192.168.1.168")
+                              .setInternalRtspPort(554)
                               .build());
                               
 //Delete camera by Evercam ID
@@ -68,11 +69,11 @@ detail.setUsername("joeyb");
 detail.setPassword("password")
 User user = User.create(detail);
 
-//Returns the list of cameras owned by a particular user
-ArrayList<Camera> cameras = User.getCameras("joeyb");
+//Returns the list of cameras owned by a particular user, including shared cameras.
+ArrayList<Camera> cameras = User.getCameras("joeyb", true);
 
-//Get Evercam user by username
-User user = new User("username")
+//Fetch Evercam user details by username or Email address.
+User user = new User("username/Email")
 ```
 ### Vendors && Models
 ```java
@@ -81,11 +82,11 @@ Vendor.getById("hikvision");
 //Get camera vendor by MAC address
 Vendor vendor = Vendor.getByMac("54:E6:FC");
 
-//Get vendor's model by name("*" means default model)
-Model model = vendor.getModel("*");
+//Get vendor's model by specifying model name
+Model model = vendor.getModel(Model.DEFAULT_MODEL);
 //Get all default values from model
-String defaultUsername = model.getDefaults().getAuth("basic").getUsername();
-String defaultPassword = model.getDefaults().getAuth("basic").getPassword();
+String defaultUsername = model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername();
+String defaultPassword = model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword();
 String defaultJpgUrl = model.getDefaults().getJpgURL();
 ```
 ### Public
