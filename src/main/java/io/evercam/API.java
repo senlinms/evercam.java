@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,7 +143,8 @@ public abstract class API
             try
             {
                 DefaultHttpClient client = new DefaultHttpClient();
-                HttpGet get = new HttpGet(URL + "/users/" + username + "/credentials?api_key=" + getDeveloperKeyPair()[0] + "&api_id=" + getDeveloperKeyPair()[1] + "&password=" + password);
+                String encodedPassword = URLEncoder.encode(password, "UTF-8");
+                HttpGet get = new HttpGet(URL + "/users/" + username + "/credentials?api_key=" + getDeveloperKeyPair()[0] + "&api_id=" + getDeveloperKeyPair()[1] + "&password=" + encodedPassword);
                 get.setHeader("Accept", "application/json");
                 org.apache.http.HttpResponse response = client.execute(get);
                 String result = EntityUtils.toString(response.getEntity());
