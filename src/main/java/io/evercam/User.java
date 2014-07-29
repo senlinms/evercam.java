@@ -194,14 +194,11 @@ public class User extends EvercamObject
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
-                else if (response.getCode() == CODE_ERROR)
-                {
-                    String message = response.getBody().toString();
-                    throw new EvercamException(message);
-                }
                 else
                 {
-                    throw new EvercamException(response.getBody().toString());
+                    //The HTTP error code could be 400, 409 etc.
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
                 }
             } catch (JSONException e)
             {
