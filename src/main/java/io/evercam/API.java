@@ -130,7 +130,7 @@ public abstract class API
     /**
      * Fetch API credentials for an authenticated user.
      *
-     * @param username User name for the user to fetch credentials for
+     * @param username Username or Email address for the user to fetch credentials for
      * @param password Password for the user to fetch credentials for.
      * @return the user API credentials (key and id)
      * @throws EvercamException if developer key and id is not added

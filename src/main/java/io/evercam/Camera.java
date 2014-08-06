@@ -182,8 +182,8 @@ public class Camera extends EvercamObject
                 }
                 else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
                 {
-                    JsonNode jsonNode = new JsonNode(result);
-                    String message = jsonNode.getObject().getString("message");
+                    ErrorResponse errorResponse = new ErrorResponse(result);
+                    String message = errorResponse.getMessage();
                     throw new EvercamException(message);
                 }
                 else if (response.getStatusLine().getStatusCode() == CODE_OK)

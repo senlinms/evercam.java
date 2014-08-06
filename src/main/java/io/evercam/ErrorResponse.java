@@ -10,6 +10,11 @@ class ErrorResponse extends EvercamObject
         this.jsonObject = jsonObject;
     }
 
+    ErrorResponse(String jsonObjectString)
+    {
+        this.jsonObject = new JSONObject(jsonObjectString);
+    }
+
     protected String getMessage() throws EvercamException
     {
         try
@@ -18,7 +23,7 @@ class ErrorResponse extends EvercamObject
         }
         catch(JSONException e)
         {
-            throw new EvercamException(jsonObject.toString() + e.toString());
+            return "";
         }
     }
 }

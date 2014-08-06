@@ -122,7 +122,7 @@ public class User extends EvercamObject
     /**
      * Returns available information for a user by specifying user unique identifier.
      *
-     * @param id unique Evercam username of the user.
+     * @param id unique Evercam username or Email address of the user.
      * @throws EvercamException if no user API key pair added
      */
     public User(String id) throws EvercamException
