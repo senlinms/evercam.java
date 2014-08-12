@@ -37,10 +37,11 @@ public class CameraSnapshotTest
         //Test get latest snapshot, and Snapshot 'get' methods
         Snapshot latestSnapshot = Camera.getLatestArchivedSnapshot(camera.getId(), true);
         assertEquals(SNAPSHOT_NOTE, latestSnapshot.getNotes());
-        assertEquals(camera.getId(), latestSnapshot.getCameraId());
+
         assertNotNull(latestSnapshot.getCompleteData());
         assertNotNull(latestSnapshot.getBase64DataString());
         assertNotNull(latestSnapshot.getTimeStamp());
+
         assertEquals(camera.getTimezone(), latestSnapshot.getTimeZone());
         Snapshot snapshotWithoutData = Camera.getLatestArchivedSnapshot(camera.getId(), false);
         assertNull(snapshotWithoutData.getCompleteData());

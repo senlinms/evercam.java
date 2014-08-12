@@ -53,6 +53,23 @@ public class UserTest
         API.setUserKeyPair(null, null);
     }
 
+    @Test
+    public void testGetUserAndUserDetailsByEmail() throws EvercamException
+    {
+        RandomUser randomUser = new RandomUser();
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getEmail(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        User user = new User(randomUser.getEmail());
+
+        assertEquals(RandomUser.FIRST_NAME, user.getFirstName());
+        assertEquals(RandomUser.LAST_NAME, user.getLastName());
+        assertEquals(randomUser.getEmail(), user.getEmail());
+        assertEquals(randomUser.getUsername(), user.getId());
+        assertEquals(randomUser.getUsername(), user.getUsername());
+        assertEquals(RandomUser.COUNTRY_CODE, user.getCountry());
+        API.setUserKeyPair(null, null);
+    }
+
 
     @Test
     public void testMissingUserDetail() throws EvercamException
@@ -63,14 +80,11 @@ public class UserTest
     }
 
     @Test
-    public void testGetCameras() throws EvercamException
+    public void testGetCamerasWithCredentials() throws EvercamException
     {
         RandomUser randomUser = new RandomUser();
         randomUser.addRandomCamera(true);
         randomUser.addRandomCamera(false);
-
-        ArrayList<Camera> privateCameras = User.getCameras(randomUser.getUsername(), false);
-        assertEquals(1, privateCameras.size());
 
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
@@ -81,6 +95,19 @@ public class UserTest
         //FIXME: Tests for get camera list including shares
         //        ArrayList<Camera> allCamerasIncludingShared = User.getCameras(randomUser.getUsername(),true);
         //        assertEquals(3, allCamerasIncludingShared.size());
+
+        API.setUserKeyPair(null, null);
+    }
+
+    @Test
+    public void testGetCamerasWithoutCredentials() throws EvercamException
+    {
+        RandomUser randomUser = new RandomUser();
+        randomUser.addRandomCamera(true);
+        randomUser.addRandomCamera(false);
+
+        ArrayList<Camera> publicCameras = User.getCameras(randomUser.getUsername(), false);
+        assertEquals(1, publicCameras.size());
 
         API.setUserKeyPair(null, null);
     }

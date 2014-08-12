@@ -1,26 +1,23 @@
 package io.evercam;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Snapshot
 {
     private JSONObject jsonObject;
+    private String timezone = "";
+
+    Snapshot(JSONObject snapshotJsonObject, String timezone)
+    {
+        jsonObject = snapshotJsonObject;
+        this.timezone = timezone;
+    }
 
     Snapshot(JSONObject snapshotJsonObject)
     {
         jsonObject = snapshotJsonObject;
-    }
-
-    public String getCameraId() throws EvercamException
-    {
-        try
-        {
-            return jsonObject.getString("camera");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
     }
 
     public String getNotes() throws EvercamException
@@ -45,15 +42,9 @@ public class Snapshot
         }
     }
 
-    public String getTimeZone() throws EvercamException
+    public String getTimeZone()
     {
-        try
-        {
-            return jsonObject.getString("timezone");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return timezone;
     }
 
     public String getCompleteData()

@@ -163,6 +163,7 @@ public class Camera extends EvercamObject
      */
     public static Camera patch(CameraDetail cameraDetail) throws EvercamException
     {
+        System.out.println(cameraDetail.toString());
         Camera camera = null;
         if (API.hasUserKeyPair())
         {
@@ -182,6 +183,7 @@ public class Camera extends EvercamObject
                 }
                 else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
                 {
+                    System.out.println(result);
                     ErrorResponse errorResponse = new ErrorResponse(result);
                     String message = errorResponse.getMessage();
                     throw new EvercamException(message);
@@ -953,12 +955,14 @@ public class Camera extends EvercamObject
                 HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/snapshots").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
                 if (response.getCode() == CODE_OK)
                 {
-                    JSONArray snapshotJsonArray = response.getBody().getObject().getJSONArray("snapshots");
+                    JSONObject snapshotsObject = response.getBody().getObject();
+                    JSONArray snapshotJsonArray = snapshotsObject.getJSONArray("snapshots");
+                    String timezone = snapshotsObject.getString("timezone");
 
                     for (int count = 0; count < snapshotJsonArray.length(); count++)
                     {
                         JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(count);
-                        snapshots.add(new Snapshot(snapshotJsonObject));
+                        snapshots.add(new Snapshot(snapshotJsonObject, timezone));
                     }
                 }
                 else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
@@ -1014,11 +1018,13 @@ public class Camera extends EvercamObject
                 }
                 if (response.getCode() == CODE_OK)
                 {
-                    JSONArray snapshotJsonArray = response.getBody().getObject().getJSONArray("snapshots");
+                    JSONObject snapshotsObject = response.getBody().getObject();
+                    JSONArray snapshotJsonArray = snapshotsObject.getJSONArray("snapshots");
+                    String timezone = snapshotsObject.getString("timezone");
                     if (snapshotJsonArray.length() != 0)
                     {
                         JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(0);
-                        snapshot = new Snapshot(snapshotJsonObject);
+                        snapshot = new Snapshot(snapshotJsonObject, timezone);
                     }
                     else
                     {

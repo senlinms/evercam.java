@@ -188,11 +188,16 @@ public class CameraDetail
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", isPublic=" + isPublic +
+                ", isOnline=" + isOnline +
                 ", vendor='" + vendor + '\'' +
                 ", model='" + model + '\'' +
                 ", timezone='" + timezone + '\'' +
                 ", macAddress='" + macAddress + '\'' +
                 ", jpgUrl='" + jpgUrl + '\'' +
+                ", mjpgUrl='" + mjpgUrl + '\'' +
+                ", mpegUrl='" + mpegUrl + '\'' +
+                ", audioUrl='" + audioUrl + '\'' +
+                ", h264Url='" + h264Url + '\'' +
                 ", internalHost='" + internalHost + '\'' +
                 ", internalHttpPort=" + internalHttpPort +
                 ", internalRtspPort=" + internalRtspPort +
@@ -201,6 +206,8 @@ public class CameraDetail
                 ", externalRtspPort=" + externalRtspPort +
                 ", cameraUsername='" + cameraUsername + '\'' +
                 ", cameraPassword='" + cameraPassword + '\'' +
+                ", locationLng=" + locationLng +
+                ", locationLat=" + locationLat +
                 '}';
     }
 }
