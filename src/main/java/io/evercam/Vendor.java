@@ -41,7 +41,7 @@ public class Vendor extends EvercamObject
         }
         else
         {
-            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
         }
     }
 
@@ -109,7 +109,24 @@ public class Vendor extends EvercamObject
 
     public Model getModel(String modelName) throws EvercamException
     {
-        return Model.getByModel(getId(), modelName);
+        return Model.getModel(getId(), modelName);
+    }
+
+    public ArrayList<String> getModelNames() throws EvercamException
+    {
+        ArrayList<String> modelNames = new ArrayList<String>();
+        try
+        {
+            JSONArray modelNameJSONArray = jsonObject.getJSONArray("models");
+            for (int arrayIndex = 0; arrayIndex < modelNameJSONArray.length(); arrayIndex++)
+            {
+                modelNames.add(arrayIndex, modelNameJSONArray.getString(arrayIndex));
+            }
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        return modelNames;
     }
 
     public static ArrayList<Vendor> getSupportedVendors() throws EvercamException

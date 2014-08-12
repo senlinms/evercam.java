@@ -167,7 +167,13 @@ public class Model extends EvercamObject
         return vendorList;
     }
 
-    protected static Model getByModel(String vendorId, String modelId) throws EvercamException
+    /**
+     * Returns data for a particular camera model
+     * @param vendorId unique identifier for the vendor
+     * @param modelId  name or unique identifier for the model
+     * @throws EvercamException if missing developer API key and id
+     */
+    public static Model getModel(String vendorId, String modelId) throws EvercamException
     {
         Model model;
         if (API.hasDeveloperKeyPair())

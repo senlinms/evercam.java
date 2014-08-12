@@ -44,6 +44,8 @@ public class VendorTest
     {
         Vendor hikvision = Vendor.getById(TEST_VENDOR_ID);
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
+        assertEquals(1, hikvision.getModelNames().size());
+        assertEquals("*", hikvision.getModelNames().get(0));
     }
 
     @Test
