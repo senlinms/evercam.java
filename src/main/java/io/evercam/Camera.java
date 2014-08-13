@@ -163,7 +163,6 @@ public class Camera extends EvercamObject
      */
     public static Camera patch(CameraDetail cameraDetail) throws EvercamException
     {
-        System.out.println(cameraDetail.toString());
         Camera camera = null;
         if (API.hasUserKeyPair())
         {
@@ -183,7 +182,6 @@ public class Camera extends EvercamObject
                 }
                 else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
                 {
-                    System.out.println(result);
                     ErrorResponse errorResponse = new ErrorResponse(result);
                     String message = errorResponse.getMessage();
                     throw new EvercamException(message);
@@ -1158,6 +1156,14 @@ public class Camera extends EvercamObject
         if (cameraDetail.locationLng != null)
         {
             cameraJSONObject.put("location_lng", cameraDetail.locationLng);
+        }
+        if (cameraDetail.locationLatString != null)
+        {
+            cameraJSONObject.put("location_lat", cameraDetail.locationLatString);
+        }
+        if (cameraDetail.locationLngString != null)
+        {
+            cameraJSONObject.put("location_lng", cameraDetail.locationLngString);
         }
 
         return cameraJSONObject;

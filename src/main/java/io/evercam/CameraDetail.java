@@ -26,6 +26,8 @@ public class CameraDetail
     String cameraPassword;
     Float locationLng;
     Float locationLat;
+    String locationLngString;
+    String locationLatString;
 
     public CameraDetail(PatchCameraBuilder builder)
     {
@@ -50,8 +52,10 @@ public class CameraDetail
         externalRtspPort = builder.externalRtspPort;
         cameraUsername = builder.cameraUsername;
         cameraPassword = builder.cameraPassword;
-        locationLat = builder.locationLat;
-        locationLng = builder.locationLng;
+//        locationLat = builder.locationLat;
+//        locationLng = builder.locationLng;
+        locationLatString = builder.locationLat;
+        locationLngString = builder.locationLng;
     }
 
     public CameraDetail(CameraBuilder builder)

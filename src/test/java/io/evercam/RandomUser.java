@@ -7,8 +7,10 @@ public class RandomUser
     public static final String FIRST_NAME = "JavaWrapper";
     public static final String LAST_NAME = "TestUser";
     public static final String COUNTRY_CODE = "us";
-    public static final float LOCATION_LAT = 37.377166f;
-    public static final float LOCATION_LNG = -122.086966f;
+    public static final Float LOCATION_LAT = 37.377166f;
+    public static final Float LOCATION_LNG = -122.086966f;
+    public static final String LOCATION_LAT_STRING = "37.377166f";
+    public static final String LOCATION_LNG_STRING = "-122.086966f";
     public static final String CAMERA_NAME = "Random Camera";
     public static final String CAMERA_INTERNAL_HOST = "192.168.1.2";
     public static final String CAMERA_EXTERNAL_HOST = "123.123.123.123";
