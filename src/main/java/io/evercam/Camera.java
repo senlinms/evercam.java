@@ -60,9 +60,8 @@ public class Camera extends EvercamObject
                 }
                 else if (statusCode == CODE_ERROR)
                 {
-                    JsonNode jsonNode = new JsonNode(result);
-                    String message = jsonNode.getObject().toString();
-                    throw new EvercamException(message);
+                    ErrorResponse errorResponse = new ErrorResponse(result);
+                    throw new EvercamException(errorResponse.getProperErrorMessage());
                 }
                 else if (statusCode == CODE_CREATE)
                 {
@@ -76,9 +75,12 @@ public class Camera extends EvercamObject
                 }
                 else if (statusCode == CODE_CONFLICT)
                 {
-                    JsonNode jsonNode = new JsonNode(result);
-                    String message = jsonNode.getObject().getString("message");
-                    throw new EvercamException(message);
+                    ErrorResponse errorResponse = new ErrorResponse(result);
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+                else
+                {
+                    throw new EvercamException(statusCode + result);
                 }
             } catch (JSONException e)
             {
