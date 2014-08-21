@@ -590,14 +590,30 @@ public class Camera extends EvercamObject
      *
      * @throws EvercamException
      */
-    public String getModel() throws EvercamException
+    public String getModelName() throws EvercamException
     {
         try
         {
-            return jsonObject.getString("model");
+            return jsonObject.getString("model_name");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return "";
+        }
+    }
+
+    /**
+     * Return the unique identifier of the camera model.
+     *
+     * @throws EvercamException
+     */
+    public String getModelId() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("model_id");
+        } catch (JSONException e)
+        {
+            return "";
         }
     }
 

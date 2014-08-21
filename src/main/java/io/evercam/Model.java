@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public class Model extends EvercamObject
 {
     private static String URL = API.URL + "models";
-    public static final String DEFAULT_MODEL = "Default";
+    public static final String DEFAULT_MODEL_NAME = "Default";
+    public static final String DEFAULT_MODEL_SUFFIX= "_default";
 
     Model(JSONObject modelJSONObject)
     {

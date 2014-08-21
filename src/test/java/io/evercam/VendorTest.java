@@ -51,11 +51,11 @@ public class VendorTest
     @Test
     public void testGetModel() throws EvercamException
     {
-        Model model = Vendor.getById(TEST_VENDOR_ID).getModel(Model.DEFAULT_MODEL);
+        Model model = Vendor.getById(TEST_VENDOR_ID).getModel("hikvision" + Model.DEFAULT_MODEL_SUFFIX);
         ArrayList<String> models = model.getKnownModels();
         assertEquals(1, models.size());
         assertEquals(TEST_VENDOR_ID, model.getVendor());
-        assertEquals(Model.DEFAULT_MODEL, model.getName());
+        assertEquals(Model.DEFAULT_MODEL_NAME, model.getName());
         assertEquals(1, model.getKnownModels().size());
         assertEquals("admin", model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername());
         assertEquals("12345", model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword());

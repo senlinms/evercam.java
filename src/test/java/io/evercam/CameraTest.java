@@ -36,8 +36,7 @@ public class CameraTest
 
         boolean deleteSuccess = Camera.delete(randomCamera.getId());
         Assert.assertTrue(deleteSuccess);
-        //FIXME: Temporarily disabled because it failed on test server
-       // assertEquals(0, User.getCameras(randomUser.getUsername(), false).size());
+        assertEquals(0, User.getCameras(randomUser.getUsername(), false).size());
 
         /**
          * Test create camera with location and online status
@@ -62,7 +61,8 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_VENDOR, camera.getVendorId());
         assertEquals(RandomUser.CAMERA_VENDOR_NAME, camera.getVendorName());
         assertEquals(RandomUser.CAMERA_MAC, camera.getMacAddress());
-        assertEquals(RandomUser.CAMERA_MODEL, camera.getModel());
+        assertEquals(RandomUser.CAMERA_MODEL_NAME, camera.getModelName());
+        assertEquals(RandomUser.CAMERA_MODEL_ID, camera.getModelId());
         assertFalse(camera.isDiscoverable());
 
         assertEquals(RandomUser.LOCATION_LNG, camera.getLocation().getLng(), 0);
@@ -102,7 +102,7 @@ public class CameraTest
         assertFalse(camera.isOnline());
         //FIXME: Patch camera only accept location data as string, not float
         CameraDetail detail = new PatchCameraBuilder(camera.getId()).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
-                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL).setH264Url(RandomUser.CAMERA_H264_URL).setMjpgUrl(RandomUser.CAMERA_MJPG_URL).setMpegUrl(RandomUser.CAMERA_MPEG_URL).setAudioUrl(RandomUser.CAMERA_AUDIO_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL).setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).setOnline(true).setLocation(RandomUser.LOCATION_LAT_STRING, RandomUser.LOCATION_LNG_STRING).build();
+                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL).setH264Url(RandomUser.CAMERA_H264_URL).setMjpgUrl(RandomUser.CAMERA_MJPG_URL).setMpegUrl(RandomUser.CAMERA_MPEG_URL).setAudioUrl(RandomUser.CAMERA_AUDIO_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL_ID).setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).setOnline(true).setLocation(RandomUser.LOCATION_LAT_STRING, RandomUser.LOCATION_LNG_STRING).build();
         Camera patchCamera = Camera.patch(detail);
         assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());
         assertTrue(patchCamera.isOnline()); //Test patch camera 'is_online'
@@ -121,7 +121,8 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_VENDOR, patchCamera.getVendorId());
         assertEquals(RandomUser.CAMERA_VENDOR_NAME, patchCamera.getVendorName());
         assertEquals(RandomUser.CAMERA_MAC, patchCamera.getMacAddress());
-        assertEquals(RandomUser.CAMERA_MODEL, patchCamera.getModel());
+        assertEquals(RandomUser.CAMERA_MODEL_NAME, patchCamera.getModelName());
+        assertEquals(RandomUser.CAMERA_MODEL_ID, patchCamera.getModelId());
         assertFalse(patchCamera.isDiscoverable());
 
         assertEquals(RandomUser.LOCATION_LNG, patchCamera.getLocation().getLng(), 0);

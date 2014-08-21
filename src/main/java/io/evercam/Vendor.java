@@ -53,7 +53,7 @@ public class Vendor extends EvercamObject
         }
         else
         {
-            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
         }
     }
 
