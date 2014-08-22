@@ -85,7 +85,7 @@ public class Defaults extends EvercamObject
             auth = new Auth(type, authJSONObject);
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return null;
         }
         return auth;
     }

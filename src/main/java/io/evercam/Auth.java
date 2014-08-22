@@ -18,15 +18,13 @@ public class Auth
 
     public String getUsername() throws EvercamException
     {
-        String username = null;
         try
         {
-            username = authJSONObject.getString("username");
+            return authJSONObject.getString("username");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return "";
         }
-        return username;
     }
 
     public String getType()
@@ -36,15 +34,12 @@ public class Auth
 
     public String getPassword() throws EvercamException
     {
-        String password = null;
         try
         {
-            password = authJSONObject.getString("password");
+            return authJSONObject.getString("password");
         } catch (JSONException e)
         {
-            throw new EvercamException(e);
+            return "";
         }
-        return password;
     }
-
 }

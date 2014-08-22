@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class Vendor extends EvercamObject
 {
-    private static String URL_VENDORS = API.URL + "vendors";
+    private static String URL_VENDORS = API.URL + "vendors/search";
 
     private JSONObject jsonObject;
 
@@ -25,12 +25,15 @@ public class Vendor extends EvercamObject
 
     public static Vendor getById(String vendorId) throws EvercamException
     {
-        ArrayList<Vendor> vendors = Model.getByVendor(vendorId);
-        if (!vendors.isEmpty())
+
+        if (API.hasDeveloperKeyPair())
         {
-            return Model.getByVendor(vendorId).get(0);
+            return getVendors(URL_VENDORS + "?id=" + vendorId  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).get(0);
         }
-        return null;
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
     }
 
     public static ArrayList<Vendor> getAll() throws EvercamException
@@ -49,7 +52,7 @@ public class Vendor extends EvercamObject
     {
         if (API.hasDeveloperKeyPair())
         {
-            return getVendors(URL_VENDORS + '/' + mac + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+            return getVendors(URL_VENDORS + "?mac=" + mac  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
         }
         else
         {
@@ -79,17 +82,6 @@ public class Vendor extends EvercamObject
         }
     }
 
-    public boolean isSupported() throws EvercamException
-    {
-        try
-        {
-            return jsonObject.getBoolean("is_supported");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
-    }
-
     public ArrayList<String> getKnownMacs() throws EvercamException
     {
         ArrayList<String> knownMacs = new ArrayList<String>();
@@ -106,32 +98,15 @@ public class Vendor extends EvercamObject
         }
         return knownMacs;
     }
+//
+//    public Model getModel(String modelName) throws EvercamException
+//    {
+//        return Model.getModel(getId(), modelName);
+//    }
 
-    public Model getModel(String modelName) throws EvercamException
+    public ArrayList<Model> getModels() throws EvercamException
     {
-        return Model.getModel(getId(), modelName);
-    }
-
-    public ArrayList<String> getModelNames() throws EvercamException
-    {
-        ArrayList<String> modelNames = new ArrayList<String>();
-        try
-        {
-            JSONArray modelNameJSONArray = jsonObject.getJSONArray("models");
-            for (int arrayIndex = 0; arrayIndex < modelNameJSONArray.length(); arrayIndex++)
-            {
-                modelNames.add(arrayIndex, modelNameJSONArray.getString(arrayIndex));
-            }
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
-        return modelNames;
-    }
-
-    public static ArrayList<Vendor> getSupportedVendors() throws EvercamException
-    {
-        return Model.getAll();
+        return Model.getByVendor(getId());
     }
 
     private static ArrayList<Vendor> getVendors(String url) throws EvercamException
