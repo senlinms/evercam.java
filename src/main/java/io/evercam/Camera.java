@@ -178,25 +178,30 @@ public class Camera extends EvercamObject
                 patch.setEntity(new StringEntity(cameraJSONObject.toString()));
                 org.apache.http.HttpResponse response = client.execute(patch);
                 String result = EntityUtils.toString(response.getEntity());
-                if (response.getStatusLine().getStatusCode() == CODE_UNAUTHORISED)
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == CODE_UNAUTHORISED || statusCode == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
                 }
-                else if (response.getStatusLine().getStatusCode() == CODE_ERROR)
+                else if (statusCode == CODE_ERROR)
                 {
                     ErrorResponse errorResponse = new ErrorResponse(result);
                     String message = errorResponse.getMessage();
                     throw new EvercamException(message);
                 }
-                else if (response.getStatusLine().getStatusCode() == CODE_OK)
+                else if (statusCode == CODE_OK)
                 {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
                     camera = new Camera(jsonObject);
                 }
-                else if (response.getStatusLine().getStatusCode() == CODE_SERVER_ERROR)
+                else if (statusCode == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                     throw new EvercamException(statusCode + " " + result);
                 }
             } catch (JSONException e)
             {
