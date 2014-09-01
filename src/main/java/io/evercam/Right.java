@@ -25,6 +25,7 @@ public class Right
 
     private Right()
     {
+        //Private constructor
     }
 
     public ArrayList<String> toArray()
@@ -35,7 +36,7 @@ public class Right
 
     public boolean canGetSnapshot()
     {
-        return toArray().contains(EDIT);
+        return toArray().contains(SNAPSHOT);
     }
 
     public boolean canEdit()

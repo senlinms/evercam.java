@@ -215,43 +215,37 @@ public class User extends EvercamObject
         return user;
     }
 
+    //TODO: Test for this method(include thumbnail)
     /**
      * Returns the set of cameras associated with a specified user.
      * Only public cameras will be returned if no user API key added
      *
      * @param userId        unique Evercam username of the user
      * @param includeShared whether or not to include cameras shared with the user in the fetch.
+     * @param includeThumbnail whether or not to get base64 encoded 150x150 thumbnail with camera view for each camera
      * @return the camera list that associated with this user
      * @throws EvercamException
      */
-    public static ArrayList<Camera> getCameras(String userId, boolean includeShared) throws EvercamException
+    public static ArrayList<Camera> getCameras(String userId, boolean includeShared, boolean includeThumbnail) throws EvercamException
     {
         ArrayList<Camera> cameraList = new ArrayList<Camera>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("include_shared", Boolean.toString(includeShared));
+        map.put("thumbnail", Boolean.toString(includeThumbnail));
+
         try
         {
             HttpResponse<JsonNode> response;
-            if (includeShared)
+
+            if (API.hasUserKeyPair())
             {
-                if (API.hasUserKeyPair())
-                {
-                    response = Unirest.get(URL + "/" + userId + "/cameras").fields(API.userKeyPairMap()).field("include_shared", "true").header("accept", "application/json").asJson();
-                }
-                else
-                {
-                    response = Unirest.get(URL + "/" + userId + "/cameras").field("include_shared", "true").header("accept", "application/json").asJson();
-                }
+                response = Unirest.get(URL + "/" + userId + "/cameras").fields(API.userKeyPairMap()).fields(map).header("accept", "application/json").asJson();
             }
             else
             {
-                if (API.hasUserKeyPair())
-                {
-                    response = Unirest.get(URL + "/" + userId + "/cameras").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
-                }
-                else
-                {
-                    response = Unirest.get(URL + "/" + userId + "/cameras").header("accept", "application/json").asJson();
-                }
+                response = Unirest.get(URL + "/" + userId + "/cameras").fields(map).header("accept", "application/json").asJson();
             }
+
             if (response.getCode() == CODE_OK)
             {
                 JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
