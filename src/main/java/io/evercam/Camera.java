@@ -1238,6 +1238,19 @@ public class Camera extends EvercamObject
         }
     }
 
+    public Right getRights() throws EvercamException
+    {
+        try
+        {
+            String rightsString = jsonObject.getString("rights");
+            return new Right(rightsString);
+        }
+        catch (JSONException e)
+        {
+             throw new EvercamException("No rights associated with this camera.");
+        }
+    }
+
     /**
      * Get camera list by requesting a specified URL, for private reuse only.
      */
