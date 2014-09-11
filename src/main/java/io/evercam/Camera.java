@@ -439,13 +439,7 @@ public class Camera extends EvercamObject
      */
     public String getUsername()
     {
-        try
-        {
-            return jsonObject.getString("cam_username");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("cam_username");
     }
 
     /**
@@ -454,13 +448,7 @@ public class Camera extends EvercamObject
      */
     public String getPassword()
     {
-        try
-        {
-            return jsonObject.getString("cam_password");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("cam_password");
     }
 
     /**
@@ -486,13 +474,7 @@ public class Camera extends EvercamObject
      */
     public String getOwner() throws EvercamException
     {
-        try
-        {
-            return jsonObject.getString("owner");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("owner");
     }
 
     /**
@@ -552,13 +534,7 @@ public class Camera extends EvercamObject
      */
     public String getVendorId() throws EvercamException
     {
-        try
-        {
-            return jsonObject.getString("vendor_id");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return getStringNotNull("vendor_id");
     }
 
     /**
@@ -568,13 +544,7 @@ public class Camera extends EvercamObject
      */
     public String getVendorName() throws EvercamException
     {
-        try
-        {
-            return jsonObject.getString("vendor_name");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return getStringNotNull("vendor_name");
     }
 
     /**
@@ -600,13 +570,7 @@ public class Camera extends EvercamObject
      */
     public String getModel() throws EvercamException
     {
-        try
-        {
-            return jsonObject.getString("model");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return getStringNotNull("model");
     }
 
     /**
@@ -615,13 +579,7 @@ public class Camera extends EvercamObject
      */
     public String getMacAddress()
     {
-        try
-        {
-            return jsonObject.getString("mac_address");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("mac_address");
     }
 
     /**
