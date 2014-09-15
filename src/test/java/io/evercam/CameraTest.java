@@ -32,11 +32,11 @@ public class CameraTest
         assertFalse(randomCamera.isOnline());
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        assertEquals(1, User.getCameras(randomUser.getUsername(), false).size());
+        assertEquals(1, User.getCameras(randomUser.getUsername(), false, false).size());
 
         boolean deleteSuccess = Camera.delete(randomCamera.getId());
         Assert.assertTrue(deleteSuccess);
-        assertEquals(0, User.getCameras(randomUser.getUsername(), false).size());
+        assertEquals(0, User.getCameras(randomUser.getUsername(), false, false).size());
 
         /**
          * Test create camera with location and online status
@@ -159,7 +159,7 @@ public class CameraTest
         Camera randomCamera1 = randomUser.addRandomCamera(true);
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        Camera camera = Camera.getById(randomCamera1.getId());
+        Camera camera = Camera.getById(randomCamera1.getId(), false);
         assertEquals(randomCamera1.getId(), camera.getId());
         assertEquals(randomUser.getUsername(), camera.getOwner());
         assertEquals(2, camera.getEndpoints().size());

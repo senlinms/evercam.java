@@ -20,13 +20,7 @@ class BaseCameraObject extends EvercamObject
      */
     public String getHost()
     {
-        try
-        {
-            return jsonObject.getString("host");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("host");
     }
 
     /**
@@ -68,35 +62,17 @@ class EvercamHttp extends EvercamObject
 
     public String getCameraUrl()
     {
-        try
-        {
-            return jsonObject.getString("camera");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("camera");
     }
 
     protected String getJpgUrl()
     {
-        try
-        {
-            return jsonObject.getString("jpg");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("jpg");
     }
 
     public String getMjpgUrl()
     {
-        try
-        {
-            return jsonObject.getString("mjpg");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("mjpg");
     }
 }
 
@@ -120,35 +96,17 @@ class EvercamRtsp extends EvercamObject
 
     public String getMpegUrl()
     {
-        try
-        {
-            return jsonObject.getString("mpeg");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("mpeg");
     }
 
     public String getAudioUrl()
     {
-        try
-        {
-            return jsonObject.getString("audio");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("audio");
     }
 
     protected String getH264Url()
     {
-        try
-        {
-            return jsonObject.getString("h264");
-        } catch (JSONException e)
-        {
-            return "";
-        }
+        return getStringNotNull("h264");
     }
 }
 

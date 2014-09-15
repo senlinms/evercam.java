@@ -43,6 +43,25 @@ public abstract class EvercamObject
         }
     }
 
+    /**
+     * Retrieve string from jsonObject and return a valid string or an empty string.
+     */
+    protected String getStringNotNull(String key)
+    {
+        try
+        {
+            String jsonString = jsonObject.getString(key);
+            if (!jsonString.equals("null"))
+            {
+                return jsonString;
+            }
+        } catch (JSONException e)
+        {
+            //Ignore exception, return empty string
+        }
+        return "";
+    }
+
     @Override
     public String toString()
     {

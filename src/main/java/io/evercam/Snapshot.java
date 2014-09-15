@@ -61,27 +61,39 @@ public class Snapshot
     public String getBase64DataString()
     {
         String completeImageData = getCompleteData();
-        if (completeImageData != null)
-        {
-            return completeImageData.substring(completeImageData.indexOf(",") + 1);
-        }
-        else
-        {
-            return null;
-        }
+        return getBase64DataStringFrom(completeImageData);
     }
 
     //FIXME: Test for this method.
     public byte[] getData()
     {
         String base64Data = getBase64DataString();
-        if (base64Data != null)
+        return getDataFrom(base64Data);
+    }
+
+    /**
+     * Return the pure base64 image data
+     * @param completeDataString the full data string with 'data:image/jpeg;base64,'
+     */
+    protected static String getBase64DataStringFrom(String completeDataString)
+    {
+        if (completeDataString != null)
         {
-            return org.apache.commons.codec.binary.Base64.decodeBase64(base64Data);
+            return completeDataString.substring(completeDataString.indexOf(",") + 1);
         }
-        else
+        return null;
+    }
+
+    /**
+     * Return byte data from base64 data string
+     * @param base64DataString the base64 data in string format
+     */
+    protected static byte[] getDataFrom(String base64DataString)
+    {
+        if (base64DataString != null)
         {
-            return null;
+            return org.apache.commons.codec.binary.Base64.decodeBase64(base64DataString);
         }
+        return null;
     }
 }
