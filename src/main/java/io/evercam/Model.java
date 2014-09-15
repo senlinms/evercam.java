@@ -9,6 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class Model extends EvercamObject
 {
@@ -29,30 +32,39 @@ public class Model extends EvercamObject
      */
     public static Model getById(String modelId) throws EvercamException
     {
-        if (API.hasDeveloperKeyPair())
+        ArrayList<Model> modelList = getAll(modelId, null, null);
+        if(modelList.size() > 0)
         {
-            try
-            {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "?id=" + modelId).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
-                ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
-                ArrayList<Model> modelList = modelsWithPaging.getModelsList();
-                if (modelList.size() > 0)
-                {
-                    return modelList.get(0);
-                }
-                else
-                {
-                    throw new EvercamException("Model with id " + modelId + " not exists");
-                }
-            } catch (UnirestException e)
-            {
-                throw new EvercamException(e);
-            }
+            return modelList.get(0);
         }
         else
         {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+            throw new EvercamException("Model with id " + modelId + " not exists");
         }
+//        if (API.hasDeveloperKeyPair())
+//        {
+//            try
+//            {
+//                HttpResponse<JsonNode> response = Unirest.get(URL + "?id=" + modelId).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
+//                ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
+//                ArrayList<Model> modelList = modelsWithPaging.getModelsList();
+//                if (modelList.size() > 0)
+//                {
+//                    return modelList.get(0);
+//                }
+//                else
+//                {
+//                    throw new EvercamException("Model with id " + modelId + " not exists");
+//                }
+//            } catch (UnirestException e)
+//            {
+//                throw new EvercamException(e);
+//            }
+//        }
+//        else
+//        {
+//            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+//        }
     }
 
     /**
@@ -63,36 +75,37 @@ public class Model extends EvercamObject
      */
     public static ArrayList<Model> getAllByName(String modelName) throws EvercamException
     {
-        ArrayList<Model> modelList = new ArrayList<Model>();
-        if (API.hasDeveloperKeyPair())
-        {
-            try
-            {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "?name=" + modelName).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
-                ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
-                modelList.addAll(modelsWithPaging.getModelsList());
-
-                int pages = modelsWithPaging.getTotalPages();
-                if (pages > 0)
-                {
-                    for (int index = 1; index <= pages; index++)
-                    {
-                        HttpResponse<JsonNode> responseLoop = Unirest.get(URL + "?name=" + modelName).field("page", index)
-                                .fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
-                        ModelsWithPaging modelsWithPagingLoop = new ModelsWithPaging(responseLoop.getBody().getObject());
-                        modelList.addAll(modelsWithPagingLoop.getModelsList());
-                    }
-                }
-                return modelList;
-            } catch (UnirestException e)
-            {
-                throw new EvercamException(e);
-            }
-        }
-        else
-        {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
-        }
+        return getAll(null, modelName, null);
+//        ArrayList<Model> modelList = new ArrayList<Model>();
+//        if (API.hasDeveloperKeyPair())
+//        {
+//            try
+//            {
+//                HttpResponse<JsonNode> response = Unirest.get(URL + "?name=" + modelName).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
+//                ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
+//                modelList.addAll(modelsWithPaging.getModelsList());
+//
+//                int pages = modelsWithPaging.getTotalPages();
+//                if (pages > 0)
+//                {
+//                    for (int index = 1; index <= pages; index++)
+//                    {
+//                        HttpResponse<JsonNode> responseLoop = Unirest.get(URL + "?name=" + modelName).field("page", index)
+//                                .fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
+//                        ModelsWithPaging modelsWithPagingLoop = new ModelsWithPaging(responseLoop.getBody().getObject());
+//                        modelList.addAll(modelsWithPagingLoop.getModelsList());
+//                    }
+//                }
+//                return modelList;
+//            } catch (UnirestException e)
+//            {
+//                throw new EvercamException(e);
+//            }
+//        }
+//        else
+//        {
+//            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+//        }
     }
 
     /**
@@ -134,6 +147,68 @@ public class Model extends EvercamObject
             {
                 HttpResponse<JsonNode> response = Unirest.get(URL).field("vendor_id", vendorId).field("limit", limit).field("page", page).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
                 return new ModelsWithPaging(response.getBody().getObject());
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
+    }
+
+    /**
+     * Returns model that match the model name with default paging
+     *
+     * @param modelName name of the model
+     * @throws EvercamException if developer API key and id not specified or model does not exists
+     */
+    /**
+     * Returns model that match the given vendor id, model name, or/and vendor id.
+     *
+     * @param modelId unique identifier of the model
+     * @param modelName name of the model
+     * @param vendorId the unique identifier of the vendor
+     * @throws EvercamException
+     */
+    public static ArrayList<Model> getAll(String modelId, String modelName, String vendorId) throws EvercamException
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if(modelId != null && !modelId.isEmpty())
+        {
+            map.put("id", modelId);
+        }
+        if(modelName != null && !modelName.isEmpty())
+        {
+            map.put("name", modelName);
+        }
+        if(vendorId != null && !vendorId.isEmpty())
+        {
+            map.put("vendor_id", vendorId);
+        }
+
+        ArrayList<Model> modelList = new ArrayList<Model>();
+        if (API.hasDeveloperKeyPair())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.get(URL).fields(API.developerKeyPairMap()).fields(map).header("accept", "application/json").asJson();
+                ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
+                modelList.addAll(modelsWithPaging.getModelsList());
+
+                int pages = modelsWithPaging.getTotalPages();
+                if (pages > 0)
+                {
+                    for (int index = 1; index <= pages; index++)
+                    {
+                        HttpResponse<JsonNode> responseLoop = Unirest.get(URL + "?name=" + modelName).field("page", index)
+                                .fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
+                        ModelsWithPaging modelsWithPagingLoop = new ModelsWithPaging(responseLoop.getBody().getObject());
+                        modelList.addAll(modelsWithPagingLoop.getModelsList());
+                    }
+                }
+                return modelList;
             } catch (UnirestException e)
             {
                 throw new EvercamException(e);
