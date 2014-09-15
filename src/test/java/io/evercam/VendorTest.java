@@ -42,25 +42,19 @@ public class VendorTest
     public void testGetVendorById() throws EvercamException
     {
         Vendor hikvision = Vendor.getById(TEST_VENDOR_ID);
+        assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
-        assertEquals(25, hikvision.getModels().size());
-  //      assertEquals("*", hikvision.getModels().get(0).getId());
+        assertEquals(3, hikvision.getKnownMacs().size());
+        assertEquals(126, hikvision.getAllModels().size());
     }
 
     @Test
-    public void testGetModel() throws EvercamException
+    public void testGetVendorByName() throws EvercamException
     {
-        Model model = Model.getModel("hikvision" + Model.DEFAULT_MODEL_SUFFIX);
-        assertEquals(TEST_VENDOR_ID, model.getVendor());
-        assertEquals(Model.DEFAULT_MODEL_NAME, model.getName());
-        assertEquals("admin", model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername());
-        assertEquals("12345", model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword());
-        assertEquals("Streaming/Channels/1/picture", model.getDefaults().getJpgURL());
-        assertEquals("h264/ch1/main/av_stream", model.getDefaults().getH264URL());
-        assertEquals("", model.getDefaults().getLowresURL());
-        assertEquals("mpeg4/ch1/main/av_stream", model.getDefaults().getMpeg4URL());
-        assertEquals("", model.getDefaults().getMobileURL());
-        assertEquals("", model.getDefaults().getMjpgURL());
+        Vendor hikvision = Vendor.getByName(TEST_VENDOR_NAME).get(0);
+        assertEquals(TEST_VENDOR_NAME, hikvision.getName());
+        assertEquals(TEST_VENDOR_ID, hikvision.getId());
+        assertEquals(3, hikvision.getKnownMacs().size());
     }
 
     @AfterClass

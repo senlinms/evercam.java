@@ -23,12 +23,26 @@ public class Vendor extends EvercamObject
         this.jsonObject = vendorJSONObject;
     }
 
+    /**
+     * Search for a camera vendor by unique identifier
+     * @param vendorId the vendor's unique identifier with Evercam
+     * @return the vendor that match this unique identifier
+     * @throws EvercamException if develop key and id is not specified, or vendor not found
+     */
     public static Vendor getById(String vendorId) throws EvercamException
     {
 
         if (API.hasDeveloperKeyPair())
         {
-            return getVendors(URL_VENDORS + "?id=" + vendorId  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).get(0);
+            ArrayList<Vendor> vendors = getVendors(URL_VENDORS + "?id=" + vendorId  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+            if(vendors.size() > 0)
+            {
+                return vendors.get(0);
+            }
+            else
+            {
+                throw new EvercamException("Vendor with id " + vendorId + " not exists");
+            }
         }
         else
         {
@@ -53,6 +67,18 @@ public class Vendor extends EvercamObject
         if (API.hasDeveloperKeyPair())
         {
             return getVendors(URL_VENDORS + "?mac=" + mac  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+        }
+    }
+
+    public static ArrayList<Vendor> getByName(String name) throws EvercamException
+    {
+        if (API.hasDeveloperKeyPair())
+        {
+            return getVendors(URL_VENDORS + "?name=" + name  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
         }
         else
         {
@@ -98,15 +124,10 @@ public class Vendor extends EvercamObject
         }
         return knownMacs;
     }
-//
-//    public Model getModel(String modelName) throws EvercamException
-//    {
-//        return Model.getModel(getId(), modelName);
-//    }
 
-    public ArrayList<Model> getModels() throws EvercamException
+    public ArrayList<Model> getAllModels() throws EvercamException
     {
-        return Model.getByVendor(getId());
+        return Model.getAllByVendorId(getId());
     }
 
     private static ArrayList<Vendor> getVendors(String url) throws EvercamException
