@@ -20,7 +20,7 @@ class ErrorResponse extends EvercamObject
 
     protected String getProperErrorMessage() throws EvercamException
     {
-        if(!isMessageEmpty())
+        if (!isMessageEmpty())
         {
             return getMessage();
         }
@@ -38,8 +38,7 @@ class ErrorResponse extends EvercamObject
         try
         {
             return jsonObject.getString("message");
-        }
-        catch(JSONException e)
+        } catch (JSONException e)
         {
             return "";
         }
@@ -47,7 +46,7 @@ class ErrorResponse extends EvercamObject
 
     protected boolean isMessageEmpty()
     {
-        if(getMessage().equals("null") || getMessage().isEmpty())
+        if (getMessage().equals("null") || getMessage().isEmpty())
         {
             return true;
         }
@@ -61,13 +60,13 @@ class ErrorResponse extends EvercamObject
     {
         ArrayList<String> contextArray = new ArrayList<String>();
         JSONArray contextJsonArray = jsonObject.getJSONArray("context");
-        if(contextJsonArray.length() != 0)
+        if (contextJsonArray.length() != 0)
         {
-        for (int index = 0; index < contextJsonArray.length(); index++)
-        {
-            String context = contextJsonArray.getString(index);
-            contextArray.add(context);
-        }
+            for (int index = 0; index < contextJsonArray.length(); index++)
+            {
+                String context = contextJsonArray.getString(index);
+                contextArray.add(context);
+            }
         }
         return contextArray;
     }
@@ -76,9 +75,9 @@ class ErrorResponse extends EvercamObject
     {
         String message = "";
         ArrayList<String> contextArray = getContexts();
-        if(contextArray.size()!=0)
+        if (contextArray.size() != 0)
         {
-            for(String context:contextArray)
+            for (String context : contextArray)
             {
                 String contextMessage = "Invalid " + context;
                 message = message + "," + contextMessage;

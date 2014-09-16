@@ -8,19 +8,19 @@ public class Right
     private String rightsString;
     private final String SNAPSHOT = "snapshot";
     private final String VIEW = "view";
-    private final String EDIT  = "edit";
-    private final String DELETE  = "delete";
+    private final String EDIT = "edit";
+    private final String DELETE = "delete";
     private final String LIST = "list";
     private final String GRANT_SNAPSHOT = "grant~snapshot";
     private final String GRANT_VIEW = "grant~view";
-    private final String GRANT_EDIT  = "grant~edit";
-    private final String GRANT_DELETE  = "grant~delete";
+    private final String GRANT_EDIT = "grant~edit";
+    private final String GRANT_DELETE = "grant~delete";
     private final String GRANT_LIST = "grant~list";
 
 
     protected Right(String rightsString)
     {
-         this.rightsString = rightsString;
+        this.rightsString = rightsString;
     }
 
     private Right()

@@ -19,9 +19,9 @@ public class ModelsWithPaging extends EvercamObject
     {
         ArrayList<Model> modelList = new ArrayList<Model>();
         JSONArray modelJsonArray = jsonObject.getJSONArray("models");
-        if(modelJsonArray.length() > 0)
+        if (modelJsonArray.length() > 0)
         {
-            for(int index = 0 ; index < modelJsonArray.length() ; index ++)
+            for (int index = 0; index < modelJsonArray.length(); index++)
             {
                 Model model = new Model(modelJsonArray.getJSONObject(index));
                 modelList.add(model);

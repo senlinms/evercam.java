@@ -201,7 +201,7 @@ public class Camera extends EvercamObject
                 }
                 else
                 {
-                     throw new EvercamException(statusCode + " " + result);
+                    throw new EvercamException(statusCode + " " + result);
                 }
             } catch (JSONException e)
             {
@@ -222,17 +222,18 @@ public class Camera extends EvercamObject
     }
 
     //TODO: Unit test for this method
+
     /**
      * Fetch details of a camera from Evercam by camera unique identifier
      *
-     * @param cameraId the camera's unique identifier with Evercam
+     * @param cameraId         the camera's unique identifier with Evercam
      * @param includeThumbnail set to true to get base64 encoded 150x150 thumbnail with camera view
      * @return Evercam camera object with all data of this camera
      * @throws EvercamException If user unauthorized or error occurred with Evercam
      */
     public static Camera getById(String cameraId, boolean includeThumbnail) throws EvercamException
     {
-        String url= URL + '/' + cameraId + "?thumbnail=" + Boolean.toString(includeThumbnail);
+        String url = URL + '/' + cameraId + "?thumbnail=" + Boolean.toString(includeThumbnail);
         ArrayList<Camera> cameraArrayList = getByUrl(url);
         return cameraArrayList.isEmpty() ? null : cameraArrayList.get(0);
     }
@@ -1217,6 +1218,7 @@ public class Camera extends EvercamObject
 
     /**
      * Return the authenticated user's rights on this camera
+     *
      * @throws EvercamException if no rights associated with the camera
      */
     public Right getRights() throws EvercamException
@@ -1225,16 +1227,17 @@ public class Camera extends EvercamObject
         {
             String rightsString = jsonObject.getString("rights");
             return new Right(rightsString);
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException("No rights associated with this camera.");
         }
     }
 
     //TODO: Unit test
+
     /**
      * Return byte thumbnail(150x150 preview of camera view) data associated with this camera.
+     *
      * @throws EvercamException if no thumbnails associated with this camera
      */
     public byte[] getThumbnailData() throws EvercamException
@@ -1244,8 +1247,7 @@ public class Camera extends EvercamObject
             String thumbnailString = jsonObject.getString("thumbnail");
             String base64ImageString = Snapshot.getBase64DataStringFrom(thumbnailString);
             return Snapshot.getDataFrom(base64ImageString);
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
             throw new EvercamException("No thumbnails associated with this camera.");
         }

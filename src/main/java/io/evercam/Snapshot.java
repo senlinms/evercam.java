@@ -1,6 +1,5 @@
 package io.evercam;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,6 +72,7 @@ public class Snapshot
 
     /**
      * Return the pure base64 image data
+     *
      * @param completeDataString the full data string with 'data:image/jpeg;base64,'
      */
     protected static String getBase64DataStringFrom(String completeDataString)
@@ -86,6 +86,7 @@ public class Snapshot
 
     /**
      * Return byte data from base64 data string
+     *
      * @param base64DataString the base64 data in string format
      */
     protected static byte[] getDataFrom(String base64DataString)

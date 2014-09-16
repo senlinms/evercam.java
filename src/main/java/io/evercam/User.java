@@ -216,12 +216,13 @@ public class User extends EvercamObject
     }
 
     //TODO: Test for this method(include thumbnail)
+
     /**
      * Returns the set of cameras associated with a specified user.
      * Only public cameras will be returned if no user API key added
      *
-     * @param userId        unique Evercam username of the user
-     * @param includeShared whether or not to include cameras shared with the user in the fetch.
+     * @param userId           unique Evercam username of the user
+     * @param includeShared    whether or not to include cameras shared with the user in the fetch.
      * @param includeThumbnail whether or not to get base64 encoded 150x150 thumbnail with camera view for each camera
      * @return the camera list that associated with this user
      * @throws EvercamException

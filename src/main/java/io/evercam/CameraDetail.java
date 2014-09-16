@@ -52,8 +52,8 @@ public class CameraDetail
         externalRtspPort = builder.externalRtspPort;
         cameraUsername = builder.cameraUsername;
         cameraPassword = builder.cameraPassword;
-//        locationLat = builder.locationLat;
-//        locationLng = builder.locationLng;
+        //        locationLat = builder.locationLat;
+        //        locationLng = builder.locationLng;
         locationLatString = builder.locationLat;
         locationLngString = builder.locationLng;
     }

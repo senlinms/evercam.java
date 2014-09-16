@@ -25,6 +25,7 @@ public class Vendor extends EvercamObject
 
     /**
      * Search for a camera vendor by unique identifier
+     *
      * @param vendorId the vendor's unique identifier with Evercam
      * @return the vendor that match this unique identifier
      * @throws EvercamException if develop key and id is not specified, or vendor not found
@@ -34,8 +35,8 @@ public class Vendor extends EvercamObject
 
         if (API.hasDeveloperKeyPair())
         {
-            ArrayList<Vendor> vendors = getVendors(URL_VENDORS + "?id=" + vendorId  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
-            if(vendors.size() > 0)
+            ArrayList<Vendor> vendors = getVendors(URL_VENDORS + "?id=" + vendorId + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+            if (vendors.size() > 0)
             {
                 return vendors.get(0);
             }
@@ -66,7 +67,7 @@ public class Vendor extends EvercamObject
     {
         if (API.hasDeveloperKeyPair())
         {
-            return getVendors(URL_VENDORS + "?mac=" + mac  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+            return getVendors(URL_VENDORS + "?mac=" + mac + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
         }
         else
         {
@@ -78,7 +79,7 @@ public class Vendor extends EvercamObject
     {
         if (API.hasDeveloperKeyPair())
         {
-            return getVendors(URL_VENDORS + "?name=" + name  + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
+            return getVendors(URL_VENDORS + "?name=" + name + "&api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]);
         }
         else
         {

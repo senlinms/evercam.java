@@ -7,7 +7,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 public class ModelTest
 {
@@ -53,7 +52,7 @@ public class ModelTest
     @Test
     public void testGetAllWithVendorAndModel() throws EvercamException
     {
-        ArrayList<Model> modelList = Model.getAll(null,"Default",TEST_VENDOR_ID);
+        ArrayList<Model> modelList = Model.getAll(null, "Default", TEST_VENDOR_ID);
         assertEquals(1, modelList.size());
         assertEquals("hikvision" + Model.DEFAULT_MODEL_SUFFIX, modelList.get(0).getId());
     }
