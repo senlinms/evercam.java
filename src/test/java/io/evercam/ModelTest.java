@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 public class ModelTest
 {
@@ -55,6 +56,22 @@ public class ModelTest
         ArrayList<Model> modelList = Model.getAll(null, "Default", TEST_VENDOR_ID);
         assertEquals(1, modelList.size());
         assertEquals("hikvision" + Model.DEFAULT_MODEL_SUFFIX, modelList.get(0).getId());
+    }
+
+    @Test
+    public void testGetDefaultModelByVendorId() throws EvercamException
+    {
+        Model defaultModel = Model.getDefaultModelByVendorId(TEST_VENDOR_ID);
+        assertNotNull(defaultModel);
+        Defaults hikvisionDefaults = defaultModel.getDefaults();
+        assertEquals("admin", hikvisionDefaults.getAuth(Auth.TYPE_BASIC).getUsername());
+        assertEquals("12345", hikvisionDefaults.getAuth(Auth.TYPE_BASIC).getPassword());
+        assertEquals("Streaming/Channels/1/picture", hikvisionDefaults.getJpgURL());
+        assertEquals("h264/ch1/main/av_stream", hikvisionDefaults.getH264URL());
+        assertEquals("", hikvisionDefaults.getLowresURL());
+        assertEquals("mpeg4/ch1/main/av_stream", hikvisionDefaults.getMpeg4URL());
+        assertEquals("", hikvisionDefaults.getMobileURL());
+        assertEquals("", hikvisionDefaults.getMjpgURL());
     }
 
     @AfterClass

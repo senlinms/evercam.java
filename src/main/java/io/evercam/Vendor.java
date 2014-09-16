@@ -131,6 +131,11 @@ public class Vendor extends EvercamObject
         return Model.getAllByVendorId(getId());
     }
 
+    public Model getDefaultModel() throws EvercamException
+    {
+        return Model.getById(getId() + Model.DEFAULT_MODEL_SUFFIX);
+    }
+
     private static ArrayList<Vendor> getVendors(String url) throws EvercamException
     {
         ArrayList<Vendor> vendorList = new ArrayList<Vendor>();

@@ -74,36 +74,6 @@ public class Model extends EvercamObject
     public static ArrayList<Model> getAllByName(String modelName) throws EvercamException
     {
         return getAll(null, modelName, null);
-        //        ArrayList<Model> modelList = new ArrayList<Model>();
-        //        if (API.hasDeveloperKeyPair())
-        //        {
-        //            try
-        //            {
-        //                HttpResponse<JsonNode> response = Unirest.get(URL + "?name=" + modelName).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
-        //                ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
-        //                modelList.addAll(modelsWithPaging.getModelsList());
-        //
-        //                int pages = modelsWithPaging.getTotalPages();
-        //                if (pages > 0)
-        //                {
-        //                    for (int index = 1; index <= pages; index++)
-        //                    {
-        //                        HttpResponse<JsonNode> responseLoop = Unirest.get(URL + "?name=" + modelName).field("page", index)
-        //                                .fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
-        //                        ModelsWithPaging modelsWithPagingLoop = new ModelsWithPaging(responseLoop.getBody().getObject());
-        //                        modelList.addAll(modelsWithPagingLoop.getModelsList());
-        //                    }
-        //                }
-        //                return modelList;
-        //            } catch (UnirestException e)
-        //            {
-        //                throw new EvercamException(e);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
-        //        }
     }
 
     /**
@@ -215,6 +185,11 @@ public class Model extends EvercamObject
         {
             throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
         }
+    }
+
+    public static Model getDefaultModelByVendorId(String vendorId) throws EvercamException
+    {
+        return getById(vendorId + Model.DEFAULT_MODEL_SUFFIX);
     }
 
     public String getId()
