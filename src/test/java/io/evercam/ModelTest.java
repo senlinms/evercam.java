@@ -41,9 +41,6 @@ public class ModelTest
     {
         ArrayList<Model> modelList = Model.getAllByVendorId(TEST_VENDOR_ID);
         assertEquals(126, modelList.size());
-
-        ArrayList<String> modelNameList = Model.getNamesByVendorId(TEST_VENDOR_ID);
-        assertEquals(126, modelNameList.size());
     }
 
     @Test
