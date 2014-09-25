@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CameraShare extends EvercamObject
 {
@@ -17,6 +19,68 @@ public class CameraShare extends EvercamObject
     CameraShare(JSONObject shareJSONObject)
     {
         this.jsonObject = shareJSONObject;
+    }
+
+    /**
+     *
+     * @param cameraId The unique identifier of the camera to share
+     * @param user Email address or user name of the user to share the camera with.
+     * @param rights A comma separate list of the rights to be granted with the share.
+     * @return CameraShare object if the camera successfully shared with the user.
+     * @throws EvercamException
+     */
+    public static CameraShare create(String cameraId, String user, String rights) throws EvercamException
+    {
+        CameraShare cameraShare = null;
+        Map<String, Object> fieldsMap = new HashMap<String, Object>();
+        fieldsMap.put("email", user);
+        fieldsMap.put("rights", rights);
+
+        if (API.hasUserKeyPair())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response =  Unirest.post(URL + "/cameras/" + cameraId + "?api_key=" + API.getUserKeyPair()[0] + "&api_id=" + API.getUserKeyPair()[1])
+                        .header("accept", "application/json").fields(fieldsMap).asJson();
+                if (response.getCode() == CODE_CREATE)
+                {
+                    JSONObject jsonObject = response.getBody().getObject().getJSONArray("shares").getJSONObject(0);
+                    cameraShare = new CameraShare(jsonObject);
+                }
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
+                else
+                {
+                    //The HTTP error code could be 400, 409 etc.
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+        return cameraShare;
+    }
+
+    public static boolean delete(String cameraId) throws EvercamException
+    {
+        if (API.hasUserKeyPair())
+        {
+            //TODO
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+        }
+        return false;
     }
 
     public static ArrayList<CameraShare> getByUser(String userId) throws EvercamException
