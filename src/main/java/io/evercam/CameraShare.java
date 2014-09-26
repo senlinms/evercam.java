@@ -69,28 +69,99 @@ public class CameraShare extends EvercamObject
         return cameraShare;
     }
 
-    public static boolean delete(String cameraId) throws EvercamException
+    /**
+     * Get details for a share for a specific camera and user.
+     * @param cameraId The unique identifier for the camera in the share.
+     * @param userId The unique identifier for the user the camera is shared with.
+     * @return CameraShare object if the share exists, otherwise return null.
+     * @throws EvercamException
+     */
+    public static CameraShare get(String cameraId, String userId) throws EvercamException
+    {
+        ArrayList<CameraShare> shareList = getSharesByUrl(URL + "?camera_id=" + cameraId + "&user_id=" + userId);
+        if(shareList.size() > 0)
+        {
+            return shareList.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * Delete an existing camera share by specify camera id and share id.
+     * @param shareId  The unique identifier of the share to be deleted.
+     * @param cameraId  The unique identifier for a camera.
+     * @return true if camera share get successfully deleted
+     * @throws EvercamException with error message if failed to delete camera share
+     */
+    public static boolean deleteByShareId(String shareId, String cameraId) throws EvercamException
     {
         if (API.hasUserKeyPair())
         {
-            //TODO
+            if(shareId == null)
+            {
+                throw new EvercamException("Share id can not be null");
+            }
+            if(cameraId == null)
+            {
+                throw new EvercamException("Camera id can not be null");
+            }
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.delete(URL + "/cameras/" + cameraId).field("share_id",shareId)
+                        .field("api_key",API.getUserKeyPair()[0]).field("api_id",API.getUserKeyPair()[1]).asJson();
+                int statusCode = response.getCode();
+                if(statusCode == CODE_OK)
+                {
+                    return true;
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
         }
         else
         {
             throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
+    }
+
+    /**
+     * Delete an existing camera share by specify camera id and user id.
+     * @param userId  The unique identifier for the user the camera is shared with.
+     * @param cameraId  The unique identifier for a camera.
+     * @return true if camera share get successfully deleted
+     * @throws EvercamException with error message if failed to delete camera share
+     */
+    public static boolean delete(String cameraId, String userId) throws EvercamException
+    {
+        if (API.hasUserKeyPair())
+        {
+            CameraShare cameraShare = get(cameraId,userId);
+            if(deleteByShareId(String.valueOf(cameraShare.getId()), cameraId))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
         return false;
     }
 
     public static ArrayList<CameraShare> getByUser(String userId) throws EvercamException
     {
-        return getSharesByUrl(URL + "/user/" + userId);
+        return getSharesByUrl(URL + "/users/" + userId);
     }
 
     public static ArrayList<CameraShare> getByCamera(String cameraId) throws EvercamException
     {
-        return getSharesByUrl(URL + "/camera/" + cameraId);
+        return getSharesByUrl(URL + "/cameras/" + cameraId);
     }
 
     /**
@@ -135,7 +206,8 @@ public class CameraShare extends EvercamObject
                 }
                 else
                 {
-                    throw new EvercamException(response.getBody().toString());
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
                 }
             } catch (UnirestException e)
             {
@@ -215,6 +287,7 @@ public class CameraShare extends EvercamObject
         }
     }
 
+    //TODO: Unit Test
     public String getKind() throws EvercamException
     {
         try
@@ -226,11 +299,12 @@ public class CameraShare extends EvercamObject
         }
     }
 
-    public String getRights() throws EvercamException
+    public Right getRights() throws EvercamException
     {
         try
         {
-            return jsonObject.getString("rights");
+            String rightsString = jsonObject.getString("rights");
+            return new Right(rightsString);
         } catch (JSONException e)
         {
             throw new EvercamException(e);

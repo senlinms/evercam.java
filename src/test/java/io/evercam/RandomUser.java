@@ -112,7 +112,7 @@ public class RandomUser
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setExternalHost(TestForReal.REAL_CAMERA_IP).setExternalHttpPort(8101).setCameraUsername(TestForReal.REAL_CAMERA_USERNAME).setCameraPassword(TestForReal.REAL_CAMERA_PASSWORD).setJpgUrl("/Streaming/channels/1/picture").build();
+        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setExternalHost(TestForReal.REAL_CAMERA_IP).setExternalHttpPort(8020).setCameraUsername(TestForReal.REAL_CAMERA_USERNAME).setCameraPassword(TestForReal.REAL_CAMERA_PASSWORD).setJpgUrl("/Streaming/channels/1/picture").build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;

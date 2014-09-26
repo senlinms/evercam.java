@@ -2,6 +2,7 @@ package io.evercam;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class Right
 {
@@ -30,7 +31,7 @@ public class Right
 
     public ArrayList<String> toArray()
     {
-        String[] rightsArray = rightsString.split(",");
+        String[] rightsArray = rightsString.toLowerCase(Locale.UK).split(",");
         return new ArrayList<String>(Arrays.asList(rightsArray));
     }
 
