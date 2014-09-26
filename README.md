@@ -21,8 +21,8 @@ API.setUserKeypair(userApiKey, userApiId)
 ```java
 //Create new camera
 Camera camera = Camera.create(new CameraBuilder("cameraid", //unique identifier
-                                               "cameraname", //friendly name
-                                               true) //is public or not
+                                                "cameraname", //friendly name
+                                                 true) //is public or not
                               .setJpgUrl("/Streaming/channels/1/picture")
                               .setCameraUsername("username")
                               .setCameraPassword("password")
@@ -43,7 +43,8 @@ Camera.patch(new PatchCameraBuilder("cameraid")
 Camera.delete("cameraId");
 
 //Get camera by Evercam ID
-Camera camera = Camera.getById("cameraId");
+Camera camera = Camera.getById("cameraId"
+                                true);//Return camera with thumnail data or not
 ```
 ### Snapshots
 ```java
@@ -69,8 +70,8 @@ detail.setUsername("joeyb");
 detail.setPassword("password")
 User user = User.create(detail);
 
-//Returns the list of cameras owned by a particular user, including shared cameras.
-ArrayList<Camera> cameras = User.getCameras("joeyb", true);
+//Returns the list of cameras owned by a particular user, including shared cameras and thumnail data
+ArrayList<Camera> cameras = User.getCameras("joeyb", true, true);
 
 //Fetch Evercam user details by username or Email address.
 User user = new User("username/Email")
@@ -79,12 +80,23 @@ User user = new User("username/Email")
 ```java
 //Get camera vendor by id
 Vendor.getById("hikvision");
-//Get camera vendor by MAC address
-Vendor vendor = Vendor.getByMac("54:E6:FC");
+//Search for camera vendors by MAC address
+ArrayList<Vendor> vendorsByMac = Vendor.getByMac("54:E6:FC");
+//Get a list of all supported vendors
+ArrayList<Vendor> allVendors = Vendor.getAll();
+//Search for vendors by vendor name
+ArrayList<Vendor> vendorsByName = Vendor.getByName("vendorName");
 
-//Get vendor's model by specifying model name
-Model model = vendor.getModel(Model.DEFAULT_MODEL);
-//Get all default values from model
+//Get camera model by model id
+Model model = Model.getById("ds-2cd2032-i");
+//Get camera models that match the given name
+ArrayList<Model> modelList = Model.getAllByName("DS-2CD2032-I");
+//Get a list of camera model that associated with specified vendor id
+ArrayList<Model> = Model.getAllByVendorId("hikvision");
+//Get default model for a given vendor
+Model defaultModel = Model.getDefaultModelByVendorId("hikvision");
+
+//Retrieve default values from model
 String defaultUsername = model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername();
 String defaultPassword = model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword();
 String defaultJpgUrl = model.getDefaults().getJpgURL();
