@@ -89,7 +89,23 @@ String defaultUsername = model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsernam
 String defaultPassword = model.getDefaults().getAuth(Auth.TYPE_BASIC).getPassword();
 String defaultJpgUrl = model.getDefaults().getJpgURL();
 ```
+### Shares
+```java
+//Create a new camera share
+CameraShare.create("cameraId","username/Email","Snapshot,View,Edit,List");
+
+//Get details for a share for a specific camera and user
+CameraShare cameraShare = CameraShare.get("cameraId","username");
+//Get the list of shares for a specified camera
+ArrayList<CameraShare> shareList = CameraShare.getByCamera("cameraId");
+//Fetch the list of shares currently granted to a user
+ArrayList<CameraShare> shareList = CameraShare.getByUser("username")
+
+//Delete an existing camera share by specifying user and camera
+CameraShare.delete("cameraId","username");
+//Delete an existing camera share by specifying share id
+CameraShare.deleteByShareId("shareId","cameraId");
+```
+[Endpoints for PATCH camera shares and share requests](https://dashboard.evercam.io/dev#!/shares) are not yet implemented in Java, It can be supported if is requested and will be updated as soon as possible.
 ### Public
 [Endpoints for publicly discoverable camera](https://dashboard.evercam.io/dev#!/public) are not yet implemented in Java, It can be supported if is requested and will be updated as soon as possible.
-### Shares
-[Endpoints for camera shares](https://dashboard.evercam.io/dev#!/shares) are not yet implemented in Java. It can be supported if is requested and will be updated as soon as possible.
