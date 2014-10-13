@@ -39,30 +39,6 @@ public class Model extends EvercamObject
         {
             throw new EvercamException("Model with id " + modelId + " not exists");
         }
-        //        if (API.hasDeveloperKeyPair())
-        //        {
-        //            try
-        //            {
-        //                HttpResponse<JsonNode> response = Unirest.get(URL + "?id=" + modelId).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
-        //                ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
-        //                ArrayList<Model> modelList = modelsWithPaging.getModelsList();
-        //                if (modelList.size() > 0)
-        //                {
-        //                    return modelList.get(0);
-        //                }
-        //                else
-        //                {
-        //                    throw new EvercamException("Model with id " + modelId + " not exists");
-        //                }
-        //            } catch (UnirestException e)
-        //            {
-        //                throw new EvercamException(e);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
-        //        }
     }
 
     /**
@@ -114,7 +90,16 @@ public class Model extends EvercamObject
             try
             {
                 HttpResponse<JsonNode> response = Unirest.get(URL).field("vendor_id", vendorId).field("limit", limit).field("page", page).fields(API.developerKeyPairMap()).header("accept", "application/json").asJson();
-                return new ModelsWithPaging(response.getBody().getObject());
+                if(response.getCode() == CODE_OK)
+                {
+                    return new ModelsWithPaging(response.getBody().getObject());
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().toString());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+
             } catch (UnirestException e)
             {
                 throw new EvercamException(e);

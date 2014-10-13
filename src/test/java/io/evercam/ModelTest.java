@@ -2,7 +2,9 @@ package io.evercam;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 
@@ -12,6 +14,9 @@ import static junit.framework.Assert.assertNotNull;
 public class ModelTest
 {
     private static final String TEST_VENDOR_ID = "hikvision";
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @BeforeClass
     public static void setUpClass()
@@ -72,6 +77,13 @@ public class ModelTest
         assertEquals("mpeg4/ch1/main/av_stream", hikvisionDefaults.getMpeg4URL());
         assertEquals("", hikvisionDefaults.getMobileURL());
         assertEquals("", hikvisionDefaults.getMjpgURL());
+    }
+
+    @Test
+    public void testModelNotExists() throws EvercamException
+    {
+        exception.expect(EvercamException.class);
+        Model.getAllByVendorId("no_model");
     }
 
     @AfterClass
