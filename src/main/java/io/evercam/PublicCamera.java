@@ -7,6 +7,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+
 public class PublicCamera extends EvercamObject
 {
     static String URL = API.URL + "public";
@@ -23,7 +25,7 @@ public class PublicCamera extends EvercamObject
      * @return the nearest camera object with thumbnail data
      * @param nearTo an address or 'longitude, latitude' points. Can be null then IP address will be used
      */
-    public static Camera getNearest(String nearTo) throws EvercamException
+    public static Camera getNearestCamera(String nearTo) throws EvercamException
     {
         try
         {
@@ -57,5 +59,40 @@ public class PublicCamera extends EvercamObject
             throw new EvercamException(e);
         }
         return null;
+    }
+
+    /**
+     * Returns jpg from nearest publicly discoverable camera from within the Evercam system.
+     * If location isn't provided requester's IP address is used
+     *
+     * @return the nearest camera object with thumbnail data
+     * @param nearTo an address or 'longitude, latitude' points. Can be null then IP address will be used
+     */
+    public static InputStream getNearestJpgStream(String nearTo) throws EvercamException
+    {
+        try
+        {
+            HttpResponse response;
+            if(nearTo == null)
+            {
+                response = Unirest.get(URL + "/nearest.jpg").header("accept", "application/json").asBinary();
+            }
+            else
+            {
+                response = Unirest.get(URL + "/nearest.jpg").field("near_to", nearTo).header("accept", "application/json").asBinary();
+            }
+
+            if (response.getCode() == CODE_OK)
+            {
+                return response.getRawBody();
+            }
+            else
+            {
+                return null;
+            }
+        } catch (UnirestException e)
+        {
+            throw new EvercamException(e);
+        }
     }
 }

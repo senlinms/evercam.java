@@ -19,13 +19,13 @@ public class PublicCameraTest
     public void testNearestCamera() throws EvercamException
     {
 //        Camera camera = PublicCamera.getNearest(null);
-//        assertEquals("stgreencam", camera.getId());
+//        assertEquals("pearse-street", camera.getId());
 //
 //        Camera cameraByAddress = PublicCamera.getNearest("stephen green");
-//        assertEquals("stgreencam", cameraByAddress.getId());
-
-//        Camera cameraByLocation = PublicCamera.getNearest("53.339953,-6.260698");
-//        assertEquals("stgreencam", cameraByLocation.getId());
+//        assertEquals("pearse-street", cameraByAddress.getId());
+//
+//        Camera cameraByLocation = PublicCamera.getNearest("53.343826,-6.247662");
+//        assertEquals("pearse-street", cameraByLocation.getId());
     }
 
     @AfterClass
