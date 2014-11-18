@@ -47,6 +47,12 @@
                                     <pattern>org.apache.commons.codec</pattern>
                                     <shadedPattern>io.evercam.relocation</shadedPattern>
                                 </relocation>
+
+                                <!-- org.json conflict with sandgrid-->
+                                <relocation>
+                                    <pattern>org.json</pattern>
+                                    <shadedPattern>io.evercam.relocation</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -67,6 +73,17 @@
                 </executions>
             </plugin>
 
+            <!--Exclude tests-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Test.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
