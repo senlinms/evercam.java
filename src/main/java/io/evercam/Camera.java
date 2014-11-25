@@ -1150,8 +1150,6 @@ public class Camera extends EvercamObject
         {
             cameraJSONObject.put("location_lng", cameraDetail.locationLngString);
         }
-
-        System.out.println(cameraJSONObject.toString());
         return cameraJSONObject;
     }
 
