@@ -52,7 +52,7 @@ public class ModelTest
     public void testGetAllModelByName() throws EvercamException
     {
         ArrayList<Model> modelList = Model.getAllByName("Default");
-        assertEquals(38, modelList.size());
+        assertEquals(39, modelList.size());
     }
 
     @Test

@@ -34,7 +34,7 @@ public class VendorTest
     @Test
     public void testGetAllVendors() throws EvercamException
     {
-        assertEquals(41, Vendor.getAll().size());
+        assertEquals(57, Vendor.getAll().size());
     }
 
     @Test
