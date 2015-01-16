@@ -180,38 +180,32 @@ public class User extends EvercamObject
         userMap.put("country", userDetail.getCountrycode());
         userMap.put("password", userDetail.getPassword());
 
-        if (API.hasDeveloperKeyPair())
+        try
         {
-            try
+            HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(userMap).asJson();
+            if (response.getCode() == CODE_CREATE)
             {
-                HttpResponse<JsonNode> response = Unirest.post(URL + '/' + "?api_key=" + API.getDeveloperKeyPair()[0] + "&api_id=" + API.getDeveloperKeyPair()[1]).header("accept", "application/json").fields(userMap).asJson();
-                if (response.getCode() == CODE_CREATE)
-                {
-                    JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
-                    user = new User(userJSONObject);
-                }
-                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
-                {
-                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
-                }
-                else
-                {
-                    //The HTTP error code could be 400, 409 etc.
-                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
-                    throw new EvercamException(errorResponse.getMessage());
-                }
-            } catch (JSONException e)
-            {
-                throw new EvercamException(e);
-            } catch (UnirestException e)
-            {
-                throw new EvercamException(e);
+                JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
+                user = new User(userJSONObject);
             }
-        }
-        else
+            else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+            {
+                throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+            }
+            else
+            {
+                //The HTTP error code could be 400, 409 etc.
+                ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                throw new EvercamException(errorResponse.getMessage());
+            }
+        } catch (JSONException e)
         {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+            throw new EvercamException(e);
+        } catch (UnirestException e)
+        {
+            throw new EvercamException(e);
         }
+
         return user;
     }
 
