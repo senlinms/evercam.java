@@ -22,7 +22,6 @@ public class ModelTest
     public static void setUpClass()
     {
         API.URL = TestURL.URL;
-        API.setDeveloperKeyPair(LocalConstants.DEVELOPER_KEY, LocalConstants.DEVELOPER_ID);
     }
 
     @Test
@@ -89,6 +88,6 @@ public class ModelTest
     @AfterClass
     public static void destroyClass()
     {
-        API.setDeveloperKeyPair(null, null);
+
     }
 }

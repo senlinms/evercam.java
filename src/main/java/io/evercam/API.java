@@ -22,19 +22,6 @@ public abstract class API
 
     /**
      * Set developer app key pair.
-     * Developer key pair will be send along with API requests that without user authentication.
-     *
-     * @param developerAppKey Evercam developer app key
-     * @param developerAppID  Evercam developer app id
-     */
-    public static void setDeveloperKeyPair(String developerAppKey, String developerAppID)
-    {
-        developerKeyPair[0] = developerAppKey;
-        developerKeyPair[1] = developerAppID;
-    }
-
-    /**
-     * Set developer app key pair.
      * Developer key pair will be send along with API requests that require user authentication.
      *
      * @param userApiKey Evercam user API key
@@ -47,32 +34,12 @@ public abstract class API
     }
 
     /**
-     * Return the developer app key pair as an array with two values.
-     * The values will be null if developer key pair has not being set.
-     */
-    public static String[] getDeveloperKeyPair()
-    {
-        return developerKeyPair;
-    }
-
-    /**
      * Return the user key pair as an array with two values.
      * The values will be null if user key pair has not being set.
      */
     public static String[] getUserKeyPair()
     {
         return userKeyPair;
-    }
-
-    /**
-     * Whether or not the developer app key pair has been added.
-     *
-     * @return true if the developer app key pair has been added, otherwise
-     * return false.
-     */
-    public static boolean hasDeveloperKeyPair()
-    {
-        return (((developerKeyPair[0] != null) && (developerKeyPair[1] != null)) ? true : false);
     }
 
     /**
@@ -83,27 +50,6 @@ public abstract class API
     public static boolean hasUserKeyPair()
     {
         return (((userKeyPair[0] != null) && (userKeyPair[1] != null)) ? true : false);
-    }
-
-    /**
-     * Return the hash map of developer key and id.
-     * Useful when add parameters using Unirest library
-     *
-     * @throws EvercamException if no developer app key pair added.
-     */
-    protected static Map<String, Object> developerKeyPairMap() throws EvercamException
-    {
-        if (hasDeveloperKeyPair())
-        {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("api_key", getDeveloperKeyPair()[0]);
-            map.put("api_id", getDeveloperKeyPair()[1]);
-            return map;
-        }
-        else
-        {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
-        }
     }
 
     /**
@@ -138,41 +84,35 @@ public abstract class API
     public static ApiKeyPair requestUserKeyPairFromEvercam(String username, String password) throws EvercamException
     {
         ApiKeyPair userKeyPair = null;
-        if (hasDeveloperKeyPair())
-        {
-            try
-            {
-                DefaultHttpClient client = new DefaultHttpClient();
-                String encodedPassword = URLEncoder.encode(password, "UTF-8");
-                HttpGet get = new HttpGet(URL + "/users/" + username + "/credentials?api_key=" + getDeveloperKeyPair()[0] + "&api_id=" + getDeveloperKeyPair()[1] + "&password=" + encodedPassword);
-                get.setHeader("Accept", "application/json");
-                org.apache.http.HttpResponse response = client.execute(get);
-                String result = EntityUtils.toString(response.getEntity());
-                int statusCode = response.getStatusLine().getStatusCode();
 
-                if (statusCode == EvercamObject.CODE_OK)
-                {
-                    JSONObject keyPairJsonObject = new JSONObject(result);
-                    userKeyPair = new ApiKeyPair(keyPairJsonObject);
-                }
-                else
-                {
-                    throw new EvercamException(new JSONObject(result).getString("message"));
-                }
-            } catch (ClientProtocolException e)
-            {
-                throw new EvercamException(e);
-            } catch (IOException e)
-            {
-                throw new EvercamException(e);
-            } catch (JSONException e)
-            {
-                throw new EvercamException(e);
-            }
-        }
-        else
+        try
         {
-            throw new EvercamException(EvercamException.MSG_API_KEY_REQUIRED);
+            DefaultHttpClient client = new DefaultHttpClient();
+            String encodedPassword = URLEncoder.encode(password, "UTF-8");
+            HttpGet get = new HttpGet(URL + "/users/" + username + "/credentials?password=" + encodedPassword);
+            get.setHeader("Accept", "application/json");
+            org.apache.http.HttpResponse response = client.execute(get);
+            String result = EntityUtils.toString(response.getEntity());
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            if (statusCode == EvercamObject.CODE_OK)
+            {
+                JSONObject keyPairJsonObject = new JSONObject(result);
+                userKeyPair = new ApiKeyPair(keyPairJsonObject);
+            }
+            else
+            {
+                throw new EvercamException(new JSONObject(result).getString("message"));
+            }
+        } catch (ClientProtocolException e)
+        {
+            throw new EvercamException(e);
+        } catch (IOException e)
+        {
+            throw new EvercamException(e);
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
         }
         return userKeyPair;
     }

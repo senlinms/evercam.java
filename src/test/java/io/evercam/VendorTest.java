@@ -18,7 +18,6 @@ public class VendorTest
     public static void setUpClass()
     {
         API.URL = TestURL.URL;
-        API.setDeveloperKeyPair(LocalConstants.DEVELOPER_KEY, LocalConstants.DEVELOPER_ID);
     }
 
     @Test
@@ -76,6 +75,6 @@ public class VendorTest
     @AfterClass
     public static void destroyClass()
     {
-        API.setDeveloperKeyPair(null, null);
+
     }
 }

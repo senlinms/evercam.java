@@ -13,19 +13,6 @@ public class APITest
     String USER_TEST_ID = "usertestid";
 
     @Test
-    public void testDeveloperAPIKeyAndId() throws EvercamException
-    {
-        assertFalse(API.hasDeveloperKeyPair());
-        API.setDeveloperKeyPair(DEVELOPER_TEST_KEY, DEVELOPER_TEST_ID);
-        assertTrue(API.hasDeveloperKeyPair());
-        assertEquals(DEVELOPER_TEST_KEY, API.getDeveloperKeyPair()[0]);
-        assertEquals(DEVELOPER_TEST_ID, API.getDeveloperKeyPair()[1]);
-
-        assertEquals(DEVELOPER_TEST_KEY, API.developerKeyPairMap().get("api_key"));
-        assertEquals(DEVELOPER_TEST_ID, API.developerKeyPairMap().get("api_id"));
-    }
-
-    @Test
     public void testUserAPIKeyAndId() throws EvercamException
     {
         assertFalse(API.hasUserKeyPair());
@@ -41,7 +28,6 @@ public class APITest
     @AfterClass
     public static void resetAPI()
     {
-        API.setDeveloperKeyPair(null, null);
         API.setUserKeyPair(null, null);
     }
 }

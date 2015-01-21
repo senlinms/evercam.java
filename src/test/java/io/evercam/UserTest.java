@@ -18,7 +18,6 @@ public class UserTest
     public static void setUpClass()
     {
         API.URL = TestURL.URL;
-        API.setDeveloperKeyPair(LocalConstants.DEVELOPER_KEY, LocalConstants.DEVELOPER_ID);
     }
 
     @Rule
@@ -115,6 +114,6 @@ public class UserTest
     @AfterClass
     public static void destroyClass()
     {
-        API.setDeveloperKeyPair(null, null);
+
     }
 }
