@@ -17,7 +17,7 @@ public class CameraSnapshotTest
     }
 
     @Test
-    public void testArchiveSnapshotAndGetSnapshot() throws EvercamException
+    public void testStoreSnapshotAndGetSnapshot() throws EvercamException
     {
         final String SNAPSHOT_NOTE = "note";
         RandomUser randomUser = new RandomUser();
@@ -25,8 +25,7 @@ public class CameraSnapshotTest
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
 
-        //Test archive two Snapshot
-        //TODO: Enable this
+        //TODO: Tests for store & get snapshot. Currently it doesn't work with test server
 //        Camera.archiveSnapshot(camera.getId(), SNAPSHOT_NOTE);
 //        Camera.archiveSnapshot(camera.getId(), SNAPSHOT_NOTE);
 //

@@ -1,9 +1,12 @@
 package io.evercam;
 
 
+import org.apache.commons.io.IOUtils;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
@@ -33,10 +36,10 @@ public class CameraTest
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         assertEquals(1, Camera.getAll(randomUser.getUsername(), false, false).size());
 
-        //TODO: Re-enable this
+        //TODO: Wait for the bug fix to re-enable this
 //        boolean deleteSuccess = Camera.delete(randomCamera.getId());
 //        Assert.assertTrue(deleteSuccess);
-//        assertEquals(0, User.getCameras(randomUser.getUsername(), false, false).size());
+//        assertEquals(0, Camera.getAll(randomUser.getUsername(), false, false).size());
 
         /**
          * Test create camera with location and online status
@@ -89,7 +92,6 @@ public class CameraTest
 
         API.setUserKeyPair(null, null);
     }
-
 
     @Test
     public void testGetAllCamerasWithCredentials() throws EvercamException
@@ -217,11 +219,24 @@ public class CameraTest
         assertEquals(2, camera.getEndpoints().size());
 
         Camera randomCamera2 = randomUser.addRandomCamera(true);
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         String idSet = randomCamera1.getId() + "," + randomCamera2.getId();
         ArrayList<Camera> camerasSet = Camera.getByIdSet(idSet);
         Assert.assertEquals(2, camerasSet.size());
         API.setUserKeyPair(null, null);
     }
+
+    //TODO: Test for get snapshot. Currently it's disabled because test server doesn't work well with snapshot
+//    @Test
+//    public void testGetSnapshot() throws EvercamException, IOException
+//    {
+//        API.setUserKeyPair(LocalConstants.API_KEY, LocalConstants.API_ID);
+//        InputStream stream = Camera.getSnapshotByCameraId("evercam-remembrance-camera");
+//        byte[] byteSnapshot = IOUtils.toByteArray(stream);
+//        System.out.println(byteSnapshot.length);
+//        Assert.assertTrue(byteSnapshot.length > 200);
+//        API.setUserKeyPair(null, null);
+//    }
 
     @AfterClass
     public static void destroyClass()
