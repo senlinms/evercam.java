@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Camera extends EvercamObject
@@ -222,7 +224,6 @@ public class Camera extends EvercamObject
     }
 
     //TODO: Unit test for this method
-
     /**
      * Fetch details of a camera from Evercam by camera unique identifier
      *
@@ -236,6 +237,59 @@ public class Camera extends EvercamObject
         String url = URL + '/' + cameraId + "?thumbnail=" + Boolean.toString(includeThumbnail);
         ArrayList<Camera> cameraArrayList = getByUrl(url);
         return cameraArrayList.isEmpty() ? null : cameraArrayList.get(0);
+    }
+
+    /**
+     * Returns the set of cameras associated with given conditions
+     * API key pair has to be specified before calling this method
+     *
+     * @param userId           unique Evercam username of the user, can be null
+     * @param includeShared    whether or not to include cameras shared with the user in the fetch.
+     * @param includeThumbnail whether or not to get base64 encoded 150x150 thumbnail with camera view for each camera
+     * @return the camera list that associated with the specified user
+     * @throws EvercamException
+     */
+    public static ArrayList<Camera> getAll(String userId, boolean includeShared, boolean includeThumbnail)  throws EvercamException
+    {
+        ArrayList<Camera> cameraList = new ArrayList<Camera>();
+
+        if(API.hasUserKeyPair()) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("include_shared", Boolean.toString(includeShared));
+            map.put("thumbnail", Boolean.toString(includeThumbnail));
+            if (userId != null) {
+                map.put("user_id", userId);
+            }
+
+            try {
+                HttpResponse<JsonNode> response;
+
+                if (API.hasUserKeyPair()) {
+                    response = Unirest.get(URL).fields(API.userKeyPairMap()).fields(map).header("accept", "application/json").asJson();
+                } else {
+                    response = Unirest.get(URL).fields(map).header("accept", "application/json").asJson();
+                }
+
+                if (response.getCode() == CODE_OK) {
+                    JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
+                    for (int count = 0; count < camerasJSONArray.length(); count++) {
+                        JSONObject cameraJSONObject = camerasJSONArray.getJSONObject(count);
+                        cameraList.add(new Camera(cameraJSONObject));
+                    }
+                } else {
+                    throw new EvercamException(response.getBody().toString());
+                }
+            } catch (JSONException e) {
+                throw new EvercamException(e);
+            } catch (UnirestException e) {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+        return cameraList;
     }
 
     /**

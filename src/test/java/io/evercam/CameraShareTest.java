@@ -36,7 +36,7 @@ public class CameraShareTest
 
         //Validate camera is successfully shared
         API.setUserKeyPair(sharedKeyPair.getApiKey(), sharedKeyPair.getApiId());
-        ArrayList<Camera> cameraList = User.getCameras(sharedUser.getUsername(), true, false);
+        ArrayList<Camera> cameraList = Camera.getAll(sharedUser.getUsername(), true, false);
         Camera sharedCamera= Camera.getById(ownedCamera.getId(),false);
         assertEquals(2, cameraList.size());
         assertEquals(ownedCamera.getId(),sharedCamera.getId());
@@ -44,7 +44,7 @@ public class CameraShareTest
         //Then delete the camera share
         boolean cameraDeleted = CameraShare.delete(sharedCamera.getId(), sharedUser.getUsername());
         assertTrue(cameraDeleted);
-        assertEquals(1,User.getCameras(sharedUser.getUsername(), true, false).size());
+        assertEquals(1,Camera.getAll(sharedUser.getUsername(), true, false).size());
 
         API.setUserKeyPair(null, null);
     }

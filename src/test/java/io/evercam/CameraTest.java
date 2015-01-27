@@ -31,7 +31,7 @@ public class CameraTest
         assertFalse(randomCamera.isOnline());
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        assertEquals(1, User.getCameras(randomUser.getUsername(), false, false).size());
+        assertEquals(1, Camera.getAll(randomUser.getUsername(), false, false).size());
 
         //TODO: Re-enable this
 //        boolean deleteSuccess = Camera.delete(randomCamera.getId());
@@ -89,6 +89,58 @@ public class CameraTest
 
         API.setUserKeyPair(null, null);
     }
+
+
+    @Test
+    public void testGetAllCamerasWithCredentials() throws EvercamException
+    {
+        //TODO: Tests for camera thumbnail from camera list
+        RandomUser randomUser = new RandomUser();
+        randomUser.addRandomCamera(true);
+        randomUser.addRandomCamera(false);
+
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+
+        ArrayList<Camera> allCameras = Camera.getAll(randomUser.getUsername(), false, false);
+        assertEquals(2, allCameras.size());
+
+        ArrayList<Camera> allCamerasIncludingShared = Camera.getAll(randomUser.getUsername(), true, false);
+        assertEquals(3, allCamerasIncludingShared.size());
+
+        API.setUserKeyPair(null, null);
+    }
+
+    @Test
+    public void testGetCamerasWithoutUsername() throws EvercamException
+    {
+        RandomUser randomUser = new RandomUser();
+        randomUser.addRandomCamera(true);
+        randomUser.addRandomCamera(false);
+
+        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+
+        ArrayList<Camera> allCameras = Camera.getAll(null, false, false);
+        assertEquals(2, allCameras.size());
+
+        ArrayList<Camera> allCamerasIncludingShared = Camera.getAll(randomUser.getUsername(), true, false);
+        assertEquals(3, allCamerasIncludingShared.size());
+
+        API.setUserKeyPair(null, null);
+    }
+
+    //TODO: Modify this test for no key pair exception or re-enable request without user key pair
+//    @Test
+//    public void testGetCamerasWithoutCredentials() throws EvercamException
+//    {
+//        RandomUser randomUser = new RandomUser();
+//        randomUser.addRandomCamera(true);
+//        randomUser.addRandomCamera(false);
+//
+//        ArrayList<Camera> publicCameras = Camera.getAll(randomUser.getUsername(), true, false);
+//        assertEquals(1, publicCameras.size());
+//    }
 
     @Test
     public void testPatchCamera() throws EvercamException

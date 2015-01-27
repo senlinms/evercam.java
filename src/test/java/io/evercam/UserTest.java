@@ -69,46 +69,12 @@ public class UserTest
         API.setUserKeyPair(null, null);
     }
 
-
     @Test
     public void testMissingUserDetail() throws EvercamException
     {
         UserDetail detail = new UserDetail();
         exception.expect(EvercamException.class);
         User.create(detail);
-    }
-
-    @Test
-    public void testGetCamerasWithCredentials() throws EvercamException
-    {
-        RandomUser randomUser = new RandomUser();
-        randomUser.addRandomCamera(true);
-        randomUser.addRandomCamera(false);
-
-        ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
-        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-
-        ArrayList<Camera> allCameras = User.getCameras(randomUser.getUsername(), false, false);
-        assertEquals(2, allCameras.size());
-
-        //FIXME: Tests for get camera list including shares
-        //        ArrayList<Camera> allCamerasIncludingShared = User.getCameras(randomUser.getUsername(),true);
-        //        assertEquals(3, allCamerasIncludingShared.size());
-
-        API.setUserKeyPair(null, null);
-    }
-
-    @Test
-    public void testGetCamerasWithoutCredentials() throws EvercamException
-    {
-        RandomUser randomUser = new RandomUser();
-        randomUser.addRandomCamera(true);
-        randomUser.addRandomCamera(false);
-
-        ArrayList<Camera> publicCameras = User.getCameras(randomUser.getUsername(), false, false);
-        assertEquals(1, publicCameras.size());
-
-        API.setUserKeyPair(null, null);
     }
 
     @AfterClass
