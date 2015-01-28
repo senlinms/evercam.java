@@ -9,12 +9,10 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 
-public class PublicCamera extends EvercamObject
-{
-    static String URL = API.URL + "public";
+public class PublicCamera extends EvercamObject {
+    static String URL = API.URL + "public/cameras";
 
-    private PublicCamera()
-    {
+    private PublicCamera() {
         //private constructor
     }
 
@@ -22,40 +20,30 @@ public class PublicCamera extends EvercamObject
      * Fetch nearest publicly discoverable camera from within the Evercam system.
      * If location isn't provided requester's IP address is used.
      *
-     * @return the nearest camera object with thumbnail data
      * @param nearTo an address or 'longitude, latitude' points. Can be null then IP address will be used
+     * @return the nearest camera object with thumbnail data
      */
-    public static Camera getNearestCamera(String nearTo) throws EvercamException
-    {
-        try
-        {
+    public static Camera getNearest(String nearTo) throws EvercamException {
+        try {
             HttpResponse<JsonNode> response;
-            if(nearTo == null)
-            {
+            if (nearTo == null) {
                 response = Unirest.get(URL + "/nearest").header("accept", "application/json").asJson();
-            }
-            else
-            {
+            } else {
                 response = Unirest.get(URL + "/nearest").field("near_to", nearTo).header("accept", "application/json").asJson();
             }
 
-            if (response.getCode() == CODE_OK)
-            {
+            if (response.getCode() == CODE_OK) {
                 JSONArray cameraArray = response.getBody().getObject().getJSONArray("cameras");
-                if(cameraArray.length() > 0)
-                {
+                if (cameraArray.length() > 0) {
                     JSONObject cameraJSONObject = cameraArray.getJSONObject(0);
                     return new Camera(cameraJSONObject);
                 }
-            }
-            else
-            {
+            } else {
                 ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
                 throw new EvercamException(errorResponse.getMessage());
 
             }
-        } catch (UnirestException e)
-        {
+        } catch (UnirestException e) {
             throw new EvercamException(e);
         }
         return null;
@@ -65,10 +53,10 @@ public class PublicCamera extends EvercamObject
      * Returns jpg from nearest publicly discoverable camera from within the Evercam system.
      * If location isn't provided requester's IP address is used
      *
-     * @return the nearest camera object with thumbnail data
      * @param nearTo an address or 'longitude, latitude' points. Can be null then IP address will be used
+     * @return the nearest camera object with thumbnail data
      */
-    public static InputStream getNearestJpgStream(String nearTo) throws EvercamException
+    public static InputStream getNearestJpg(String nearTo) throws EvercamException
     {
         try
         {

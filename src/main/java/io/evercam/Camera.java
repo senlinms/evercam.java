@@ -1053,8 +1053,6 @@ public class Camera extends EvercamObject
         }
     }
 
-    //TODO: Unit test
-
     /**
      * Return byte thumbnail(150x150 preview of camera view) data associated with this camera.
      *

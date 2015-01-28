@@ -11,21 +11,26 @@ public class PublicCameraTest
     @BeforeClass
     public static void setUpClass()
     {
-     //TODO: Test should target to test server, which is not updated yet.
-     //   API.URL = TestURL.URL;
+        API.URL = TestURL.URL;
     }
 
     @Test
     public void testNearestCamera() throws EvercamException
     {
-//        Camera camera = PublicCamera.getNearest(null);
-//        assertEquals("pearse-street", camera.getId());
-//
-//        Camera cameraByAddress = PublicCamera.getNearest("stephen green");
-//        assertEquals("pearse-street", cameraByAddress.getId());
-//
-//        Camera cameraByLocation = PublicCamera.getNearest("53.343826,-6.247662");
-//        assertEquals("pearse-street", cameraByLocation.getId());
+        Camera camera = PublicCamera.getNearest(null);
+        assertEquals("pearse-street", camera.getId());
+
+        Camera cameraByAddress = PublicCamera.getNearest("stephen green");
+        assertEquals("pearse-street", cameraByAddress.getId());
+
+        Camera cameraByLocation = PublicCamera.getNearest("53.343826,-6.247662");
+        assertEquals("pearse-street", cameraByLocation.getId());
+    }
+
+    @Test
+    public void testNearestJpg() throws EvercamException
+    {
+        //TODO: Tests for get nearest JPG
     }
 
     @AfterClass

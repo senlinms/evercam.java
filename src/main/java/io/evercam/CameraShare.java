@@ -137,57 +137,22 @@ public class CameraShare extends EvercamObject
      * @return true if camera share get successfully deleted
      * @throws EvercamException with error message if failed to delete camera share
      */
-    public static boolean delete(String cameraId, String userId) throws EvercamException
-    {
-        if (API.hasUserKeyPair())
-        {
-            CameraShare cameraShare = get(cameraId,userId);
-            if(deleteByShareId(String.valueOf(cameraShare.getId()), cameraId))
-            {
+    public static boolean delete(String cameraId, String userId) throws EvercamException {
+        if (API.hasUserKeyPair()) {
+            CameraShare cameraShare = get(cameraId, userId);
+            if (deleteByShareId(String.valueOf(cameraShare.getId()), cameraId)) {
                 return true;
             }
-        }
-        else
-        {
+        } else {
             throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
         return false;
     }
 
-    //TODO: Fix get share by user
-//    public static ArrayList<CameraShare> getByUser(String userId) throws EvercamException
-//    {
-//        return getSharesByUrl(URL + "/users/" + userId);
-//    }
-
     public static ArrayList<CameraShare> getByCamera(String cameraId) throws EvercamException
     {
         return getSharesByUrl(URL + '/' + cameraId + "/shares");
     }
-
-    /**
-     * TODO: Remove this method later. It was used to get list of shared cameras, but should be replaced by
-     * cameras GET
-     */
-    //
-//    /**
-//     * Return the camera list owned by the specific user as a string
-//     * for requesting data for a specified set of cameras
-//     *
-//     * @param userId Evercam user unique identifier
-//     * @return a comma separated list of camera identifiers owned by this user
-//     * @throws EvercamException
-//     */
-//    public static String getNameSetString(String userId) throws EvercamException
-//    {
-//        ArrayList<CameraShare> cameraShares = getByUser(userId);
-//        String nameSetString = "";
-//        for (int count = 0; count < cameraShares.size(); count++)
-//        {
-//            nameSetString += cameraShares.get(count).getCameraId() + ",";
-//        }
-//        return nameSetString;
-//    }
 
     private static ArrayList<CameraShare> getSharesByUrl(String url) throws EvercamException
     {

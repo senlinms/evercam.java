@@ -253,7 +253,7 @@ public class Snapshot extends EvercamObject
         return getBase64DataStringFrom(completeImageData);
     }
 
-    //FIXME: Test for this method.
+    //TODO: Test for this method.
     public byte[] getData()
     {
         String base64Data = getBase64DataString();

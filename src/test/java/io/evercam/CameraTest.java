@@ -36,7 +36,7 @@ public class CameraTest
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         assertEquals(1, Camera.getAll(randomUser.getUsername(), false, false).size());
 
-        //TODO: Wait for the bug fix to re-enable this
+        //TODO: Wait for the bug fix to re-enable this, currently can not delete camera
 //        boolean deleteSuccess = Camera.delete(randomCamera.getId());
 //        Assert.assertTrue(deleteSuccess);
 //        assertEquals(0, Camera.getAll(randomUser.getUsername(), false, false).size());
@@ -96,7 +96,6 @@ public class CameraTest
     @Test
     public void testGetAllCamerasWithCredentials() throws EvercamException
     {
-        //TODO: Tests for camera thumbnail from camera list
         RandomUser randomUser = new RandomUser();
         randomUser.addRandomCamera(true);
         randomUser.addRandomCamera(false);
@@ -109,6 +108,11 @@ public class CameraTest
 
         ArrayList<Camera> allCamerasIncludingShared = Camera.getAll(randomUser.getUsername(), true, false);
         assertEquals(3, allCamerasIncludingShared.size());
+
+        //Test get camera thumbnail
+        Camera demoCamera = Camera.getById("evercam-remembrance-camera", true);
+        byte[] thumbnailData = demoCamera.getThumbnailData();
+        Assert.assertTrue(thumbnailData.length > 100);
 
         API.setUserKeyPair(null, null);
     }
@@ -131,18 +135,6 @@ public class CameraTest
 
         API.setUserKeyPair(null, null);
     }
-
-    //TODO: Modify this test for no key pair exception or re-enable request without user key pair
-//    @Test
-//    public void testGetCamerasWithoutCredentials() throws EvercamException
-//    {
-//        RandomUser randomUser = new RandomUser();
-//        randomUser.addRandomCamera(true);
-//        randomUser.addRandomCamera(false);
-//
-//        ArrayList<Camera> publicCameras = Camera.getAll(randomUser.getUsername(), true, false);
-//        assertEquals(1, publicCameras.size());
-//    }
 
     @Test
     public void testPatchCamera() throws EvercamException
