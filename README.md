@@ -6,15 +6,12 @@ A Java wrapper around Evercam API
 ```java
 import io.evercam.*;
 
-//Developer key and id required for basic API requests.
-API.setDeveloperKeypair("developerApiKey","developerApiId")
-
 //Request user's key and id from Evercam
 ApiKeyPair userKeyPair = API.requestUserKeyPairFromEvercam("username/Email", "password");
 String userApiKey = userKeyPair.getApiKey();
 String userApiId = userKeyPair.getApiId();
 
-//User key and id is required for authentication.
+//User key and id is required for authentication for all endpoints except /public, /vendors and /models.
 API.setUserKeypair(userApiKey, userApiId)
 ```
 ### Cameras
@@ -45,17 +42,20 @@ Camera.delete("cameraId");
 //Get camera by Evercam ID
 Camera camera = Camera.getById("cameraId"
                                 true);//Return camera with thumnail data or not
+                                
+//Returns the list of cameras owned by a particular user, including shared cameras and thumnail data
+ArrayList<Camera> cameras = Camera.getAll("joeyb", true, true);
 ```
 ### Snapshots
 ```java
 //Store a camera live snapshot on Evercam server
-Camera.archiveSnapshot("cameraId", "notes")
+Snapshot.store("cameraId", "notes")
 
 //Get a list of archived snapshot
-ArrayList<Snapshot> snapshots = Camera.getArchivedSnapshot("cameraId");
+ArrayList<Snapshot> snapshots = Snapshot.getArchivedSnapshots("cameraId");
 
 //Fetch latest archived snapshot from Evercam with data
-Snapshot latestSnapshot = Camera.getLatestArchivedSnapshot("cameraId",true).
+Snapshot latestSnapshot = Snapshot.getLatestArchivedSnapshot("cameraId",true).
 byte[] snapshotImageData = latestSnapshot.getData();
 ```
 ### Users
@@ -70,16 +70,13 @@ detail.setUsername("joeyb");
 detail.setPassword("password")
 User user = User.create(detail);
 
-//Returns the list of cameras owned by a particular user, including shared cameras and thumnail data
-ArrayList<Camera> cameras = User.getCameras("joeyb", true, true);
-
 //Fetch Evercam user details by username or Email address.
 User user = new User("username/Email")
 ```
 ### Vendors && Models
 ```java
 //Get camera vendor by id
-Vendor.getById("hikvision");
+Vendor vendor = Vendor.getById("hikvision");
 //Search for camera vendors by MAC address
 ArrayList<Vendor> vendorsByMac = Vendor.getByMac("54:E6:FC");
 //Get a list of all supported vendors
@@ -110,8 +107,6 @@ CameraShare.create("cameraId","username/Email","Snapshot,View,Edit,List");
 CameraShare cameraShare = CameraShare.get("cameraId","username");
 //Get the list of shares for a specified camera
 ArrayList<CameraShare> shareList = CameraShare.getByCamera("cameraId");
-//Fetch the list of shares currently granted to a user
-ArrayList<CameraShare> shareList = CameraShare.getByUser("username")
 
 //Delete an existing camera share by specifying user and camera
 CameraShare.delete("cameraId","username");
@@ -120,4 +115,10 @@ CameraShare.deleteByShareId("shareId","cameraId");
 ```
 [Endpoints for PATCH camera shares and share requests](https://dashboard.evercam.io/dev#!/shares) are not yet implemented in Java, It can be supported if is requested and will be updated as soon as possible.
 ### Public
-[Endpoints for publicly discoverable camera](https://dashboard.evercam.io/dev#!/public) are not yet implemented in Java, It can be supported if is requested and will be updated as soon as possible.
+```java
+//Fetch nearest publicly discoverable camera from within the Evercam system.
+//If location isn't provided requester's IP address is used.
+Camera camera = PublicCamera.getNearest("address/latLng/null");
+//Returns jpg from nearest publicly discoverable camera from within the Evercam system.
+InputStream jogStream = PublicCamera.getNearestJpg("address/latLng/null");
+```
