@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class Vendor extends EvercamObject
 {
-    private static String URL_VENDORS = API.URL + "vendors/search";
+    private static String URL_VENDORS = API.URL + "vendors";
 
     private JSONObject jsonObject;
 
@@ -32,7 +32,7 @@ public class Vendor extends EvercamObject
      */
     public static Vendor getById(String vendorId) throws EvercamException
     {
-        ArrayList<Vendor> vendors = getVendors(URL_VENDORS + "?id=" + vendorId);
+        ArrayList<Vendor> vendors = getVendors(URL_VENDORS + '/' + vendorId);
         if (vendors.size() > 0)
         {
             return vendors.get(0);

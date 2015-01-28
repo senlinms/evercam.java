@@ -4,6 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public class Model extends EvercamObject
 {
-    private static String URL = API.URL + "models/search";
+    private static String URL = API.URL + "models";
     public static final String DEFAULT_MODEL_NAME = "Default";
     public static final String DEFAULT_MODEL_SUFFIX = "_default";
 
@@ -30,14 +31,22 @@ public class Model extends EvercamObject
      */
     public static Model getById(String modelId) throws EvercamException
     {
-        ArrayList<Model> modelList = getAll(modelId, null, null);
-        if (modelList.size() > 0)
+        try
         {
-            return modelList.get(0);
-        }
-        else
+            HttpResponse<JsonNode> response = Unirest.get(URL + '/' + modelId).header("accept", "application/json").asJson();
+            JSONArray modelArray = response.getBody().getObject().getJSONArray("models");
+            if(modelArray.length() > 0)
+            {
+                return new Model(modelArray.getJSONObject(0));
+            }
+            else
+            {
+                throw new EvercamException("Model with id " + modelId + " doesn't exists");
+            }
+
+        } catch (UnirestException e)
         {
-            throw new EvercamException("Model with id " + modelId + " not exists");
+            throw new EvercamException(e);
         }
     }
 
@@ -49,7 +58,7 @@ public class Model extends EvercamObject
      */
     public static ArrayList<Model> getAllByName(String modelName) throws EvercamException
     {
-        return getAll(null, modelName, null);
+        return getAll(modelName, null);
     }
 
     /**
@@ -99,26 +108,16 @@ public class Model extends EvercamObject
     }
 
     /**
-     * Returns model that match the model name with default paging
+     * Returns model that match the given model name, or/and vendor id.
      *
-     * @param modelName name of the model
-     * @throws EvercamException if developer API key and id not specified or model does not exists
-     */
-    /**
-     * Returns model that match the given vendor id, model name, or/and vendor id.
-     *
-     * @param modelId   unique identifier of the model
      * @param modelName name of the model
      * @param vendorId  the unique identifier of the vendor
      * @throws EvercamException
      */
-    public static ArrayList<Model> getAll(String modelId, String modelName, String vendorId) throws EvercamException
+    public static ArrayList<Model> getAll(String modelName, String vendorId) throws EvercamException
     {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (modelId != null && !modelId.isEmpty())
-        {
-            map.put("id", modelId);
-        }
+
         if (modelName != null && !modelName.isEmpty())
         {
             map.put("name", modelName);
