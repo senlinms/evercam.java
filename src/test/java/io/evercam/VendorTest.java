@@ -27,13 +27,13 @@ public class VendorTest
         Vendor hikvision = Vendor.getByMac(TEST_VENDOR_MAC).get(0);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
-        assertEquals(3, hikvision.getKnownMacs().size());
+        assertEquals(4, hikvision.getKnownMacs().size());
     }
 
     @Test
     public void testGetAllVendors() throws EvercamException
     {
-        assertEquals(57, Vendor.getAll().size());
+        assertEquals(59, Vendor.getAll().size());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class VendorTest
         Vendor hikvision = Vendor.getById(TEST_VENDOR_ID);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
-        assertEquals(3, hikvision.getKnownMacs().size());
+        assertEquals(4, hikvision.getKnownMacs().size());
         assertEquals(126, hikvision.getAllModels().size());
     }
 
@@ -52,7 +52,7 @@ public class VendorTest
         Vendor hikvision = Vendor.getByName(TEST_VENDOR_NAME).get(0);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
-        assertEquals(3, hikvision.getKnownMacs().size());
+        assertEquals(4, hikvision.getKnownMacs().size());
     }
 
     @Test
