@@ -109,8 +109,6 @@ CameraShare cameraShare = CameraShare.get("cameraId","username");
 ArrayList<CameraShare> shareList = CameraShare.getByCamera("cameraId");
 
 //Delete an existing camera share by specifying user and camera
-CameraShare.delete("cameraId","username");
-//Delete an existing camera share by specifying camera and user
 CameraShare.delete("cameraId","username/Email");
 ```
 [Endpoints for PATCH camera shares and share requests](https://dashboard.evercam.io/dev#!/shares) are not yet implemented in Java, It can be supported if is requested and will be updated as soon as possible.
