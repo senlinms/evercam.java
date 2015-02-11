@@ -15,7 +15,8 @@ import java.util.Map;
 public abstract class API
 {
     public static String VERSION = "v1";
-    public static String URL = "https://api.evercam.io/" + VERSION + "/";
+    public static final String PRODUCTION_URL = "https://api.evercam.io/" + VERSION + "/";
+    public static String URL = PRODUCTION_URL;
 
     private static String[] developerKeyPair = {null, null};
     private static String[] userKeyPair = {null, null};
@@ -115,5 +116,10 @@ public abstract class API
             throw new EvercamException(e);
         }
         return userKeyPair;
+    }
+
+    public static void resetUrl()
+    {
+        URL = PRODUCTION_URL;
     }
 }

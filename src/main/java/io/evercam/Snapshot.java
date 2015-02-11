@@ -4,11 +4,13 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Snapshot extends EvercamObject
 {
@@ -35,7 +37,7 @@ public class Snapshot extends EvercamObject
      * @return the saved snapshot
      * @throws EvercamException if unable to save the snapshot
      */
-    public static Snapshot store(String cameraId, String notes) throws EvercamException
+    public static Snapshot record(String cameraId, String notes) throws EvercamException
     {
         Snapshot snapshot = null;
         if (API.hasUserKeyPair())
@@ -71,7 +73,8 @@ public class Snapshot extends EvercamObject
                 }
                 else
                 {
-                    throw new EvercamException(response.getCode() + response.getBody().toString());
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
                 }
             } catch (JSONException e)
             {
@@ -88,99 +91,59 @@ public class Snapshot extends EvercamObject
         return snapshot;
     }
 
-
-//    TODO: Implement GET /cameras/{id}/recordings/snapshots.json, currently the code are out-of-date
-//    /**
-//     * Returns the list of all snapshots currently stored for this camera
-//     *
-//     * @param cameraId the unique identifier of the camera
-//     * @throws EvercamException if error occurred with Evercam
-//     */
-//    public static ArrayList<Snapshot> getArchivedSnapshots(String cameraId) throws EvercamException
-//    {
-//        ArrayList<Snapshot> snapshots = new ArrayList<Snapshot>();
-//        if (API.hasUserKeyPair())
-//        {
-//            try
-//            {
-//                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/snapshots").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
-//                if (response.getCode() == CODE_OK)
-//                {
-//                    JSONObject snapshotsObject = response.getBody().getObject();
-//                    JSONArray snapshotJsonArray = snapshotsObject.getJSONArray("snapshots");
-//                    String timezone = snapshotsObject.getString("timezone");
-//
-//                    for (int count = 0; count < snapshotJsonArray.length(); count++)
-//                    {
-//                        JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(count);
-//                        snapshots.add(new Snapshot(snapshotJsonObject, timezone));
-//                    }
-//                }
-//                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
-//                {
-//                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
-//                }
-//                else if (response.getCode() == CODE_SERVER_ERROR)
-//                {
-//                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
-//                }
-//                else
-//                {
-//                    throw new EvercamException(response.getBody().toString());
-//                }
-//            } catch (UnirestException e)
-//            {
-//                throw new EvercamException(e);
-//            } catch (JSONException e)
-//            {
-//                throw new EvercamException(e);
-//            }
-//        }
-//        else
-//        {
-//            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
-//        }
-//        return snapshots;
-//    }
-
-    //TODO: Write test for this method. Currently snapshot doesn't work with teste server
     /**
-     * Returns latest snapshot stored for this camera.
+     * A wrap of GET /cameras/{id}/recordings/snapshots, returns all pages in one method
      *
-     * @param cameraId the camera's unique identifier with Evercam
-     * @param withData whether it should send image data
-     * @throws EvercamException
+     * Returns the list of all snapshots currently stored for specific camera
+     *
+     * @param cameraId the unique identifier of the camera
+     * @throws EvercamException if user key and id not specified
      */
-    public static Snapshot getLatestArchivedSnapshot(String cameraId, boolean withData) throws EvercamException
+    public static ArrayList<Snapshot> getRecordedSnapshots(String cameraId, int from, int to) throws EvercamException
     {
-        Snapshot snapshot;
-        HttpResponse<JsonNode> response;
+        ArrayList<Snapshot> snapshotList = new ArrayList<Snapshot>();
+
+        SnapshotsWithPaging snapshotsWithPaging = getSnapshotListWithPaging(cameraId, from, to, 100, 1);
+        snapshotList.addAll(snapshotsWithPaging.getSnapshotsList());
+        int pages = snapshotsWithPaging.getTotalPages();
+
+        if(pages > 1)
+        {
+            for(int index = 2; index < pages; index ++)
+            {
+                SnapshotsWithPaging moreWithPaging = getSnapshotListWithPaging(cameraId, from, to, 100, index);
+                snapshotList.addAll(moreWithPaging.getSnapshotsList());
+            }
+        }
+
+        return snapshotList;
+    }
+
+    /**
+     * GET /cameras/{id}/recordings/snapshots
+     *
+     * Returns the list of snapshots currently stored for specific camera with specific page
+     *
+     * @param cameraId the unique identifier of the camera
+     * @throws EvercamException if user key and id not specified
+     */
+    public static SnapshotsWithPaging getSnapshotListWithPaging(String cameraId, int from, int to, int limit, int page) throws EvercamException
+    {
         if (API.hasUserKeyPair())
         {
+            Map<String,Object> fieldsMap = API.userKeyPairMap();
+            fieldsMap.put("from", from);
+            fieldsMap.put("to", to);
+            fieldsMap.put("limit", limit);
+            fieldsMap.put("page", page);
+
             try
             {
-                if (withData)
-                {
-                    response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/latest" + "?with_data=true").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
-                }
-                else
-                {
-                    response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/latest").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
-                }
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots")
+                        .fields(fieldsMap).header("accept", "application/json").asJson();
                 if (response.getCode() == CODE_OK)
                 {
-                    JSONObject snapshotsObject = response.getBody().getObject();
-                    JSONArray snapshotJsonArray = snapshotsObject.getJSONArray("snapshots");
-                    String timezone = snapshotsObject.getString("timezone");
-                    if (snapshotJsonArray.length() != 0)
-                    {
-                        JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(0);
-                        snapshot = new Snapshot(snapshotJsonObject, timezone);
-                    }
-                    else
-                    {
-                        throw new EvercamException("No snapshot saved for camera:" + cameraId);
-                    }
+                    return new SnapshotsWithPaging(response.getBody().getObject());
                 }
                 else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
                 {
@@ -192,7 +155,8 @@ public class Snapshot extends EvercamObject
                 }
                 else
                 {
-                    throw new EvercamException(response.getBody().toString());
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
                 }
             } catch (UnirestException e)
             {
@@ -206,7 +170,250 @@ public class Snapshot extends EvercamObject
         {
             throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         }
-        return snapshot;
+    }
+
+    /**
+     * GET /cameras/{id}/recordings/snapshots/{year}/{month}/{day}/hours
+     *
+     * Returns list of specific hours in a given day which contains any snapshots
+     *
+     * @param cameraId the camera's unique identifier with Evercam
+     * @param year year, for example 2013
+     * @param month month, for example 11
+     * @param day day, for example 17
+     *
+     * @throws EvercamException if user key pair is not specified
+     */
+    public static ArrayList<Integer> getHoursContainSnapshots(String cameraId, int year, int month, int day) throws EvercamException
+    {
+        ArrayList<Integer> hoursList = new ArrayList<Integer>();
+        if (API.hasUserKeyPair())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/" + year + '/' + month + '/' + day + "/hours")
+                        .fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
+
+                if (response.getCode() == CODE_OK)
+                {
+                    JSONObject hoursArrayObject = response.getBody().getObject();
+                    JSONArray hoursArray = hoursArrayObject.getJSONArray("hours");
+
+                    if (hoursArray.length() != 0)
+                    {
+                        for(int index = 0 ; index <hoursArray.length() ; index ++)
+                        {
+                            hoursList.add(hoursArray.getInt(index));
+                        }
+                    }
+                }
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
+                else if (response.getCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+
+        return hoursList;
+    }
+
+    /**
+     * GET /cameras/{id}/recordings/snapshots/{year}/{month}/days
+     *
+     * Returns list of specific days in a given month which contains any snapshots
+     *
+     * @param cameraId the camera's unique identifier with Evercam
+     * @param year year, for example 2013
+     * @param month month, for example 11
+     *
+     * @throws EvercamException if user key pair is not specified
+     */
+    public static ArrayList<Integer> getDaysContainSnapshots(String cameraId, int year, int month) throws EvercamException
+    {
+        ArrayList<Integer> daysList = new ArrayList<Integer>();
+        if (API.hasUserKeyPair())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/" + year + '/' + month + "/days")
+                        .fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
+
+                if (response.getCode() == CODE_OK)
+                {
+                    JSONObject daysArrayObject = response.getBody().getObject();
+                    JSONArray daysJsonArray = daysArrayObject.getJSONArray("days");
+
+                    if (daysJsonArray.length() != 0)
+                    {
+                        for(int index = 0 ; index < daysJsonArray.length() ; index ++)
+                        {
+                            daysList.add(daysJsonArray.getInt(index));
+                        }
+                    }
+                }
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
+                else if (response.getCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+
+        return daysList;
+    }
+
+    /**
+     * GET /cameras/{id}/recordings/snapshots/{timestamp}
+     *
+     * Returns the snapshot stored for this camera closest to the given timestamp
+     *
+     * @param cameraId the camera's unique identifier with Evercam
+     * @param timeStamp snapshot Unix timestamp
+     * @param withData whether it should send image data
+     * @param range time range in seconds around specified timestamp. Default range is one second (so it matches only exact timestamp).
+     */
+    public static Snapshot getByTime(String cameraId, int timeStamp, boolean withData, int range) throws EvercamException
+    {
+        String url = URL + "/" + cameraId + "/recordings/snapshots/" + timeStamp;
+        if (withData)
+        {
+            url += "?with_data=true&range=" + range;
+        }
+        else
+        {
+            url += "?range=" + range;
+        }
+        ArrayList<Snapshot> snapshotList = getSnapshotsByUrl(url);
+        if (snapshotList.size() > 0)
+        {
+            return snapshotList.get(0);
+        }
+        else
+        {
+            throw new EvercamException("Snapshot does not exist");
+        }
+    }
+
+    /**
+     * GET /cameras/{id}/recordings/snapshots/latest
+     *
+     * Returns latest snapshot stored for this camera.
+     *
+     * @param cameraId the camera's unique identifier with Evercam
+     * @param withData whether it should send image data
+     * @throws EvercamException
+     */
+    public static Snapshot getLatest(String cameraId, boolean withData) throws EvercamException
+    {
+        String url = URL + "/" + cameraId + "/recordings/snapshots/latest";
+
+        if (withData)
+        {
+            url += "?with_data=true";
+        }
+        ArrayList<Snapshot> snapshotList = getSnapshotsByUrl(url);
+        if (snapshotList.size() > 0)
+        {
+            return snapshotList.get(0);
+        }
+        else
+        {
+            throw new EvercamException("No snapshot saved for camera:" + cameraId);
+        }
+    }
+
+    /**
+     * Return snapshot list by request URL. This method is called by getLatest() and getByTime
+     */
+    private static ArrayList<Snapshot> getSnapshotsByUrl(String url) throws EvercamException
+    {
+        ArrayList<Snapshot> snapshotList = new ArrayList<Snapshot>();
+        HttpResponse<JsonNode> response;
+        if (API.hasUserKeyPair())
+        {
+            try
+            {
+                System.out.println(url);
+                response = Unirest.get(url).fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
+
+                System.out.println(response.getBody());
+                if (response.getCode() == CODE_OK)
+                {
+                    JSONObject snapshotsObject = response.getBody().getObject();
+                    JSONArray snapshotJsonArray = snapshotsObject.getJSONArray("snapshots");
+                    String timezone = snapshotsObject.getString("timezone");
+                    if (snapshotJsonArray.length() != 0)
+                    {
+                        for(int index = 0 ; index < snapshotJsonArray.length() ; index ++)
+                        {
+                            JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(0);
+                            snapshotList.add(new Snapshot(snapshotJsonObject, timezone));
+                        }
+                    }
+                }
+                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                {
+                    throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
+                }
+                else if (response.getCode() == CODE_SERVER_ERROR)
+                {
+                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            } catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            } catch (JSONException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+        return snapshotList;
     }
 
     public String getNotes() throws EvercamException
@@ -253,7 +460,6 @@ public class Snapshot extends EvercamObject
         return getBase64DataStringFrom(completeImageData);
     }
 
-    //TODO: Test for this method.
     public byte[] getData()
     {
         String base64Data = getBase64DataString();
