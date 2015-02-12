@@ -53,7 +53,7 @@ public class CameraSnapshotTest
         //Get snapshot by time
         Snapshot snapshot = Snapshot.getByTime(LocalConstants.TEST_CAMERA_ID, TIME_FROM, true, 1);
         assertEquals("", snapshot.getTimeZone());
-        assertEquals("", snapshot.getNotes());
+        assertEquals("Initial snapshot", snapshot.getNotes());
         assertNotNull(snapshot.getData());
 
         API.setUserKeyPair(null, null);
