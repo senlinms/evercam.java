@@ -52,7 +52,6 @@ public class CameraSnapshotTest
 
         //Get snapshot by time
         Snapshot snapshot = Snapshot.getByTime(LocalConstants.TEST_CAMERA_ID, TIME_FROM, true, 1);
-        assertEquals("", snapshot.getTimeZone());
         assertEquals("Initial snapshot", snapshot.getNotes());
         assertNotNull(snapshot.getData());
 
@@ -78,7 +77,6 @@ public class CameraSnapshotTest
         assertNotNull(latestSnapshot.getBase64DataString());
         assertNotNull(latestSnapshot.getTimeStamp());
 
-        assertEquals(camera.getTimezone(), latestSnapshot.getTimeZone());
         Snapshot snapshotWithoutData = Snapshot.getLatest(camera.getId(), false);
         assertNull(snapshotWithoutData.getCompleteData());
         assertNull(snapshotWithoutData.getBase64DataString());

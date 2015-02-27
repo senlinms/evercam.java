@@ -15,13 +15,6 @@ import java.util.Map;
 public class Snapshot extends EvercamObject
 {
     static String URL = API.URL + "cameras";
-    private String timezone = "";
-
-    Snapshot(JSONObject snapshotJsonObject, String timezone)
-    {
-        jsonObject = snapshotJsonObject;
-        this.timezone = timezone;
-    }
 
     Snapshot(JSONObject snapshotJsonObject)
     {
@@ -379,18 +372,13 @@ public class Snapshot extends EvercamObject
                 {
                     JSONObject snapshotsObject = response.getBody().getObject();
                     JSONArray snapshotJsonArray = snapshotsObject.getJSONArray("snapshots");
-                    String timezone = "";
-                    //Snapshot object returned from GET snapshots doesn't contains timezone field at this moment
-                    if (snapshotsObject.has("timezone"))
-                    {
-                        timezone = snapshotsObject.getString("timezone");
-                    }
+
                     if (snapshotJsonArray.length() != 0)
                     {
                         for (int index = 0; index < snapshotJsonArray.length(); index++)
                         {
                             JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(0);
-                            snapshotList.add(new Snapshot(snapshotJsonObject, timezone));
+                            snapshotList.add(new Snapshot(snapshotJsonObject));
                         }
                     }
                 }
@@ -474,11 +462,6 @@ public class Snapshot extends EvercamObject
         {
             throw new EvercamException(e);
         }
-    }
-
-    public String getTimeZone()
-    {
-        return timezone;
     }
 
     public String getCompleteData()

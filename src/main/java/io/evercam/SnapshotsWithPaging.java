@@ -19,13 +19,12 @@ public class SnapshotsWithPaging extends EvercamObject
     {
         ArrayList<Snapshot> snapshotList = new ArrayList<Snapshot>();
         JSONArray snapshotJsonArray = jsonObject.getJSONArray("snapshots");
-        String timezone = jsonObject.getString("timezone");
         if (snapshotJsonArray.length() > 0)
         {
             for (int index = 0; index < snapshotJsonArray.length(); index++)
             {
                 JSONObject snapshotJsonObject = snapshotJsonArray.getJSONObject(index);
-                snapshotList.add(new Snapshot(snapshotJsonObject, timezone));
+                snapshotList.add(new Snapshot(snapshotJsonObject));
             }
         }
         return snapshotList;
