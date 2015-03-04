@@ -1072,6 +1072,14 @@ public class Camera extends EvercamObject
     }
 
     /**
+     * Return a URL of latest snapshot thumbnail
+     */
+    public String getThumbnailUrl()
+    {
+        return jsonObject.getString("thumbnail_url");
+    }
+
+    /**
      * Get camera list by requesting a specified URL and parameters as a map
      */
     private static ArrayList<Camera> getByUrl(String url, Map<String, Object> parameterMap) throws EvercamException
