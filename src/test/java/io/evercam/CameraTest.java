@@ -230,6 +230,15 @@ public class CameraTest
 //        API.setUserKeyPair(null, null);
 //    }
 
+    @Test
+    public void testGetSnapshotUrl() throws EvercamException
+    {
+        API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
+        Camera camera = Camera.getById("evercam-remembrance-camera", false);
+        Assert.assertTrue(!camera.getLiveSnapshotUrl().isEmpty());
+        API.setUserKeyPair(null, null);
+    }
+
     @AfterClass
     public static void destroyClass()
     {
