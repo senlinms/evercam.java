@@ -814,24 +814,6 @@ public class Camera extends EvercamObject
     }
 
     /**
-     * Returns jpg URL for the camera
-     *
-     * @throws EvercamException if user key pair not specified
-     */
-    public String getLiveSnapshotUrl() throws EvercamException
-    {
-        if(API.hasUserKeyPair())
-        {
-            return URL + '/' + getId() + "/live/snapshot?api_id=" + API.getUserKeyPair()[1] + "&api_key=" + API
-                    .getUserKeyPair()[0];
-        }
-        else
-        {
-            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
-        }
-    }
-
-    /**
      * Validate the specified URL in valid or not by send a HTTP request.
      *
      * @param url the URL that need to be validated.

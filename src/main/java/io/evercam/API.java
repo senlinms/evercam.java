@@ -122,4 +122,22 @@ public abstract class API
     {
         URL = PRODUCTION_URL;
     }
+
+    /**
+     * Returns snapshot URL for the specified camera
+     *
+     * @throws EvercamException if user key pair not specified
+     */
+    public static String generateSnapshotUrlForCamera(String cameraId) throws EvercamException
+    {
+        if(hasUserKeyPair())
+        {
+            return Camera.URL + '/' + cameraId + "/live/snapshot?api_id=" + getUserKeyPair()[1] + "&api_key=" +
+                    getUserKeyPair()[0];
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+    }
 }
