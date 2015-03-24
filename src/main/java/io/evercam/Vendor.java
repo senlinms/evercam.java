@@ -124,10 +124,6 @@ public class Vendor extends EvercamObject
                     vendorList.add(new Vendor(vendorJSONObject));
                 }
             }
-            else if (response.getCode() == CODE_FORBIDDEN || response.getCode() == CODE_UNAUTHORISED)
-            {
-                throw new EvercamException(EvercamException.MSG_INVALID_DEVELOPER_KEY);
-            }
             else if (response.getCode() == CODE_SERVER_ERROR)
             {
                 throw new EvercamException(EvercamException.MSG_SERVER_ERROR);

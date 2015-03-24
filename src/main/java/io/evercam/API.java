@@ -18,7 +18,6 @@ public abstract class API
     public static final String PRODUCTION_URL = "https://api.evercam.io/" + VERSION + "/";
     public static String URL = PRODUCTION_URL;
 
-    private static String[] developerKeyPair = {null, null};
     private static String[] userKeyPair = {null, null};
 
     /**
