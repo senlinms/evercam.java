@@ -230,6 +230,18 @@ public class CameraTest
 //        API.setUserKeyPair(null, null);
 //    }
 
+    @Test
+    public void testTestSnapshot() throws EvercamException
+    {
+        //FIXME: The test request is send to the production server
+        API.resetUrl();
+        String URL = "http://" + LocalConstants.IP + ":" + LocalConstants.HTTP_PORT;
+        String ENDING = LocalConstants.SNAPSHOT_ENDING;
+        Snapshot snapshot = Camera.testSnapshot(URL, ENDING, LocalConstants.USERNAME, LocalConstants.PASSWORD);
+        assertNotNull(snapshot);
+        API.URL = TestURL.URL;
+    }
+
     @AfterClass
     public static void destroyClass()
     {

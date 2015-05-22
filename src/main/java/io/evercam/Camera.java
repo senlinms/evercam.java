@@ -1119,4 +1119,49 @@ public class Camera extends EvercamObject
         }
         return cameraList;
     }
+
+    /**
+     * Tests if given camera parameters are correct
+     *
+     * @param externalUrl External camera URL, in format http://ip:port
+     * @param jpgUrl The snapshot URL ending
+     * @param cameraUsername camera's username
+     * @param cameraPassword camera's password
+     * @return Return the snapshot if the snapshot is available, otherwise return null
+     * @throws EvercamException
+     */
+    public static Snapshot testSnapshot(String externalUrl, String jpgUrl, String cameraUsername, String
+            cameraPassword) throws EvercamException
+    {
+        try
+        {
+            JSONObject snapshotJSONObject = new JSONObject();
+            snapshotJSONObject.put("external_url", externalUrl);
+            snapshotJSONObject.put("jpg_url", jpgUrl);
+            snapshotJSONObject.put("cam_username", cameraUsername);
+            snapshotJSONObject.put("cam_password", cameraPassword);
+
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(URL + "/test");
+            post.setHeader("Content-type", "application/json");
+            post.setHeader("Accept", "application/json");
+            post.setEntity(new StringEntity(snapshotJSONObject.toString()));
+            org.apache.http.HttpResponse response = client.execute(post);
+            String result = EntityUtils.toString(response.getEntity());
+            int statusCode = response.getStatusLine().getStatusCode();
+            if(statusCode == CODE_CREATE)
+            {
+                return new Snapshot(new JSONObject(result));
+            }
+        }
+        catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+        catch (IOException e)
+        {
+            throw new EvercamException(e);
+        }
+        return null;
+    }
 }
