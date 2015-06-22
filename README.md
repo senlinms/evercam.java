@@ -1,6 +1,15 @@
 # evercam.java [![Build Status](https://travis-ci.org/evercam/evercam.java.png)](https://travis-ci.org/evercam/evercam.java)
 
-A Java wrapper around Evercam API
+The Java library around Evercam API
+
+## Help make it better
+
+The entire Evercam codebase is open source, see details: http://www.evercam.io/open-source and we'd love to see your pull requests!
+
+For any bugs and discussions, please use [Github Issues](https://github.com/evercam/evercam.java/issues).
+
+Any questions or suggestions around Evercam, drop us a line: http://www.evercam.io/contact
+
 
 ## Basic Usage
 ```java
