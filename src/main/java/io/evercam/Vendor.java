@@ -97,6 +97,21 @@ public class Vendor extends EvercamObject
         return knownMacs;
     }
 
+    /**
+     * @return Logo thumbnail URL for this camera vendor
+     * @throws EvercamException if logo doesn't exist in vendor object
+     */
+    public String getLogoUrl() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getString("logo");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
     public ArrayList<Model> getAllModels() throws EvercamException
     {
         return Model.getAllByVendorId(getId());

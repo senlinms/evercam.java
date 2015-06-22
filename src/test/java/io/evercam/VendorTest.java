@@ -12,12 +12,14 @@ public class VendorTest
     private static final String TEST_VENDOR_ID = "hikvision";
     private static final String TEST_VENDOR_MAC = "8c:e7:48";
     private static final String TEST_VENDOR_NAME = "Hikvision Digital Technology";
+    private static final String TEST_LOGO_URL = "http://evercam-public-assets.s3.amazonaws.com/hikvision/logo.jpg";
 
 
     @BeforeClass
     public static void setUpClass()
     {
-        API.URL = TestURL.URL;
+        //TODO: Uncomment this to send test request to the test server
+        //API.URL = TestURL.URL;
     }
 
     @Test
@@ -27,7 +29,8 @@ public class VendorTest
         Vendor hikvision = Vendor.getByMac(TEST_VENDOR_MAC).get(0);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
-        assertEquals(4, hikvision.getKnownMacs().size());
+        assertEquals(TEST_LOGO_URL, hikvision.getLogoUrl());
+        assertEquals(5, hikvision.getKnownMacs().size());
     }
 
     @Test

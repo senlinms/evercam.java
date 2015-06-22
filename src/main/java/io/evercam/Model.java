@@ -47,6 +47,9 @@ public class Model extends EvercamObject
         } catch (UnirestException e)
         {
             throw new EvercamException(e);
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
         }
     }
 
@@ -183,6 +186,21 @@ public class Model extends EvercamObject
         try
         {
             return jsonObject.getString("name");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    /**
+     * Return thumbnail URL for this model
+     */
+    public String getThumbnailUrl() throws EvercamException
+    {
+        try
+        {
+            JSONObject imagesJsonObject = jsonObject.getJSONObject("images");
+            return  imagesJsonObject.getString("thumbnail");
         } catch (JSONException e)
         {
             throw new EvercamException(e);

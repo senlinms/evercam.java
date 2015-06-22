@@ -14,6 +14,8 @@ import static junit.framework.Assert.assertNotNull;
 public class ModelTest
 {
     private static final String TEST_VENDOR_ID = "hikvision";
+    private static final String TEST_MODEL_THUMBNAIL_URL = "http://evercam-public-assets.s3.amazonaws" +
+            ".com/hikvision/hikvision_default/thumbnail.jpg";
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -21,7 +23,8 @@ public class ModelTest
     @BeforeClass
     public static void setUpClass()
     {
-        API.URL = TestURL.URL;
+        //TODO: Uncomment this to send test request to the test server
+        //API.URL = TestURL.URL;
     }
 
     @Test
@@ -38,20 +41,21 @@ public class ModelTest
         assertEquals("mpeg4/ch1/main/av_stream", model.getDefaults().getMpeg4URL());
         assertEquals("", model.getDefaults().getMobileURL());
         assertEquals("", model.getDefaults().getMjpgURL());
+        assertEquals(TEST_MODEL_THUMBNAIL_URL, model.getThumbnailUrl());
     }
 
     @Test
     public void testGetAllModelByVendor() throws EvercamException
     {
         ArrayList<Model> modelList = Model.getAllByVendorId(TEST_VENDOR_ID);
-        assertEquals(126, modelList.size());
+        assertEquals(148, modelList.size());
     }
 
     @Test
     public void testGetAllModelByName() throws EvercamException
     {
         ArrayList<Model> modelList = Model.getAllByName("Default");
-        assertEquals(39, modelList.size());
+        assertEquals(61, modelList.size());
     }
 
     @Test
