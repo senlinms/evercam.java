@@ -76,7 +76,7 @@ public class RandomUser
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, isPublic).setInternalHost(CAMERA_INTERNAL_HOST).setInternalHttpPort(CAMERA_INTERNAL_HTTP).setInternalRtspPort(CAMERA_INTERNAL_RTSP).setExternalHost(CAMERA_EXTERNAL_HOST).setExternalHttpPort(CAMERA_EXTERNAL_HTTP).setExternalRtspPort(CAMERA_EXTERNAL_RTSP).setCameraUsername(CAMERA_USERNAME).setCameraPassword(CAMERA_PASSWORD).setJpgUrl(CAMERA_JPG_URL).setH264Url(CAMERA_H264_URL).setTimeZone(CAMERA_TIMEZONE).setVendor(CAMERA_VENDOR).setModel(CAMERA_MODEL_ID).setMacAddress(CAMERA_MAC).build();
+        CameraDetail detail = new CameraBuilder(CAMERA_NAME, isPublic).setInternalHost(CAMERA_INTERNAL_HOST).setInternalHttpPort(CAMERA_INTERNAL_HTTP).setInternalRtspPort(CAMERA_INTERNAL_RTSP).setExternalHost(CAMERA_EXTERNAL_HOST).setExternalHttpPort(CAMERA_EXTERNAL_HTTP).setExternalRtspPort(CAMERA_EXTERNAL_RTSP).setCameraUsername(CAMERA_USERNAME).setCameraPassword(CAMERA_PASSWORD).setJpgUrl(CAMERA_JPG_URL).setH264Url(CAMERA_H264_URL).setTimeZone(CAMERA_TIMEZONE).setVendor(CAMERA_VENDOR).setModel(CAMERA_MODEL_ID).setMacAddress(CAMERA_MAC).build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;
@@ -86,7 +86,8 @@ public class RandomUser
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).build();
+        CameraDetail detail = new CameraBuilder(CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).setId
+                (randomUUID()).build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;
@@ -105,14 +106,17 @@ public class RandomUser
 
     public CameraBuilder basicCamera() throws EvercamException
     {
-        return new CameraBuilder(randomUUID(), CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST);
+        return new CameraBuilder(CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).setId(randomUUID());
     }
 
     public Camera addRealCamera() throws EvercamException
     {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
-        CameraDetail detail = new CameraBuilder(randomUUID(), CAMERA_NAME, true).setExternalHost(LocalConstants.IP).setExternalHttpPort(LocalConstants.HTTP_PORT).setCameraUsername(LocalConstants.USERNAME).setCameraPassword(LocalConstants.PASSWORD).setJpgUrl("/Streaming/channels/1/picture").build();
+        CameraDetail detail = new CameraBuilder(CAMERA_NAME, true).setExternalHost(LocalConstants.IP)
+                .setExternalHttpPort(LocalConstants.HTTP_PORT).setCameraUsername(LocalConstants.USERNAME)
+                .setCameraPassword(LocalConstants.PASSWORD).setJpgUrl("/Streaming/channels/1/picture").setId(randomUUID())
+                .build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;

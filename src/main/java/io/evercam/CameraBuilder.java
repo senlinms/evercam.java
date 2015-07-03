@@ -2,10 +2,10 @@ package io.evercam;
 
 public class CameraBuilder
 {
-    final String id;
     final Boolean isPublic;
     final String name;
 
+    String id;
     String vendor;
     String model;
     String timezone;
@@ -27,16 +27,8 @@ public class CameraBuilder
     Float locationLat;
     Boolean isOnline;
 
-    public CameraBuilder(String cameraId, String cameraName, Boolean isPublic) throws EvercamException
+    public CameraBuilder(String cameraName, Boolean isPublic) throws EvercamException
     {
-        if (cameraId != null)
-        {
-            id = cameraId;
-        }
-        else
-        {
-            throw new EvercamException("camera id can not be null");
-        }
         if (cameraName != null)
         {
             name = cameraName;
@@ -53,6 +45,12 @@ public class CameraBuilder
         {
             throw new EvercamException("camera public/private can not be null");
         }
+    }
+
+    public CameraBuilder setId(String id)
+    {
+        this.id = id;
+        return this;
     }
 
     public CameraBuilder setJpgUrl(String jpgUrl)
