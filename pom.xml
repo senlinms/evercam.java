@@ -23,7 +23,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>${project.artifactId}-${project.version}-withDependency-ShadedForAndroid
+                            <finalName>${project.artifactId}-${project.version}-android
                             </finalName>
                             <artifactSet>
                                 <includes>
@@ -33,7 +33,7 @@
                                     <include>org.apache.httpcomponents:httpcore-nio</include>
                                     <include>org.apache.httpcomponents:httpasyncclient</include>
                                     <include>org.apache.httpcomponents:httpmime</include>
-                                    <include>org.json:json</include>
+                                    <!--<include>org.json:json</include>-->
                                     <include>commons-codec:commons-codec</include>
                                     <include>commons-io</include>
                                 </includes>
@@ -48,11 +48,11 @@
                                     <shadedPattern>io.evercam.relocation</shadedPattern>
                                 </relocation>
 
-                                <!-- org.json conflict with sandgrid-->
-                                <relocation>
-                                    <pattern>org.json</pattern>
-                                    <shadedPattern>io.evercam.relocation</shadedPattern>
-                                </relocation>
+                                <!--&lt;!&ndash; org.json conflict with sandgrid&ndash;&gt;-->
+                                <!--<relocation>-->
+                                    <!--<pattern>org.json</pattern>-->
+                                    <!--<shadedPattern>io.evercam.relocation</shadedPattern>-->
+                                <!--</relocation>-->
                             </relocations>
                         </configuration>
                     </execution>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.7</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -103,17 +103,17 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.3</version>
+            <version>4.3.3</version><!-- Latest version 4.5 causes crash on Android -->
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
-            <version>4.0.1</version>
+            <version>4.0.1</version><!-- Latest version 4.1 causes crash on Android-->
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
-            <version>4.3.3</version>
+            <version>4.5</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
