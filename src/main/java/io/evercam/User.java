@@ -177,7 +177,11 @@ public class User extends EvercamObject
         userMap.put("lastname", userDetail.getLastname());
         userMap.put("email", userDetail.getEmail());
         userMap.put("username", userDetail.getUsername());
-        userMap.put("country", userDetail.getCountrycode());
+        if(userDetail.hasCountryCode())
+        {
+            userMap.put("country", userDetail.getCountryCode());
+        }
+
         userMap.put("password", userDetail.getPassword());
 
         try

@@ -7,7 +7,7 @@ public class UserDetail
     private String username;
     private String email;
     private String password;
-    private String countrycode;
+    private String countrycode = "";
 
     public String getFirstname() throws EvercamException
     {
@@ -54,13 +54,14 @@ public class UserDetail
         return email;
     }
 
-    public String getCountrycode() throws EvercamException
+    public String getCountryCode()
     {
-        if (countrycode == null)
-        {
-            throw new EvercamException("country is missing");
-        }
         return countrycode;
+    }
+
+    public boolean hasCountryCode()
+    {
+        return !getCountryCode().isEmpty();
     }
 
     public void setFirstname(String firstname)
