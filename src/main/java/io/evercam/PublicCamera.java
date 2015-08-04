@@ -29,10 +29,11 @@ public class PublicCamera extends EvercamObject {
             if (nearTo == null) {
                 response = Unirest.get(URL + "/nearest").header("accept", "application/json").asJson();
             } else {
-                response = Unirest.get(URL + "/nearest").field("near_to", nearTo).header("accept", "application/json").asJson();
+                response = Unirest.get(URL + "/nearest").queryString("near_to", nearTo).header("accept", "application/json")
+                        .asJson();
             }
 
-            if (response.getCode() == CODE_OK) {
+            if (response.getStatus() == CODE_OK) {
                 JSONArray cameraArray = response.getBody().getObject().getJSONArray("cameras");
                 if (cameraArray.length() > 0) {
                     JSONObject cameraJSONObject = cameraArray.getJSONObject(0);
@@ -67,10 +68,11 @@ public class PublicCamera extends EvercamObject {
             }
             else
             {
-                response = Unirest.get(URL + "/nearest.jpg").field("near_to", nearTo).header("accept", "application/json").asBinary();
+                response = Unirest.get(URL + "/nearest.jpg").queryString("near_to", nearTo).header("accept",
+                        "application/json").asBinary();
             }
 
-            if (response.getCode() == CODE_OK)
+            if (response.getStatus() == CODE_OK)
             {
                 return response.getRawBody();
             }

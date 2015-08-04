@@ -291,7 +291,8 @@ public class Camera extends EvercamObject
         {
             try
             {
-                HttpResponse response = Unirest.get(URL + "/" + cameraId + "/live/snapshot.jpg").fields(API.userKeyPairMap()).asBinary();
+                HttpResponse response = Unirest.get(URL + "/" + cameraId + "/live/snapshot.jpg").queryString(API.userKeyPairMap())
+                        .asBinary();
                 inputStream = response.getRawBody();
             } catch (UnirestException e)
             {
@@ -824,7 +825,7 @@ public class Camera extends EvercamObject
         try
         {
             HttpResponse response = Unirest.get(url).asBinary();
-            if (response.getCode() != CODE_ERROR)
+            if (response.getStatus() != CODE_ERROR)
             {
                 return true;
             }
@@ -1090,9 +1091,10 @@ public class Camera extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(url).fields(API.userKeyPairMap()).fields(parameterMap).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(url).queryString(API.userKeyPairMap()).queryString(parameterMap)
+                        .header("accept", "application/json").asJson();
 
-                if (response.getCode() == CODE_OK)
+                if (response.getStatus() == CODE_OK)
                 {
                     JSONArray camerasJSONArray = response.getBody().getObject().getJSONArray("cameras");
                     for (int count = 0; count < camerasJSONArray.length(); count++)

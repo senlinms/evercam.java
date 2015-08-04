@@ -130,7 +130,7 @@ public class Vendor extends EvercamObject
         try
         {
             HttpResponse<JsonNode> response = request.header("accept", "application/json").asJson();
-            if (response.getCode() == CODE_OK)
+            if (response.getStatus() == CODE_OK)
             {
                 JSONArray vendorsJSONArray = response.getBody().getObject().getJSONArray("vendors");
                 for (int vendorIndex = 0; vendorIndex < vendorsJSONArray.length(); vendorIndex++)
@@ -139,7 +139,7 @@ public class Vendor extends EvercamObject
                     vendorList.add(new Vendor(vendorJSONObject));
                 }
             }
-            else if (response.getCode() == CODE_SERVER_ERROR)
+            else if (response.getStatus() == CODE_SERVER_ERROR)
             {
                 throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
             }

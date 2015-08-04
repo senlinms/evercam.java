@@ -42,12 +42,12 @@ public class CameraShare extends EvercamObject
             {
                 HttpResponse<JsonNode> response =  Unirest.post(URL + '/' + cameraId + "/shares")
                         .header("accept", "application/json").fields(fieldsMap).asJson();
-                if (response.getCode() == CODE_CREATE)
+                if (response.getStatus() == CODE_CREATE)
                 {
                     JSONObject jsonObject = response.getBody().getObject().getJSONArray("shares").getJSONObject(0);
                     cameraShare = new CameraShare(jsonObject);
                 }
-                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
@@ -111,7 +111,7 @@ public class CameraShare extends EvercamObject
                 fieldsMap.put("email", userId);
                 HttpResponse<JsonNode> response = Unirest.delete(URL + '/' + cameraId + "/shares")
                         .fields(fieldsMap).asJson();
-                int statusCode = response.getCode();
+                int statusCode = response.getStatus();
                 if(statusCode == CODE_OK)
                 {
                     return true;
@@ -148,8 +148,9 @@ public class CameraShare extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(url).fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
-                if (response.getCode() == CODE_OK)
+                HttpResponse<JsonNode> response = Unirest.get(url).queryString(API.userKeyPairMap()).header("accept",
+                        "application/json").asJson();
+                if (response.getStatus() == CODE_OK)
                 {
                     JSONArray sharesJSONArray = response.getBody().getObject().getJSONArray("shares");
                     for (int count = 0; count < sharesJSONArray.length(); count++)
@@ -158,7 +159,7 @@ public class CameraShare extends EvercamObject
                         cameraShares.add(new CameraShare(shareJSONObject));
                     }
                 }
-                else if (response.getCode() == CODE_SERVER_ERROR)
+                else if (response.getStatus() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }

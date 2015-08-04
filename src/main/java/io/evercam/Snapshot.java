@@ -47,20 +47,20 @@ public class Snapshot extends EvercamObject
                     response = Unirest.post(URL + '/' + cameraId + "/recordings/snapshots").fields(API.userKeyPairMap()).field("notes", notes).asJson();
                 }
 
-                if (response.getCode() == CODE_CREATE)
+                if (response.getStatus() == CODE_CREATE)
                 {
                     JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
                     snapshot = new Snapshot(snapshotJsonObject);
                 }
-                else if (response.getCode() == CODE_NOT_FOUND)
+                else if (response.getStatus() == CODE_NOT_FOUND)
                 {
                     throw new EvercamException("camera does not exist");
                 }
-                else if (response.getCode() == CODE_ERROR)
+                else if (response.getStatus() == CODE_ERROR)
                 {
                     throw new EvercamException("camera is offline");
                 }
-                else if (response.getCode() == CODE_SERVER_ERROR)
+                else if (response.getStatus() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }
@@ -134,16 +134,17 @@ public class Snapshot extends EvercamObject
 
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots").fields(fieldsMap).header("accept", "application/json").asJson();
-                if (response.getCode() == CODE_OK)
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots").queryString
+                        (fieldsMap).header("accept", "application/json").asJson();
+                if (response.getStatus() == CODE_OK)
                 {
                     return new SnapshotsWithPaging(response.getBody().getObject());
                 }
-                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
-                else if (response.getCode() == CODE_SERVER_ERROR)
+                else if (response.getStatus() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }
@@ -186,9 +187,11 @@ public class Snapshot extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/" + year + '/' + month + '/' + day + "/hours").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/" + year 
+                        + '/' + month + '/' + day + "/hours").queryString(API.userKeyPairMap()).header("accept", 
+                        "application/json").asJson();
 
-                if (response.getCode() == CODE_OK)
+                if (response.getStatus() == CODE_OK)
                 {
                     JSONObject hoursArrayObject = response.getBody().getObject();
                     JSONArray hoursArray = hoursArrayObject.getJSONArray("hours");
@@ -201,11 +204,11 @@ public class Snapshot extends EvercamObject
                         }
                     }
                 }
-                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
-                else if (response.getCode() == CODE_SERVER_ERROR)
+                else if (response.getStatus() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }
@@ -249,9 +252,11 @@ public class Snapshot extends EvercamObject
         {
             try
             {
-                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/" + year + '/' + month + "/days").fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
+                HttpResponse<JsonNode> response = Unirest.get(URL + "/" + cameraId + "/recordings/snapshots/" + year
+                        + '/' + month + "/days").queryString(API.userKeyPairMap()).header("accept", "application/json")
+                        .asJson();
 
-                if (response.getCode() == CODE_OK)
+                if (response.getStatus() == CODE_OK)
                 {
                     JSONObject daysArrayObject = response.getBody().getObject();
                     JSONArray daysJsonArray = daysArrayObject.getJSONArray("days");
@@ -264,11 +269,11 @@ public class Snapshot extends EvercamObject
                         }
                     }
                 }
-                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
-                else if (response.getCode() == CODE_SERVER_ERROR)
+                else if (response.getStatus() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }
@@ -366,9 +371,9 @@ public class Snapshot extends EvercamObject
         {
             try
             {
-                response = Unirest.get(url).fields(API.userKeyPairMap()).header("accept", "application/json").asJson();
+                response = Unirest.get(url).queryString(API.userKeyPairMap()).header("accept", "application/json").asJson();
 
-                if (response.getCode() == CODE_OK)
+                if (response.getStatus() == CODE_OK)
                 {
                     JSONObject snapshotsObject = response.getBody().getObject();
                     JSONArray snapshotJsonArray = snapshotsObject.getJSONArray("snapshots");
@@ -382,11 +387,11 @@ public class Snapshot extends EvercamObject
                         }
                     }
                 }
-                else if (response.getCode() == CODE_UNAUTHORISED || response.getCode() == CODE_FORBIDDEN)
+                else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN)
                 {
                     throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
                 }
-                else if (response.getCode() == CODE_SERVER_ERROR)
+                else if (response.getStatus() == CODE_SERVER_ERROR)
                 {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 }

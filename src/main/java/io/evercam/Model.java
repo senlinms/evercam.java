@@ -93,8 +93,10 @@ public class Model extends EvercamObject
     {
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(URL).field("vendor_id", vendorId).field("limit", limit).field("page", page).header("accept", "application/json").asJson();
-            if(response.getCode() == CODE_OK)
+            HttpResponse<JsonNode> response = Unirest.get(URL).queryString("vendor_id", vendorId).queryString("limit", limit)
+                    .queryString
+                    ("page", page).header("accept", "application/json").asJson();
+            if(response.getStatus() == CODE_OK)
             {
                 return new ModelsWithPaging(response.getBody().getObject());
             }
@@ -133,7 +135,7 @@ public class Model extends EvercamObject
         ArrayList<Model> modelList = new ArrayList<Model>();
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(URL).fields(map).header("accept", "application/json").asJson();
+            HttpResponse<JsonNode> response = Unirest.get(URL).queryString(map).header("accept", "application/json").asJson();
             ModelsWithPaging modelsWithPaging = new ModelsWithPaging(response.getBody().getObject());
             modelList.addAll(modelsWithPaging.getModelsList());
 
@@ -142,7 +144,8 @@ public class Model extends EvercamObject
             {
                 for (int index = 1; index <= pages; index++)
                 {
-                    HttpResponse<JsonNode> responseLoop = Unirest.get(URL + "?name=" + modelName).field("page", index).header("accept", "application/json").asJson();
+                    HttpResponse<JsonNode> responseLoop = Unirest.get(URL + "?name=" + modelName).queryString("page", index)
+                            .header("accept", "application/json").asJson();
                     ModelsWithPaging modelsWithPagingLoop = new ModelsWithPaging(responseLoop.getBody().getObject());
                     modelList.addAll(modelsWithPagingLoop.getModelsList());
                 }
