@@ -80,6 +80,10 @@ public class Camera extends EvercamObject
                     ErrorResponse errorResponse = new ErrorResponse(result);
                     throw new EvercamException(errorResponse.getMessage());
                 }
+                else if (statusCode == CODE_APPLICATION_ERROR)
+                {
+                    throw new EvercamException("Application error");
+                }
                 else
                 {
                     throw new EvercamException(statusCode + result);

@@ -15,6 +15,7 @@ public abstract class EvercamObject
     static final int CODE_NOT_FOUND = 404;
     static final int CODE_CONFLICT = 409;
     static final int CODE_SERVER_ERROR = 500;
+    static final int CODE_APPLICATION_ERROR = 503;
 
     final String RTSP_PREFIX = "rtsp://";
     final String HTTP_PREFIX = "http://";
