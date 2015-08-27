@@ -196,6 +196,34 @@ public class Model extends EvercamObject
     }
 
     /**
+     * @return true if this camera model supports ONVIF
+     */
+    public boolean isOnvif() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getBoolean("onvif");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    /**
+     * @return true if this camera model supports PTZ
+     */
+    public boolean isPTZ() throws EvercamException
+    {
+        try
+        {
+            return jsonObject.getBoolean("ptz");
+        } catch (JSONException e)
+        {
+            throw new EvercamException(e);
+        }
+    }
+
+    /**
      * Return thumbnail URL for this model
      */
     public String getThumbnailUrl() throws EvercamException

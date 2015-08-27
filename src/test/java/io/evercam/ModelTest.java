@@ -8,8 +8,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.*;
 
 public class ModelTest
 {
@@ -42,6 +41,8 @@ public class ModelTest
         assertEquals("", model.getDefaults().getMobileURL());
         assertEquals("", model.getDefaults().getMjpgURL());
         assertEquals(TEST_MODEL_THUMBNAIL_URL, model.getThumbnailUrl());
+        assertTrue(model.isOnvif());
+        assertFalse(model.isPTZ());
     }
 
     @Test
