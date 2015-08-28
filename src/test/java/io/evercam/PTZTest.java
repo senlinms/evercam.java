@@ -2,6 +2,7 @@ package io.evercam;
 
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PTZTest
@@ -20,5 +21,12 @@ public class PTZTest
     {
         API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
         assertTrue(new PTZHome("mobile-mast").move());
+    }
+
+    @Test
+    public void testGetAllPresets() throws PTZException
+    {
+        //API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
+        assertEquals(39, PTZPreset.getAllPresets("mobile-mast").size());
     }
 }

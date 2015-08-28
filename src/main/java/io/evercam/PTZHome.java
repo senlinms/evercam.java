@@ -6,6 +6,9 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 import java.io.InputStream;
 
+/**
+ * Preset control that move camera to home position
+ */
 public class PTZHome implements PTZControl
 {
     private final String cameraId;
@@ -15,6 +18,12 @@ public class PTZHome implements PTZControl
         this.cameraId = cameraId;
     }
 
+    /**
+     * POST /cameras/{id}/ptz/home
+     *
+     * @return true if it successfully moved the camera
+     * @throws PTZException if any error occurred
+     */
     @Override
     public boolean move() throws PTZException
     {
