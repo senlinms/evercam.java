@@ -77,4 +77,10 @@ public class PTZPreset extends EvercamObject
 
         return presetsArrayList;
     }
+
+    @Override
+    public String toString()
+    {
+        return getToken() + ": " + getName();
+    }
 }

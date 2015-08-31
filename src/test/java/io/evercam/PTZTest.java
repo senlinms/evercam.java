@@ -7,12 +7,13 @@ import static org.junit.Assert.assertTrue;
 
 public class PTZTest
 {
+    private final String PTZ_CAMERA_ID = "mobile-mast";
 
     @Test
     public void testPTZRelativeMove() throws PTZException
     {
         API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
-        PTZRelative ptzRelative = new PTZRelativeBuilder("mobile-mast").left(10).build();
+        PTZRelative ptzRelative = new PTZRelativeBuilder(PTZ_CAMERA_ID).left(10).build();
         assertTrue(ptzRelative.move());
     }
 
@@ -20,13 +21,20 @@ public class PTZTest
     public void testPTZHome() throws PTZException
     {
         API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
-        assertTrue(new PTZHome("mobile-mast").move());
+        assertTrue(new PTZHome(PTZ_CAMERA_ID).move());
     }
 
     @Test
     public void testGetAllPresets() throws PTZException
     {
-        //API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
-        assertEquals(39, PTZPreset.getAllPresets("mobile-mast").size());
+        API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
+        assertEquals(39, PTZPreset.getAllPresets(PTZ_CAMERA_ID).size());
+    }
+
+    @Test
+    public void testPresetMove() throws PTZException
+    {
+        API.setUserKeyPair(LocalConstants.TEST_API_KEY, LocalConstants.TEST_API_ID);
+        assertTrue(new PTZPresetControl(PTZ_CAMERA_ID, "1").move());
     }
 }
