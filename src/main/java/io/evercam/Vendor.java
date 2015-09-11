@@ -112,6 +112,14 @@ public class Vendor extends EvercamObject
         }
     }
 
+    /**
+     * @return Return the logo URL based on the specified vendor ID
+     */
+    public static String getLogoUrl(String vendorId)
+    {
+        return API.AWS_ASSETS_URL + vendorId + "/logo.jpg";
+    }
+
     public ArrayList<Model> getAllModels() throws EvercamException
     {
         return Model.getAllByVendorId(getId());

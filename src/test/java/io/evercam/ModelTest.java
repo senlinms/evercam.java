@@ -29,7 +29,7 @@ public class ModelTest
     @Test
     public void testGetModelById() throws EvercamException
     {
-        Model model = Model.getById("hikvision" + Model.DEFAULT_MODEL_SUFFIX);
+        Model model = Model.getById(TEST_VENDOR_ID + Model.DEFAULT_MODEL_SUFFIX);
         assertEquals(TEST_VENDOR_ID, model.getVendorId());
         assertEquals(Model.DEFAULT_MODEL_NAME, model.getName());
         assertEquals("admin", model.getDefaults().getAuth(Auth.TYPE_BASIC).getUsername());
@@ -43,6 +43,10 @@ public class ModelTest
         assertEquals(TEST_MODEL_THUMBNAIL_URL, model.getThumbnailUrl());
         assertTrue(model.isOnvif());
         assertFalse(model.isPTZ());
+
+        //Test the static model thumbnail URL method
+        assertEquals(TEST_MODEL_THUMBNAIL_URL,
+                Model.getThumbnailUrl(TEST_VENDOR_ID, TEST_VENDOR_ID + Model.DEFAULT_MODEL_SUFFIX));
     }
 
     @Test

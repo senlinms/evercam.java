@@ -17,6 +17,7 @@ public abstract class API
     public static String VERSION = "v1";
     public static final String PRODUCTION_URL = "https://api.evercam.io/" + VERSION + "/";
     public static String URL = PRODUCTION_URL;
+    public static final String AWS_ASSETS_URL = "http://evercam-public-assets.s3.amazonaws.com/";
 
     private static String[] userKeyPair = {null, null};
 

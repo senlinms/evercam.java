@@ -45,8 +45,11 @@ public class VendorTest
         Vendor hikvision = Vendor.getById(TEST_VENDOR_ID);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
-        assertEquals(4, hikvision.getKnownMacs().size());
-        assertEquals(126, hikvision.getAllModels().size());
+        assertEquals(6, hikvision.getKnownMacs().size());
+        assertEquals(152, hikvision.getAllModels().size());
+
+        //Test the static vendor logo URL method
+        assertEquals(TEST_LOGO_URL, Vendor.getLogoUrl("hikvision"));
     }
 
     @Test

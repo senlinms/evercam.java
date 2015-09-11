@@ -238,6 +238,14 @@ public class Model extends EvercamObject
         }
     }
 
+    /**
+     * @return The static model thumbnail URL for the specifies model
+     */
+    public static String getThumbnailUrl(String vendorId, String modelId)
+    {
+        return API.AWS_ASSETS_URL + vendorId + "/" + modelId + "/thumbnail.jpg";
+    }
+
     public Defaults getDefaults() throws EvercamException
     {
         Defaults defaults;
