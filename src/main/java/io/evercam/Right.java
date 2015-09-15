@@ -85,6 +85,11 @@ public class Right
         return toArray().contains(GRANT_LIST);
     }
 
+    public boolean isFullRight()
+    {
+        return toString().equals("snapshot,view,edit,list,grant~snapshot,grant~view,grant~edit,grant~list");
+    }
+
     @Override
     public String toString()
     {
