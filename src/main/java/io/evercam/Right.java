@@ -35,7 +35,7 @@ public class Right
         return new ArrayList<String>(Arrays.asList(rightsArray));
     }
 
-    public boolean canGetSnapshot()
+    public boolean canTakeSnapshot()
     {
         return toArray().contains(SNAPSHOT);
     }
@@ -85,9 +85,15 @@ public class Right
         return toArray().contains(GRANT_LIST);
     }
 
+    /**
+     * Validate if the user has full right on this camera.
+     *
+     * @return true if user has all rights except 'delete'
+     */
     public boolean isFullRight()
     {
-        return toString().equals("snapshot,view,edit,list,grant~snapshot,grant~view,grant~edit,grant~list");
+        return canTakeSnapshot() && canView() && canEdit() && canList()
+                && canGrantSnapshot() && canGrantView() && canGrantList() && canGrantEdit();
     }
 
     @Override
