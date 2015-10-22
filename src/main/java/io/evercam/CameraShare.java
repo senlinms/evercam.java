@@ -22,6 +22,8 @@ public class CameraShare extends EvercamObject
     }
 
     /**
+     * POST /cameras/{id}/shares
+     * Create a new camera share
      *
      * @param cameraId The unique identifier of the camera to share
      * @param user Email address or user name of the user to share the camera with.
@@ -70,7 +72,9 @@ public class CameraShare extends EvercamObject
     }
 
     /**
-     * Get details for a share for a specific camera and user.
+     * GET /cameras/{id}/shares
+     * Get the list of shares for a specified camera
+     *
      * @param cameraId The unique identifier for the camera in the share.
      * @param userId The unique identifier for the user the camera is shared with.
      * @return CameraShare object if the share exists, otherwise return null.
@@ -87,7 +91,55 @@ public class CameraShare extends EvercamObject
     }
 
     /**
-     * Delete an existing camera share by specify camera id and user id.
+     * PATCH /cameras/{id}/shares
+     * Update an existing camera share
+     *
+     * @param cameraId The unique identifier of the camera
+     * @param user Email address or user name of the shared user
+     * @param rights A comma separate list of the rights to be patched
+     * @return CameraShare object after patch
+     * @throws EvercamException
+     */
+    public static CameraShare patch(String cameraId, String user, String rights) throws EvercamException
+    {
+        CameraShare cameraShare = null;
+        if(API.hasUserKeyPair())
+        {
+            try
+            {
+                Map<String, Object> fieldsMap = API.userKeyPairMap();
+                fieldsMap.put("email", user);
+                fieldsMap.put("rights", rights);
+                HttpResponse<JsonNode> response = Unirest.patch(URL + '/' + cameraId + "/shares").queryString
+                    (fieldsMap).fields(API.userKeyPairMap()).asJson();
+                if(response.getStatus() == CODE_OK)
+                {
+                    JSONObject jsonObject = response.getBody().getObject().getJSONArray("shares").getJSONObject(0);
+                    cameraShare = new CameraShare(jsonObject);
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            }
+            catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+
+        return cameraShare;
+    }
+
+    /**
+     * DELETE /cameras/{id}/shares
+     * Delete an existing camera share
+     *
      * @param userId  The unique identifier for the user the camera is shared with.
      * @param cameraId  The unique identifier for a camera.
      * @return true if camera share get successfully deleted
