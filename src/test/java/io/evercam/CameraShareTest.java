@@ -1,6 +1,7 @@
 package io.evercam;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,6 +22,9 @@ public class CameraShareTest
     @Test
     public void testCreateAndDeleteShare() throws EvercamException
     {
+        //TODO: Use the testing server / remove the commented code
+        //API.resetUrl();
+
         //Create camera owner and add a camera
         RandomUser owner = new RandomUser();
         ApiKeyPair ownerKeyPair = API.requestUserKeyPairFromEvercam(owner.getUsername(), owner.getPassword());
@@ -46,12 +50,23 @@ public class CameraShareTest
         assertTrue(cameraDeleted);
         assertEquals(1,Camera.getAll(sharedUser.getUsername(), true, false).size());
 
+        //Delete the random users
+        API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
+        assertTrue(User.delete(owner.getUsername()));
+        API.setUserKeyPair(sharedKeyPair.getApiKey(), sharedKeyPair.getApiId());
+        assertTrue(User.delete(sharedUser.getUsername()));
+
         API.setUserKeyPair(null, null);
+
+        //API.URL = TestURL.URL;
     }
 
     @Test
     public void testGetCameraShare() throws EvercamException
     {
+        //TODO: Use the testing server / remove the commented code
+        //API.resetUrl();
+
         //Create camera owner and add a camera
         RandomUser owner = new RandomUser();
         ApiKeyPair ownerKeyPair = API.requestUserKeyPairFromEvercam(owner.getUsername(), owner.getPassword());
@@ -82,7 +97,17 @@ public class CameraShareTest
         assertEquals(sharedUser1.getEmail(), share.getUserEmail());
         assertTrue(share.getRights().canEdit());
 
+        //Delete the random users
+        API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
+        assertTrue(User.delete(owner.getUsername()));
+        API.setUserKeyPair(sharedKeyPair1.getApiKey(), sharedKeyPair1.getApiId());
+        assertTrue(User.delete(sharedUser1.getUsername()));
+        API.setUserKeyPair(sharedKeyPair2.getApiKey(), sharedKeyPair2.getApiId());
+        assertTrue(User.delete(sharedUser2.getUsername()));
+
         API.setUserKeyPair(null, null);
+
+        //API.URL = TestURL.URL;
     }
 
     @AfterClass

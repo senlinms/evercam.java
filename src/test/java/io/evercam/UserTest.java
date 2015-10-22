@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 public class UserTest
 {
@@ -24,7 +25,7 @@ public class UserTest
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void testCreateUser() throws EvercamException, JSONException
+    public void testCreateAndDeleteUser() throws EvercamException, JSONException
     {
         RandomUser randomUser = new RandomUser();
 
@@ -33,6 +34,11 @@ public class UserTest
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         assertNotNull(apiKeyPair.getApiId());
         assertNotNull(apiKeyPair.getApiKey());
+
+        //Delete the random user
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        assertTrue(User.delete(randomUser.getUsername()));
+        API.setUserKeyPair(null, null);
     }
 
     @Test

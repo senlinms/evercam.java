@@ -168,7 +168,7 @@ public class User extends EvercamObject
      * Starts the new user sign up process with Evercam
      *
      * @param userDetail user detail object with all details for the new user
-     * @throws EvercamException if no developer app API key pair added
+     * @throws EvercamException
      */
     public static User create(UserDetail userDetail) throws EvercamException
     {
@@ -212,5 +212,42 @@ public class User extends EvercamObject
         }
 
         return user;
+    }
+
+    /**
+     * DELETE /users/{id}
+     * Delete your account, any cameras you own and all stored media
+     *
+     * @param userId the unique identifier of the user to delete
+     * @return true if the user account is successfully deleted
+     * @throws EvercamException if user API key and id not specified
+     */
+    public static boolean delete(String userId) throws EvercamException
+    {
+        if(API.hasUserKeyPair())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.delete(URL + '/' + userId).fields(API.userKeyPairMap())
+                    .asJson();
+                if(response.getStatus() == CODE_OK)
+                {
+                    return true;
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            }
+            catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
     }
 }
