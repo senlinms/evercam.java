@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CameraShare extends EvercamObject
+public class CameraShare extends EvercamObject implements CameraShareInterface
 {
     static String URL = API.URL + "cameras";
 
@@ -31,9 +31,10 @@ public class CameraShare extends EvercamObject
      * @return CameraShare object if the camera successfully shared with the user.
      * @throws EvercamException
      */
-    public static CameraShare create(String cameraId, String user, String rights) throws EvercamException
+    public static CameraShareInterface create(String cameraId, String user, String rights) throws EvercamException
     {
         CameraShare cameraShare = null;
+        CameraShareRequest cameraShareRequest = null;
         Map<String, Object> fieldsMap = API.userKeyPairMap();
         fieldsMap.put("email", user);
         fieldsMap.put("rights", rights);
@@ -46,8 +47,18 @@ public class CameraShare extends EvercamObject
                         .header("accept", "application/json").fields(fieldsMap).asJson();
                 if (response.getStatus() == CODE_CREATE)
                 {
-                    JSONObject jsonObject = response.getBody().getObject().getJSONArray("shares").getJSONObject(0);
-                    cameraShare = new CameraShare(jsonObject);
+                    try
+                    {
+                        JSONObject jsonObject = response.getBody().getObject().getJSONArray("shares").getJSONObject(0);
+                        cameraShare = new CameraShare(jsonObject);
+                    }
+                    catch (JSONException e)
+                    {
+                        JSONObject jsonObject = response.getBody().getObject().getJSONArray("share_requests")
+                                .getJSONObject(0);
+                        cameraShareRequest = new CameraShareRequest(jsonObject);
+                        return cameraShareRequest;
+                    }
                 }
                 else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN)
                 {
