@@ -28,6 +28,7 @@ public class CameraDetail
     Float locationLat;
     String locationLngString;
     String locationLatString;
+    Boolean isDiscoverable;
 
     public CameraDetail(PatchCameraBuilder builder)
     {
@@ -56,6 +57,7 @@ public class CameraDetail
         //        locationLng = builder.locationLng;
         locationLatString = builder.locationLat;
         locationLngString = builder.locationLng;
+        isDiscoverable = builder.isDiscoverable;
     }
 
     public CameraDetail(CameraBuilder builder)
@@ -83,6 +85,7 @@ public class CameraDetail
         cameraPassword = builder.cameraPassword;
         locationLat = builder.locationLat;
         locationLng = builder.locationLng;
+        isDiscoverable = builder.isDiscoverable;
     }
 
     public String getId()
@@ -185,6 +188,11 @@ public class CameraDetail
         return isOnline;
     }
 
+    public Boolean getIsDiscoverable()
+    {
+        return isDiscoverable;
+    }
+
     @Override
     public String toString()
     {
@@ -212,6 +220,7 @@ public class CameraDetail
                 ", cameraPassword='" + cameraPassword + '\'' +
                 ", locationLng=" + locationLng +
                 ", locationLat=" + locationLat +
+                ", isDiscoverable=" + isDiscoverable +
                 '}';
     }
 }

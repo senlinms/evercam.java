@@ -162,11 +162,11 @@ public class CameraShare extends EvercamObject implements CameraShareInterface
         {
             if(userId == null)
             {
-                throw new EvercamException("User id can not be null");
+                throw new NullPointerException("User id can not be null");
             }
             if(cameraId == null)
             {
-                throw new EvercamException("Camera id can not be null");
+                throw new NullPointerException("Camera id can not be null");
             }
             try
             {

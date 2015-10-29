@@ -19,7 +19,7 @@ public class Right
     private final String GRANT_LIST = "grant~list";
 
 
-    protected Right(String rightsString)
+    public Right(String rightsString)
     {
         this.rightsString = rightsString;
     }

@@ -1,8 +1,11 @@
 package io.evercam;
 
 
+import junit.framework.*;
 import org.apache.commons.io.IOUtils;
 import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
@@ -28,6 +31,9 @@ public class CameraTest
     @Test
     public void testCreateAndDeleteCamera() throws EvercamException
     {
+        //TODO: Use the testing server / remove the commented code
+        //API.resetUrl();
+
         RandomUser randomUser = new RandomUser();
 
         Camera randomCamera = randomUser.addRandomCamera(true);
@@ -37,9 +43,9 @@ public class CameraTest
         assertEquals(1, Camera.getAll(randomUser.getUsername(), false, false).size());
 
         //TODO: Wait for the bug fix to re-enable this, currently can not delete camera
-//        boolean deleteSuccess = Camera.delete(randomCamera.getId());
-//        Assert.assertTrue(deleteSuccess);
-//        assertEquals(0, Camera.getAll(randomUser.getUsername(), false, false).size());
+        boolean deleteSuccess = Camera.delete(randomCamera.getId());
+        Assert.assertTrue(deleteSuccess);
+        assertEquals(0, Camera.getAll(randomUser.getUsername(), false, false).size());
 
         /**
          * Test create camera with location and online status
@@ -66,14 +72,13 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_MAC, camera.getMacAddress());
         assertEquals(RandomUser.CAMERA_MODEL_NAME, camera.getModelName());
         assertEquals(RandomUser.CAMERA_MODEL_ID, camera.getModelId());
-        assertFalse(camera.isDiscoverable());
+        assertTrue(camera.isDiscoverable());
 
         assertEquals(RandomUser.LOCATION_LNG, camera.getLocation().getLng(), 0);
         assertEquals(RandomUser.LOCATION_LAT, camera.getLocation().getLat(), 0);
 
-        assertNotNull(camera.getDynamicDns());
-        assertNotNull(camera.getProxyUrl().getJpg());
-        //    assertTrue(patchCamera.isOwned()); FIXME!
+        assertNotNull(camera.getProxyUrl().getHls());
+        assertNotNull(camera.getProxyUrl().getRtmp());
 
         assertEquals(RandomUser.CAMERA_INTERNAL_URL, camera.getInternalCameraEndpoint());
         assertEquals(RandomUser.CAMERA_EXTERNAL_URL, camera.getExternalCameraEndpoint());
@@ -90,7 +95,12 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_INTERNAL_AUDIO_URL, camera.getInternalObject().getRtsp().getAudioUrl());
         assertEquals(RandomUser.CAMERA_EXTERNAL_AUDIO_URL, camera.getExternalObject().getRtsp().getAudioUrl());
 
+        //Delete the user after testing
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        assertTrue(User.delete(randomUser.getUsername()));
         API.setUserKeyPair(null, null);
+
+        //API.URL = TestURL.URL;
     }
 
     @Test
@@ -139,6 +149,9 @@ public class CameraTest
     @Test
     public void testPatchCamera() throws EvercamException
     {
+        //TODO: Use the testing server / remove the commented code
+        //API.resetUrl();
+
         final String PATCH_CAMERA_NAME = "Patch Camera";
         RandomUser randomUser = new RandomUser();
         Camera camera = randomUser.addBasicCamera();
@@ -148,10 +161,18 @@ public class CameraTest
         assertFalse(camera.isOnline());
         //FIXME: Patch camera only accept location data as string, not float
         CameraDetail detail = new PatchCameraBuilder(camera.getId()).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
-                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL).setH264Url(RandomUser.CAMERA_H264_URL).setMjpgUrl(RandomUser.CAMERA_MJPG_URL).setMpegUrl(RandomUser.CAMERA_MPEG_URL).setAudioUrl(RandomUser.CAMERA_AUDIO_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL_ID).setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false).setOnline(true).setLocation(RandomUser.LOCATION_LAT_STRING, RandomUser.LOCATION_LNG_STRING).build();
+                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST)
+                .setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP)
+                .setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL)
+                .setH264Url(RandomUser.CAMERA_H264_URL).setMjpgUrl(RandomUser.CAMERA_MJPG_URL).setMpegUrl(RandomUser.CAMERA_MPEG_URL)
+                .setAudioUrl(RandomUser.CAMERA_AUDIO_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR)
+                .setModel(RandomUser.CAMERA_MODEL_ID).setMacAddress(RandomUser.CAMERA_MAC).setName(PATCH_CAMERA_NAME).setPublic(false)
+                .setOnline(true).setLocation(RandomUser.LOCATION_LAT_STRING, RandomUser.LOCATION_LNG_STRING)
+                .setDiscoverable(true)
+                .build();
         Camera patchCamera = Camera.patch(detail);
         assertEquals(PATCH_CAMERA_NAME, patchCamera.getName());
-        assertTrue(patchCamera.isOnline()); //Test patch camera 'is_online'
+        assertTrue(patchCamera.isOnline());
         assertEquals(false, patchCamera.isPublic());
         assertEquals(RandomUser.CAMERA_INTERNAL_HOST, patchCamera.getInternalHost());
         assertEquals(RandomUser.CAMERA_INTERNAL_HTTP, patchCamera.getInternalHttpPort());
@@ -169,13 +190,13 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_MAC, patchCamera.getMacAddress());
         assertEquals(RandomUser.CAMERA_MODEL_NAME, patchCamera.getModelName());
         assertEquals(RandomUser.CAMERA_MODEL_ID, patchCamera.getModelId());
-        assertFalse(patchCamera.isDiscoverable());
+        assertTrue(patchCamera.isDiscoverable());
 
         assertEquals(RandomUser.LOCATION_LNG, patchCamera.getLocation().getLng(), 0);
         assertEquals(RandomUser.LOCATION_LAT, patchCamera.getLocation().getLat(), 0);
 
-        assertNotNull(patchCamera.getDynamicDns());
-        assertNotNull(patchCamera.getProxyUrl().getJpg());
+        assertNotNull(patchCamera.getProxyUrl().getHls());
+        assertNotNull(patchCamera.getProxyUrl().getRtmp());
         //    assertTrue(patchCamera.isOwned()); FIXME!
 
         assertEquals(RandomUser.CAMERA_INTERNAL_URL, patchCamera.getInternalCameraEndpoint());
@@ -195,7 +216,13 @@ public class CameraTest
         assertEquals(RandomUser.CAMERA_INTERNAL_AUDIO_URL, patchCamera.getInternalObject().getRtsp().getAudioUrl());
         assertEquals(RandomUser.CAMERA_EXTERNAL_AUDIO_URL, patchCamera.getExternalObject().getRtsp().getAudioUrl());
 
+        //Delete the user after testing
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        assertTrue(User.delete(randomUser.getUsername()));
+
         API.setUserKeyPair(null, null);
+
+        //API.URL = TestURL.URL;
     }
 
     @Test

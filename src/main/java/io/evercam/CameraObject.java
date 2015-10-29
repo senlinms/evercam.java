@@ -126,14 +126,6 @@ class External extends BaseCameraObject
     }
 }
 
-class DynamicDns extends BaseCameraObject
-{
-    DynamicDns(JSONObject jsonObject)
-    {
-        super(jsonObject);
-    }
-}
-
 class ProxyUrl extends EvercamObject
 {
     ProxyUrl(JSONObject jsonObject)
@@ -141,9 +133,14 @@ class ProxyUrl extends EvercamObject
         this.jsonObject = jsonObject;
     }
 
-    public String getJpg()
+    public String getHls()
     {
-        return jsonObject.getString("jpg");
+        return jsonObject.getString("hls");
+    }
+
+    public String getRtmp()
+    {
+        return jsonObject.getString("rtmp");
     }
 }
 

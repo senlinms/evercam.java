@@ -4,7 +4,6 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sun.javafx.beans.annotations.NonNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -129,10 +128,18 @@ public class CameraShareRequest extends EvercamObject implements CameraShareInte
      * @return true if the pending request deleted successfully
      * @throws EvercamException
      */
-    public static boolean delete(@NonNull String cameraId, @NonNull String email) throws EvercamException
+    public static boolean delete(String cameraId, String email) throws EvercamException
     {
         if (API.hasUserKeyPair())
         {
+            if(email == null)
+            {
+                throw new NullPointerException("User id can not be null");
+            }
+            if(cameraId == null)
+            {
+                throw new NullPointerException("Camera id can not be null");
+            }
             try
             {
                 Map<String,Object> fieldsMap = API.userKeyPairMap();

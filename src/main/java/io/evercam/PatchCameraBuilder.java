@@ -25,8 +25,9 @@ public class PatchCameraBuilder
     String cameraPassword;
     String locationLng;
     String locationLat;
+    Boolean isDiscoverable;
 
-    public PatchCameraBuilder(String cameraId) throws EvercamException
+    public PatchCameraBuilder(String cameraId)
     {
         if (cameraId != null)
         {
@@ -34,7 +35,7 @@ public class PatchCameraBuilder
         }
         else
         {
-            throw new EvercamException("camera id can not be null");
+            throw new NullPointerException("camera id can not be null");
         }
     }
 
@@ -166,6 +167,12 @@ public class PatchCameraBuilder
     public PatchCameraBuilder setMacAddress(String macAddress)
     {
         this.macAddress = macAddress;
+        return this;
+    }
+
+    public PatchCameraBuilder setDiscoverable(Boolean isDiscoverable)
+    {
+        this.isDiscoverable = isDiscoverable;
         return this;
     }
 

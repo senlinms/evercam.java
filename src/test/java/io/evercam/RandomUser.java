@@ -98,7 +98,14 @@ public class RandomUser
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         CameraDetail detail = basicCamera().setLocation(LOCATION_LAT, LOCATION_LNG).setOnline(true).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
-                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).setCameraUsername(RandomUser.CAMERA_USERNAME).setCameraPassword(RandomUser.CAMERA_PASSWORD).setJpgUrl(RandomUser.CAMERA_JPG_URL).setH264Url(RandomUser.CAMERA_H264_URL).setMjpgUrl(RandomUser.CAMERA_MJPG_URL).setMpegUrl(RandomUser.CAMERA_MPEG_URL).setAudioUrl(RandomUser.CAMERA_AUDIO_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL_ID).setMacAddress(RandomUser.CAMERA_MAC).build();
+                CAMERA_INTERNAL_HTTP).setInternalRtspPort(RandomUser.CAMERA_INTERNAL_RTSP).setExternalHost(RandomUser.CAMERA_EXTERNAL_HOST).setExternalHttpPort(RandomUser.CAMERA_EXTERNAL_HTTP).setExternalRtspPort(RandomUser.CAMERA_EXTERNAL_RTSP).
+                setCameraUsername(RandomUser.CAMERA_USERNAME).
+                setCameraPassword(RandomUser.CAMERA_PASSWORD).
+                setJpgUrl(RandomUser.CAMERA_JPG_URL).setH264Url(RandomUser.CAMERA_H264_URL).
+                setMjpgUrl(RandomUser.CAMERA_MJPG_URL).setMpegUrl(RandomUser.CAMERA_MPEG_URL).
+                setAudioUrl(RandomUser.CAMERA_AUDIO_URL).setTimeZone(RandomUser.CAMERA_TIMEZONE).
+                setVendor(RandomUser.CAMERA_VENDOR).setModel(RandomUser.CAMERA_MODEL_ID).
+                setMacAddress(RandomUser.CAMERA_MAC).setDiscoverable(true).build();
         Camera camera = Camera.create(detail);
         API.setUserKeyPair(null, null);
         return camera;

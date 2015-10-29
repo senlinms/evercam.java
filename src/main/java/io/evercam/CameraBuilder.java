@@ -26,8 +26,9 @@ public class CameraBuilder
     Float locationLng;
     Float locationLat;
     Boolean isOnline;
+    Boolean isDiscoverable;
 
-    public CameraBuilder(String cameraName, Boolean isPublic) throws EvercamException
+    public CameraBuilder(String cameraName, Boolean isPublic)
     {
         if (cameraName != null)
         {
@@ -35,7 +36,7 @@ public class CameraBuilder
         }
         else
         {
-            throw new EvercamException("camera name can not be null");
+            throw new NullPointerException("camera name can not be null");
         }
         if (isPublic != null)
         {
@@ -43,7 +44,7 @@ public class CameraBuilder
         }
         else
         {
-            throw new EvercamException("camera public/private can not be null");
+            throw new NullPointerException("camera public/private can not be null");
         }
     }
 
@@ -158,6 +159,12 @@ public class CameraBuilder
     public CameraBuilder setOnline(Boolean isOnline)
     {
         this.isOnline = isOnline;
+        return this;
+    }
+
+    public CameraBuilder setDiscoverable(Boolean isDiscoverable)
+    {
+        this.isDiscoverable = isDiscoverable;
         return this;
     }
 

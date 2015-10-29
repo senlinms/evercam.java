@@ -976,6 +976,10 @@ public class Camera extends EvercamObject
         {
             cameraJSONObject.put("location_lng", cameraDetail.locationLngString);
         }
+        if(cameraDetail.isDiscoverable != null)
+        {
+            cameraJSONObject.put("discoverable", cameraDetail.isDiscoverable);
+        }
         return cameraJSONObject;
     }
 
@@ -1005,21 +1009,6 @@ public class Camera extends EvercamObject
         {
             JSONObject externalJsonObject = getJsonObjectByString("external");
             return new External(externalJsonObject);
-        } catch (EvercamException e)
-        {
-            return null;
-        }
-    }
-
-    /**
-     * Return the dynamic DNS object of this camera.
-     */
-    public DynamicDns getDynamicDns()
-    {
-        try
-        {
-            JSONObject dyndnsJsonObject = getJsonObjectByString("dyndns");
-            return new DynamicDns(dyndnsJsonObject);
         } catch (EvercamException e)
         {
             return null;
