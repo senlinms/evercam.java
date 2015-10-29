@@ -73,34 +73,23 @@ public class User extends EvercamObject
 
     /**
      * Return last name of the user.
-     *
-     * @throws EvercamException
      */
-    public String getLastName() throws EvercamException
+    public String getLastName()
     {
-        try
-        {
-            return jsonObject.getString("lastname");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return jsonObject.getString("lastname");
     }
 
     /**
      * Return first name of the user.
-     *
-     * @throws EvercamException
      */
-    public String getFirstName() throws EvercamException
+    public String getFirstName()
     {
-        try
-        {
-            return jsonObject.getString("firstname");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return jsonObject.getString("firstname");
+    }
+
+    public String getFullName()
+    {
+        return getFirstName() + " " + getLastName();
     }
 
     /**

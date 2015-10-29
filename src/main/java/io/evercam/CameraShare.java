@@ -261,75 +261,67 @@ public class CameraShare extends EvercamObject implements CameraShareInterface
         }
     }
 
-    public String getCameraId() throws EvercamException
+    /**
+     * Unique identifier of the shared camera.
+     */
+    public String getCameraId()
     {
-        try
-        {
-            return jsonObject.getString("camera_id");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return getStringNotNull("camera_id");
     }
 
     /**
      * @return The unique identifier of the user who shared the camera.
-     * @throws EvercamException
      */
-    public String getSharerId() throws EvercamException
+    public String getSharerId()
     {
-        try
-        {
-            return jsonObject.getString("sharer_id");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return jsonObject.getString("sharer_id");
     }
 
-    public String getUserId() throws EvercamException
+    public String getSharerEmail()
     {
-        try
-        {
-            return jsonObject.getString("user_id");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return jsonObject.getString("sharer_email");
     }
 
-    public String getUserEmail() throws EvercamException
+    public String getSharerFullName()
     {
-        try
-        {
-            return jsonObject.getString("email");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return jsonObject.getString("sharer_name");
     }
 
-    //TODO: Unit Test
-    public String getKind() throws EvercamException
+    /**
+     * Unique user id of the user the camera is shared with
+     */
+    public String getUserId()
     {
-        try
-        {
-            return jsonObject.getString("kind");
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return jsonObject.getString("user_id");
     }
 
-    public Right getRights() throws EvercamException
+    /**
+     * Email of the user the camera is shared with
+     */
+    public String getUserEmail()
     {
-        try
-        {
-            String rightsString = jsonObject.getString("rights");
-            return new Right(rightsString);
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        return getStringNotNull("email");
+    }
+
+    /**
+     * Full name of the user the camera is shared with
+     */
+    public String getFullName()
+    {
+        return getStringNotNull("fullname");
+    }
+
+    /**
+     * Either 'public' or 'private' depending on the share kind.,
+     */
+    public String getKind()
+    {
+        return jsonObject.getString("kind");
+    }
+
+    public Right getRights()
+    {
+        String rightsString = jsonObject.getString("rights");
+        return new Right(rightsString);
     }
 }

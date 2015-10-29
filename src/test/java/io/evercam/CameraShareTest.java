@@ -93,9 +93,13 @@ public class CameraShareTest
         assertNotNull(share);
         assertEquals(ownedCamera.getId(),share.getCameraId());
         assertEquals(owner.getUsername(),share.getSharerId());
+        assertEquals(owner.getUser().getFullName(), share.getSharerFullName());
+        assertEquals(owner.getEmail(), share.getSharerEmail());
         assertEquals(sharedUser1.getUsername(),share.getUserId());
         assertEquals(sharedUser1.getEmail(), share.getUserEmail());
+        assertEquals(sharedUser1.getUser().getFullName(), share.getFullName());
         assertTrue(share.getRights().canEdit());
+        assertEquals("private", share.getKind());
 
         //Test for patch camera share
         CameraShare patchedShare = CameraShare.patch(ownedCamera.getId(), sharedUser1.getUsername(), "snapshot,list");
