@@ -63,6 +63,22 @@ public abstract class EvercamObject
         return "";
     }
 
+    public static Right getRightsFrom(CameraShareInterface shareInterface)
+    {
+        Right rights = null;
+
+        if(shareInterface instanceof CameraShare)
+        {
+            rights = ((CameraShare) shareInterface).getRights();
+        }
+        else if(shareInterface instanceof CameraShareRequest)
+        {
+            rights = ((CameraShareRequest) shareInterface).getRights();
+        }
+
+        return rights;
+    }
+
     @Override
     public String toString()
     {

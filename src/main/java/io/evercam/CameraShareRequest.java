@@ -217,16 +217,10 @@ public class CameraShareRequest extends EvercamObject implements CameraShareInte
     /**
      * @return The rights to be granted on the share
      */
-    public Right getRights() throws EvercamException
+    public Right getRights()
     {
-        try
-        {
-            String rightsString = jsonObject.getString("rights");
-            return new Right(rightsString);
-        } catch (JSONException e)
-        {
-            throw new EvercamException(e);
-        }
+        String rightsString = jsonObject.getString("rights");
+        return new Right(rightsString);
     }
 
     /**

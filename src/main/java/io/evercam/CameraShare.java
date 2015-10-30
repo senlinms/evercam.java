@@ -324,4 +324,10 @@ public class CameraShare extends EvercamObject implements CameraShareInterface
         String rightsString = jsonObject.getString("rights");
         return new Right(rightsString);
     }
+
+    @Override
+    public String toString()
+    {
+        return jsonObject.toString();
+    }
 }

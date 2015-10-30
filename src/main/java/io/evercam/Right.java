@@ -18,10 +18,12 @@ public class Right
     private final String GRANT_DELETE = "grant~delete";
     private final String GRANT_LIST = "grant~list";
 
+    public final static String FULL_RIGHTS = "Snapshot,View,Edit,List";
+    public final static String READ_ONLY = "Snapshot,List";
 
     public Right(String rightsString)
     {
-        this.rightsString = rightsString;
+        this.rightsString = rightsString.toLowerCase(Locale.UK);
     }
 
     private Right()
@@ -31,7 +33,7 @@ public class Right
 
     public ArrayList<String> toArray()
     {
-        String[] rightsArray = rightsString.toLowerCase(Locale.UK).split(",");
+        String[] rightsArray = rightsString.split(",");
         return new ArrayList<String>(Arrays.asList(rightsArray));
     }
 
@@ -92,8 +94,15 @@ public class Right
      */
     public boolean isFullRight()
     {
-        return canTakeSnapshot() && canView() && canEdit() && canList()
-                && canGrantSnapshot() && canGrantView() && canGrantList() && canGrantEdit();
+        return canTakeSnapshot() && canView() && canEdit() && canList();
+    }
+
+    /**
+     * Validate if user has read only rights on this camera
+     */
+    public boolean isReadOnly()
+    {
+        return canTakeSnapshot() && canList() && !canEdit() && !canView();
     }
 
     @Override
