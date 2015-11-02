@@ -28,16 +28,23 @@ public class CameraShare extends EvercamObject implements CameraShareInterface
      * @param cameraId The unique identifier of the camera to share
      * @param user Email address or user name of the user to share the camera with.
      * @param rights A comma separate list of the rights to be granted with the share.
+     * @param message Message to send in Email
+     *
      * @return CameraShare object if the camera successfully shared with the user.
      * @throws EvercamException
      */
-    public static CameraShareInterface create(String cameraId, String user, String rights) throws EvercamException
+    public static CameraShareInterface create(String cameraId, String user, String rights, String message) throws
+            EvercamException
     {
         CameraShare cameraShare = null;
         CameraShareRequest cameraShareRequest = null;
         Map<String, Object> fieldsMap = API.userKeyPairMap();
         fieldsMap.put("email", user);
         fieldsMap.put("rights", rights);
+        if(message != null && !message.isEmpty())
+        {
+            fieldsMap.put("message", message);
+        }
 
         if (API.hasUserKeyPair())
         {

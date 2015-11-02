@@ -13,6 +13,8 @@ import static org.junit.Assert.assertNotNull;
 
 public class CameraShareTest
 {
+    public final static String TEST_SHARE_MESSAGE = "Java Wrapper Test Message";
+
     @BeforeClass
     public static void setUpClass()
     {
@@ -36,7 +38,7 @@ public class CameraShareTest
 
         //Owner share the camera
         API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
-        CameraShare.create(ownedCamera.getId(), sharedUser.getUsername(), "Snapshot,View,Edit,List");
+        CameraShare.create(ownedCamera.getId(), sharedUser.getUsername(), Right.FULL_RIGHTS, TEST_SHARE_MESSAGE);
 
         //Validate camera is successfully shared
         API.setUserKeyPair(sharedKeyPair.getApiKey(), sharedKeyPair.getApiId());
@@ -80,9 +82,9 @@ public class CameraShareTest
 
         //Owner share the camera
         API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
-        CameraShare.create(ownedCamera.getId(), sharedUser1.getUsername(), "Snapshot,View,Edit,List");
+        CameraShare.create(ownedCamera.getId(), sharedUser1.getUsername(), Right.FULL_RIGHTS, TEST_SHARE_MESSAGE);
         API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
-        CameraShare.create(ownedCamera.getId(), sharedUser2.getUsername(), "Snapshot,View,Edit,List");
+        CameraShare.create(ownedCamera.getId(), sharedUser2.getUsername(), Right.FULL_RIGHTS, TEST_SHARE_MESSAGE);
 
         //Test get share by camera
         ArrayList<CameraShare> shareListByCamera = CameraShare.getByCamera(ownedCamera.getId());
@@ -102,12 +104,12 @@ public class CameraShareTest
         assertEquals("private", share.getKind());
 
         //Test for patch camera share
-        CameraShare patchedShare = CameraShare.patch(ownedCamera.getId(), sharedUser1.getUsername(), "snapshot,list");
-        assertEquals("Snapshot,List", patchedShare.getRights().toString());
+        CameraShare patchedShare = CameraShare.patch(ownedCamera.getId(), sharedUser1.getUsername(), Right.READ_ONLY);
+        assertEquals(Right.READ_ONLY, patchedShare.getRights().toString());
         //Test patch share with Email address
         CameraShare patchedShareWithEmail = CameraShare.patch(ownedCamera.getId(), sharedUser1.getEmail(),
-                "Snapshot,View,Edit,List");
-        assertEquals("Snapshot,View,Edit,List", patchedShareWithEmail.getRights().toString());
+                Right.FULL_RIGHTS);
+        assertEquals(Right.FULL_RIGHTS, patchedShareWithEmail.getRights().toString());
 
         //Delete the random users
         API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());

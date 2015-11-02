@@ -32,7 +32,7 @@ public class CameraShareRequestTest
 
         //Owner share the camera with a user that doesn't exist
         API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
-        CameraShare.create(ownedCamera.getId(), TEST_SHARER_EMAIL, "Snapshot,View,Edit,List");
+        CameraShare.create(ownedCamera.getId(), TEST_SHARER_EMAIL, Right.FULL_RIGHTS, CameraShareTest.TEST_SHARE_MESSAGE);
 
         ArrayList<CameraShareRequest> shareRequestList = CameraShareRequest.get(ownedCamera.getId(),
                 CameraShareRequest.STATUS_PENDING);
@@ -42,14 +42,14 @@ public class CameraShareRequestTest
         assertEquals(ownedCamera.getId(), shareRequest.getCameraId());
         assertEquals(owner.getUser().getFirstName() + " " + owner.getUser().getLastName(), shareRequest.getSharerName());
         assertEquals(owner.getEmail(), shareRequest.getSharerEmail());
-        assertEquals("Snapshot,View,Edit,List", shareRequest.getRights().toString());
+        assertEquals(Right.FULL_RIGHTS, shareRequest.getRights().toString());
         assertEquals(owner.getUsername(), shareRequest.getUserId());
         assertEquals(TEST_SHARER_EMAIL, shareRequest.getEmail());
 
         //Test patch share request
         CameraShareRequest patchedShareRequest = CameraShareRequest.patch(ownedCamera.getId(), TEST_SHARER_EMAIL,
-                "Snapshot,List");
-        assertEquals("Snapshot,List", patchedShareRequest.getRights().toString());
+                Right.READ_ONLY);
+        assertEquals(Right.READ_ONLY, patchedShareRequest.getRights().toString());
 
         //Test delete/revoke share request
         assertTrue(CameraShareRequest.delete(ownedCamera.getId(), TEST_SHARER_EMAIL));
