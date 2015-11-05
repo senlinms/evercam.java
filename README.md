@@ -110,7 +110,10 @@ String defaultJpgUrl = model.getDefaults().getJpgURL();
 ### Shares
 ```java
 //Create a new camera share
-CameraShare.create("cameraId","username/Email","Snapshot,View,Edit,List");
+CameraShareInterface shareInterface = CameraShare.create("cameraId","username/Email",Right.FULL_RIGHT);
+
+//Update existing camera share
+CameraShare patchedShare = CameraShare.patch("cameraId", "username/Email", Right.READ_ONLY);
 
 //Get details for a share for a specific camera and user
 CameraShare cameraShare = CameraShare.get("cameraId","username");
@@ -120,7 +123,19 @@ ArrayList<CameraShare> shareList = CameraShare.getByCamera("cameraId");
 //Delete an existing camera share by specifying user and camera
 CameraShare.delete("cameraId","username/Email");
 ```
-[Endpoints for PATCH camera shares and share requests](https://dashboard.evercam.io/dev#!/shares) are not yet implemented in Java, It can be supported if is requested and will be updated as soon as possible.
+
+### Share requests
+```java
+//Fetch the list of share requests currently outstanding for a given camera.
+ArrayList<CameraShareRequest> shareRequestList = CameraShareRequest.get("cameraId", CameraShareRequest.STATUS_PENDING)
+
+//Updates a pending camera share request
+CameraShareRequest.patch("cameraId", "userEmail", "newRights");
+
+//Cancels a pending camera share request for a given camera
+CameraShareRequest.delete("cameraId", "userEmail");
+```
+
 ### Public
 ```java
 //Fetch nearest publicly discoverable camera from within the Evercam system.
