@@ -311,6 +311,49 @@ public class Camera extends EvercamObject
     }
 
     /**
+     * PUT /cameras/{id}
+     * Transfers the ownership of a camera from one user to another
+     *
+     * @param cameraId The unique identifier for the camera.
+     * @param userId The Evercam user name or email address for the new camera owner.
+     * @throws EvercamException if user key and id not specified
+     */
+    public static Camera transfer(String cameraId, String userId) throws EvercamException
+    {
+        Camera transferredCamera;
+
+        if (API.hasUserKeyPair())
+        {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest.put(URL + '/' + cameraId)
+                        .queryString("user_id", userId).queryString(API.userKeyPairMap()).asJson();
+                JSONObject object = response.getBody().getObject();
+                if (response.getStatus() == CODE_OK)
+                {
+                    transferredCamera = new Camera(object.getJSONArray("cameras").getJSONObject(0));
+                }
+                else
+                {
+                    ErrorResponse errorResponse = new ErrorResponse(object);
+                    String message = errorResponse.getMessage();
+                    throw new EvercamException(message);
+                }
+            }
+            catch (UnirestException e)
+            {
+                throw new EvercamException(e);
+            }
+        }
+        else
+        {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+
+        return transferredCamera;
+    }
+
+    /**
      * Check if camera details contain username and password or not.
      *
      * @return True if username and password exists in camera model, otherwise return False.

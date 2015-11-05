@@ -105,11 +105,18 @@ public class CameraShareTest
 
         //Test for patch camera share
         CameraShare patchedShare = CameraShare.patch(ownedCamera.getId(), sharedUser1.getUsername(), Right.READ_ONLY);
-        assertEquals(Right.READ_ONLY, patchedShare.getRights().toString());
+        assertEquals(Right.READ_ONLY.toLowerCase(), patchedShare.getRights().toString().toLowerCase());
         //Test patch share with Email address
         CameraShare patchedShareWithEmail = CameraShare.patch(ownedCamera.getId(), sharedUser1.getEmail(),
                 Right.FULL_RIGHTS);
-        assertEquals(Right.FULL_RIGHTS, patchedShareWithEmail.getRights().toString());
+        assertEquals(Right.FULL_RIGHTS.toLowerCase(), patchedShareWithEmail.getRights().toString().toLowerCase());
+
+        //Test transfer owner
+        Camera transferredCameraByUsername = Camera.transfer(ownedCamera.getId(), sharedUser1.getUsername());
+        assertEquals(sharedUser1.getUsername(), transferredCameraByUsername.getOwner());
+        API.setUserKeyPair(sharedKeyPair1.getApiKey(), sharedKeyPair1.getApiId());
+        Camera transferredCameraByEmail = Camera.transfer(ownedCamera.getId(), sharedUser2.getUsername());
+        assertEquals(sharedUser2.getUsername(), transferredCameraByEmail.getOwner());
 
         //Delete the random users
         API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
