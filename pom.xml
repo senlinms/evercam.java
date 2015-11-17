@@ -6,7 +6,7 @@
 
     <groupId>io.evercam</groupId>
     <artifactId>evercam-java</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 
     <build>
         <plugins>

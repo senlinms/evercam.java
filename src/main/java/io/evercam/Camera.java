@@ -1173,30 +1173,24 @@ public class Camera extends EvercamObject
     {
         try
         {
-            JSONObject snapshotJSONObject = new JSONObject();
-            snapshotJSONObject.put("external_url", externalUrl);
-            snapshotJSONObject.put("jpg_url", jpgUrl);
-            snapshotJSONObject.put("cam_username", cameraUsername);
-            snapshotJSONObject.put("cam_password", cameraPassword);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("external_url", externalUrl);
+            map.put("jpg_url", jpgUrl);
+            map.put("cam_username", cameraUsername);
+            map.put("cam_password", cameraPassword);
 
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpPost post = new HttpPost(URL + "/test");
-            post.setHeader("Content-type", "application/json");
-            post.setHeader("Accept", "application/json");
-            post.setEntity(new StringEntity(snapshotJSONObject.toString()));
-            org.apache.http.HttpResponse response = client.execute(post);
-            String result = EntityUtils.toString(response.getEntity());
-            int statusCode = response.getStatusLine().getStatusCode();
-            if(statusCode == CODE_CREATE)
+            HttpResponse<JsonNode> httpResponse = Unirest.post(URL + "/test").fields(map).asJson();
+            int statusCode = httpResponse.getStatus();
+            if(statusCode == CODE_OK)
             {
-                return new Snapshot(new JSONObject(result));
+                return new Snapshot(httpResponse.getBody().getObject());
             }
         }
         catch (JSONException e)
         {
             throw new EvercamException(e);
         }
-        catch (IOException e)
+        catch (UnirestException e)
         {
             throw new EvercamException(e);
         }

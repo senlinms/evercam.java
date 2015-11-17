@@ -266,6 +266,7 @@ public class CameraTest
         String ENDING = LocalConstants.SNAPSHOT_ENDING;
         Snapshot snapshot = Camera.testSnapshot(URL, ENDING, LocalConstants.USERNAME, LocalConstants.PASSWORD);
         assertNotNull(snapshot);
+        Assert.assertTrue(snapshot.getData().length > 0);
         API.URL = TestURL.URL;
     }
 
