@@ -1179,7 +1179,8 @@ public class Camera extends EvercamObject
             map.put("cam_username", cameraUsername);
             map.put("cam_password", cameraPassword);
 
-            HttpResponse<JsonNode> httpResponse = Unirest.post(URL + "/test").fields(map).asJson();
+            String MEDIA_URL = (URL + "/test").replace("api","media");
+            HttpResponse<JsonNode> httpResponse = Unirest.post(MEDIA_URL).fields(map).asJson();
             int statusCode = httpResponse.getStatus();
             if(statusCode == CODE_OK)
             {
