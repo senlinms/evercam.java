@@ -6,11 +6,10 @@
 
     <groupId>io.evercam</groupId>
     <artifactId>evercam-java</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
 
     <build>
         <plugins>
-
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
