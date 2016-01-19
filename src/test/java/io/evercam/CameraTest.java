@@ -1,15 +1,9 @@
 package io.evercam;
 
 
-import junit.framework.*;
-import org.apache.commons.io.IOUtils;
 import org.junit.*;
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
@@ -17,20 +11,17 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-public class CameraTest
-{
+public class CameraTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
         API.URL = TestURL.URL;
     }
 
     @Test
-    public void testCreateAndDeleteCamera() throws EvercamException
-    {
+    public void testCreateAndDeleteCamera() throws EvercamException {
         //TODO: Use the testing server / remove the commented code
         //API.resetUrl();
 
@@ -104,8 +95,7 @@ public class CameraTest
     }
 
     @Test
-    public void testGetAllCamerasWithCredentials() throws EvercamException
-    {
+    public void testGetAllCamerasWithCredentials() throws EvercamException {
         RandomUser randomUser = new RandomUser();
         randomUser.addRandomCamera(true);
         randomUser.addRandomCamera(false);
@@ -128,8 +118,7 @@ public class CameraTest
     }
 
     @Test
-    public void testGetCamerasWithoutUsername() throws EvercamException
-    {
+    public void testGetCamerasWithoutUsername() throws EvercamException {
         RandomUser randomUser = new RandomUser();
         randomUser.addRandomCamera(true);
         randomUser.addRandomCamera(false);
@@ -147,8 +136,7 @@ public class CameraTest
     }
 
     @Test
-    public void testPatchCamera() throws EvercamException
-    {
+    public void testPatchCamera() throws EvercamException {
         //TODO: Use the testing server / remove the commented code
         //API.resetUrl();
 
@@ -226,8 +214,7 @@ public class CameraTest
     }
 
     @Test
-    public void testCameraGetByIdAndIdSet() throws EvercamException
-    {
+    public void testCameraGetByIdAndIdSet() throws EvercamException {
         RandomUser randomUser = new RandomUser();
         Camera randomCamera1 = randomUser.addRandomCamera(true);
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
@@ -258,8 +245,7 @@ public class CameraTest
 //    }
 
     @Test
-    public void testTestSnapshot() throws EvercamException
-    {
+    public void testTestSnapshot() throws EvercamException {
         //FIXME: The test request is send to the production server
         API.resetUrl();
         String URL = "http://" + LocalConstants.IP + ":" + LocalConstants.HTTP_PORT;
@@ -271,8 +257,7 @@ public class CameraTest
     }
 
     @AfterClass
-    public static void destroyClass()
-    {
+    public static void destroyClass() {
 
     }
 }

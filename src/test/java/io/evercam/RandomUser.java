@@ -2,8 +2,7 @@ package io.evercam;
 
 import java.util.UUID;
 
-public class RandomUser
-{
+public class RandomUser {
     public static final String FIRST_NAME = "JavaWrapper";
     public static final String LAST_NAME = "TestUser";
     public static final String COUNTRY_CODE = "us";
@@ -52,8 +51,7 @@ public class RandomUser
     private String password;
     private String email;
 
-    public RandomUser() throws EvercamException
-    {
+    public RandomUser() throws EvercamException {
         String randomUsername = randomUUID();
         String randomEmail = randomEmail();
         String randomPassword = randomUUID();
@@ -72,8 +70,7 @@ public class RandomUser
         user = User.create(detail);
     }
 
-    public Camera addRandomCamera(boolean isPublic) throws EvercamException
-    {
+    public Camera addRandomCamera(boolean isPublic) throws EvercamException {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         CameraDetail detail = new CameraBuilder(CAMERA_NAME, isPublic).setInternalHost(CAMERA_INTERNAL_HOST).setInternalHttpPort(CAMERA_INTERNAL_HTTP).setInternalRtspPort(CAMERA_INTERNAL_RTSP).setExternalHost(CAMERA_EXTERNAL_HOST).setExternalHttpPort(CAMERA_EXTERNAL_HTTP).setExternalRtspPort(CAMERA_EXTERNAL_RTSP).setCameraUsername(CAMERA_USERNAME).setCameraPassword(CAMERA_PASSWORD).setJpgUrl(CAMERA_JPG_URL).setH264Url(CAMERA_H264_URL).setTimeZone(CAMERA_TIMEZONE).setVendor(CAMERA_VENDOR).setModel(CAMERA_MODEL_ID).setMacAddress(CAMERA_MAC).build();
@@ -82,8 +79,7 @@ public class RandomUser
         return camera;
     }
 
-    public Camera addBasicCamera() throws EvercamException
-    {
+    public Camera addBasicCamera() throws EvercamException {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         CameraDetail detail = new CameraBuilder(CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).setId
@@ -93,8 +89,7 @@ public class RandomUser
         return camera;
     }
 
-    public Camera addFullCamera() throws EvercamException
-    {
+    public Camera addFullCamera() throws EvercamException {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         CameraDetail detail = basicCamera().setLocation(LOCATION_LAT, LOCATION_LNG).setOnline(true).setInternalHost(RandomUser.CAMERA_INTERNAL_HOST).setInternalHttpPort(RandomUser.
@@ -111,13 +106,11 @@ public class RandomUser
         return camera;
     }
 
-    public CameraBuilder basicCamera() throws EvercamException
-    {
+    public CameraBuilder basicCamera() throws EvercamException {
         return new CameraBuilder(CAMERA_NAME, true).setInternalHost(CAMERA_INTERNAL_HOST).setId(randomUUID());
     }
 
-    public Camera addRealCamera() throws EvercamException
-    {
+    public Camera addRealCamera() throws EvercamException {
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(getUsername(), getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
         CameraDetail detail = new CameraBuilder(CAMERA_NAME, true).setExternalHost(LocalConstants.IP)
@@ -129,13 +122,11 @@ public class RandomUser
         return camera;
     }
 
-    public static String randomUUID()
-    {
+    public static String randomUUID() {
         return String.valueOf(UUID.randomUUID()).replace("-", "");
     }
 
-    public static String randomEmail()
-    {
+    public static String randomEmail() {
         String randomUuid = randomUUID();
         char[] emailChars = randomUuid.toCharArray();
         emailChars[8] = '@';
@@ -143,23 +134,19 @@ public class RandomUser
         return String.valueOf(emailChars);
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 }

@@ -9,17 +9,14 @@ import java.util.ArrayList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
-public class CameraShareRequestTest
-{
+public class CameraShareRequestTest {
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
         API.URL = TestURL.URL;
     }
 
     @Test
-    public void testGetPatchDeleteCameraShareRequest() throws EvercamException
-    {
+    public void testGetPatchDeleteCameraShareRequest() throws EvercamException {
         final String TEST_SHARER_EMAIL = "liuting+999@evercam.io";
 
         //TODO: Use the testing server / remove the commented code
@@ -64,8 +61,7 @@ public class CameraShareRequestTest
     }
 
     @AfterClass
-    public static void destroyClass()
-    {
+    public static void destroyClass() {
 
     }
 }

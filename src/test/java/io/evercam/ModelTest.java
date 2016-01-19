@@ -10,8 +10,7 @@ import java.util.ArrayList;
 
 import static junit.framework.Assert.*;
 
-public class ModelTest
-{
+public class ModelTest {
     private static final String TEST_VENDOR_ID = "hikvision";
     private static final String TEST_MODEL_THUMBNAIL_URL = "http://evercam-public-assets.s3.amazonaws" +
             ".com/hikvision/hikvision_default/thumbnail.jpg";
@@ -20,15 +19,13 @@ public class ModelTest
     public ExpectedException exception = ExpectedException.none();
 
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
         //TODO: Uncomment this to send test request to the test server
         //API.URL = TestURL.URL;
     }
 
     @Test
-    public void testGetModelById() throws EvercamException
-    {
+    public void testGetModelById() throws EvercamException {
         Model model = Model.getById(TEST_VENDOR_ID + Model.DEFAULT_MODEL_SUFFIX);
         assertEquals(TEST_VENDOR_ID, model.getVendorId());
         assertEquals(Model.DEFAULT_MODEL_NAME, model.getName());
@@ -50,30 +47,26 @@ public class ModelTest
     }
 
     @Test
-    public void testGetAllModelByVendor() throws EvercamException
-    {
+    public void testGetAllModelByVendor() throws EvercamException {
         ArrayList<Model> modelList = Model.getAllByVendorId(TEST_VENDOR_ID);
         assertEquals(148, modelList.size());
     }
 
     @Test
-    public void testGetAllModelByName() throws EvercamException
-    {
+    public void testGetAllModelByName() throws EvercamException {
         ArrayList<Model> modelList = Model.getAllByName("Default");
         assertEquals(61, modelList.size());
     }
 
     @Test
-    public void testGetAllWithVendorAndModel() throws EvercamException
-    {
+    public void testGetAllWithVendorAndModel() throws EvercamException {
         ArrayList<Model> modelList = Model.getAll("Default", TEST_VENDOR_ID);
         assertEquals(1, modelList.size());
         assertEquals("hikvision" + Model.DEFAULT_MODEL_SUFFIX, modelList.get(0).getId());
     }
 
     @Test
-    public void testGetDefaultModelByVendorId() throws EvercamException
-    {
+    public void testGetDefaultModelByVendorId() throws EvercamException {
         Model defaultModel = Model.getDefaultModelByVendorId(TEST_VENDOR_ID);
         assertNotNull(defaultModel);
         Defaults hikvisionDefaults = defaultModel.getDefaults();
@@ -88,15 +81,13 @@ public class ModelTest
     }
 
     @Test
-    public void testModelNotExists() throws EvercamException
-    {
+    public void testModelNotExists() throws EvercamException {
         exception.expect(EvercamException.class);
         Model.getAllByVendorId("no_model");
     }
 
     @AfterClass
-    public static void destroyClass()
-    {
+    public static void destroyClass() {
 
     }
 }

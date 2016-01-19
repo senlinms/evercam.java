@@ -1,7 +1,6 @@
 package io.evercam;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,19 +10,16 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
-public class CameraShareTest
-{
+public class CameraShareTest {
     public final static String TEST_SHARE_MESSAGE = "Java Wrapper Test Message";
 
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
         API.URL = TestURL.URL;
     }
 
     @Test
-    public void testCreateAndDeleteShare() throws EvercamException
-    {
+    public void testCreateAndDeleteShare() throws EvercamException {
         //TODO: Use the testing server / remove the commented code
         //API.resetUrl();
 
@@ -43,14 +39,14 @@ public class CameraShareTest
         //Validate camera is successfully shared
         API.setUserKeyPair(sharedKeyPair.getApiKey(), sharedKeyPair.getApiId());
         ArrayList<Camera> cameraList = Camera.getAll(sharedUser.getUsername(), true, false);
-        Camera sharedCamera= Camera.getById(ownedCamera.getId(),false);
+        Camera sharedCamera = Camera.getById(ownedCamera.getId(), false);
         assertEquals(2, cameraList.size());
-        assertEquals(ownedCamera.getId(),sharedCamera.getId());
+        assertEquals(ownedCamera.getId(), sharedCamera.getId());
 
         //Then delete the camera share
         boolean cameraDeleted = CameraShare.delete(sharedCamera.getId(), sharedUser.getUsername());
         assertTrue(cameraDeleted);
-        assertEquals(1,Camera.getAll(sharedUser.getUsername(), true, false).size());
+        assertEquals(1, Camera.getAll(sharedUser.getUsername(), true, false).size());
 
         //Delete the random users
         API.setUserKeyPair(ownerKeyPair.getApiKey(), ownerKeyPair.getApiId());
@@ -64,8 +60,7 @@ public class CameraShareTest
     }
 
     @Test
-    public void testGetAndPatchCameraShare() throws EvercamException
-    {
+    public void testGetAndPatchCameraShare() throws EvercamException {
         //TODO: Use the testing server / remove the commented code
         //API.resetUrl();
 
@@ -88,16 +83,16 @@ public class CameraShareTest
 
         //Test get share by camera
         ArrayList<CameraShare> shareListByCamera = CameraShare.getByCamera(ownedCamera.getId());
-        assertEquals(2,shareListByCamera.size());
+        assertEquals(2, shareListByCamera.size());
 
         //Test get specific share by user and camera and test share object details
         CameraShare share = CameraShare.get(ownedCamera.getId(), sharedUser1.getUsername());
         assertNotNull(share);
-        assertEquals(ownedCamera.getId(),share.getCameraId());
-        assertEquals(owner.getUsername(),share.getSharerId());
+        assertEquals(ownedCamera.getId(), share.getCameraId());
+        assertEquals(owner.getUsername(), share.getSharerId());
         assertEquals(owner.getUser().getFullName(), share.getSharerFullName());
         assertEquals(owner.getEmail(), share.getSharerEmail());
-        assertEquals(sharedUser1.getUsername(),share.getUserId());
+        assertEquals(sharedUser1.getUsername(), share.getUserId());
         assertEquals(sharedUser1.getEmail(), share.getUserEmail());
         assertEquals(sharedUser1.getUser().getFullName(), share.getFullName());
         assertTrue(share.getRights().canEdit());
@@ -132,8 +127,7 @@ public class CameraShareTest
     }
 
     @AfterClass
-    public static void destroyClass()
-    {
+    public static void destroyClass() {
 
     }
 }

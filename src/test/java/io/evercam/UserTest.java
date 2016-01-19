@@ -7,17 +7,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
+import static junit.framework.Assert.*;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-
-public class UserTest
-{
+public class UserTest {
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
         API.URL = TestURL.URL;
     }
 
@@ -25,8 +19,7 @@ public class UserTest
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void testCreateAndDeleteUser() throws EvercamException, JSONException
-    {
+    public void testCreateAndDeleteUser() throws EvercamException, JSONException {
         RandomUser randomUser = new RandomUser();
 
         assertEquals(randomUser.getUsername(), randomUser.getUser().getUsername());
@@ -42,8 +35,7 @@ public class UserTest
     }
 
     @Test
-    public void testGetUserAndUserDetails() throws EvercamException
-    {
+    public void testGetUserAndUserDetails() throws EvercamException {
         RandomUser randomUser = new RandomUser();
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getUsername(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
@@ -59,8 +51,7 @@ public class UserTest
     }
 
     @Test
-    public void testGetUserAndUserDetailsByEmail() throws EvercamException
-    {
+    public void testGetUserAndUserDetailsByEmail() throws EvercamException {
         RandomUser randomUser = new RandomUser();
         ApiKeyPair apiKeyPair = API.requestUserKeyPairFromEvercam(randomUser.getEmail(), randomUser.getPassword());
         API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
@@ -76,16 +67,14 @@ public class UserTest
     }
 
     @Test
-    public void testMissingUserDetail() throws EvercamException
-    {
+    public void testMissingUserDetail() throws EvercamException {
         UserDetail detail = new UserDetail();
         exception.expect(EvercamException.class);
         User.create(detail);
     }
 
     @AfterClass
-    public static void destroyClass()
-    {
+    public static void destroyClass() {
 
     }
 }

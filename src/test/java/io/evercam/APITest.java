@@ -5,16 +5,14 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class APITest
-{
+public class APITest {
     String DEVELOPER_TEST_KEY = "developertestkey";
     String DEVELOPER_TEST_ID = "developertestid";
     String USER_TEST_KEY = "usertestkey";
     String USER_TEST_ID = "usertestid";
 
     @Test
-    public void testUserAPIKeyAndId() throws EvercamException
-    {
+    public void testUserAPIKeyAndId() throws EvercamException {
         assertFalse(API.hasUserKeyPair());
         API.setUserKeyPair(USER_TEST_KEY, USER_TEST_ID);
         assertTrue(API.hasUserKeyPair());
@@ -26,8 +24,7 @@ public class APITest
     }
 
     @AfterClass
-    public static void resetAPI()
-    {
+    public static void resetAPI() {
         API.setUserKeyPair(null, null);
     }
 }

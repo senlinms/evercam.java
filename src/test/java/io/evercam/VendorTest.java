@@ -7,8 +7,7 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-public class VendorTest
-{
+public class VendorTest {
     private static final String TEST_VENDOR_ID = "hikvision";
     private static final String TEST_VENDOR_MAC = "8c:e7:48";
     private static final String TEST_VENDOR_NAME = "Hikvision Digital Technology";
@@ -16,15 +15,13 @@ public class VendorTest
 
 
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
         //TODO: Uncomment this to send test request to the test server
         //API.URL = TestURL.URL;
     }
 
     @Test
-    public void testGetVendorByMac() throws EvercamException
-    {
+    public void testGetVendorByMac() throws EvercamException {
         assertEquals(1, Vendor.getByMac(TEST_VENDOR_MAC).size());
         Vendor hikvision = Vendor.getByMac(TEST_VENDOR_MAC).get(0);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
@@ -34,14 +31,12 @@ public class VendorTest
     }
 
     @Test
-    public void testGetAllVendors() throws EvercamException
-    {
+    public void testGetAllVendors() throws EvercamException {
         assertEquals(59, Vendor.getAll().size());
     }
 
     @Test
-    public void testGetVendorById() throws EvercamException
-    {
+    public void testGetVendorById() throws EvercamException {
         Vendor hikvision = Vendor.getById(TEST_VENDOR_ID);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
@@ -53,8 +48,7 @@ public class VendorTest
     }
 
     @Test
-    public void testGetVendorByName() throws EvercamException
-    {
+    public void testGetVendorByName() throws EvercamException {
         Vendor hikvision = Vendor.getByName(TEST_VENDOR_NAME).get(0);
         assertEquals(TEST_VENDOR_NAME, hikvision.getName());
         assertEquals(TEST_VENDOR_ID, hikvision.getId());
@@ -62,8 +56,7 @@ public class VendorTest
     }
 
     @Test
-    public void testGetDefaultModel() throws EvercamException
-    {
+    public void testGetDefaultModel() throws EvercamException {
         Vendor hikvision = Vendor.getById(TEST_VENDOR_ID);
         Model defaultModel = hikvision.getDefaultModel();
         assertNotNull(defaultModel);
@@ -79,8 +72,7 @@ public class VendorTest
     }
 
     @AfterClass
-    public static void destroyClass()
-    {
+    public static void destroyClass() {
 
     }
 }

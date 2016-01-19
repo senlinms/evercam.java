@@ -6,17 +6,14 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class PublicCameraTest
-{
+public class PublicCameraTest {
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
         API.URL = TestURL.URL;
     }
 
     @Test
-    public void testNearestCamera() throws EvercamException
-    {
+    public void testNearestCamera() throws EvercamException {
         Camera camera = PublicCamera.getNearest(null);
         assertEquals("stephens-green", camera.getId());
 
@@ -28,13 +25,11 @@ public class PublicCameraTest
     }
 
     @Test
-    public void testNearestJpg() throws EvercamException
-    {
+    public void testNearestJpg() throws EvercamException {
         //TODO: Tests for get nearest JPG
     }
 
     @AfterClass
-    public static void destroyClass()
-    {
+    public static void destroyClass() {
     }
 }
