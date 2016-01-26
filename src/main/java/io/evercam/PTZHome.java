@@ -38,8 +38,6 @@ public class PTZHome implements PTZControl {
                 } else {
                     throw new PTZException("Home move error with response code: " + response.getStatus());
                 }
-            } catch (EvercamException e) {
-                throw new PTZException(e);
             } catch (UnirestException e) {
                 throw new PTZException(e);
             }

@@ -35,8 +35,6 @@ public class PTZPresetControl implements PTZControl {
                     ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
                     throw new PTZException(response.getStatus() + ": " + errorResponse.getMessage());
                 }
-            } catch (EvercamException e) {
-                throw new PTZException(e);
             } catch (UnirestException e) {
                 throw new PTZException(e);
             }

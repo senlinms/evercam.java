@@ -46,24 +46,17 @@ public abstract class API {
      * @return true if the user key pair has been added, otherwise return false.
      */
     public static boolean hasUserKeyPair() {
-        return (((userKeyPair[0] != null) && (userKeyPair[1] != null)) ? true : false);
+        return ((userKeyPair[0] != null) && (userKeyPair[1] != null));
     }
 
     /**
      * Return the hash map of user key and id.
-     * Useful when add parameters using Unirest library
-     *
-     * @throws EvercamException if no user key pair added.
      */
-    protected static Map<String, Object> userKeyPairMap() throws EvercamException {
-        if (hasUserKeyPair()) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("api_key", getUserKeyPair()[0]);
-            map.put("api_id", getUserKeyPair()[1]);
-            return map;
-        } else {
-            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
-        }
+    public static Map<String, Object> userKeyPairMap() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("api_key", getUserKeyPair()[0]);
+        map.put("api_id", getUserKeyPair()[1]);
+        return map;
     }
 
     /**
