@@ -101,20 +101,6 @@ class External extends BaseCameraObject {
     }
 }
 
-class ProxyUrl extends EvercamObject {
-    ProxyUrl(JSONObject jsonObject) {
-        this.jsonObject = jsonObject;
-    }
-
-    public String getHls() {
-        return jsonObject.getString("hls");
-    }
-
-    public String getRtmp() {
-        return jsonObject.getString("rtmp");
-    }
-}
-
 class Location extends EvercamObject {
     Location(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
