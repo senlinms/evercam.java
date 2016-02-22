@@ -96,6 +96,9 @@ public class CameraTest {
 
     @Test
     public void testGetAllCamerasWithCredentials() throws EvercamException {
+        //TODO: Use the testing server or remove the commented code
+        //API.resetUrl();
+
         RandomUser randomUser = new RandomUser();
         randomUser.addRandomCamera(true);
         randomUser.addRandomCamera(false);
@@ -109,12 +112,18 @@ public class CameraTest {
         ArrayList<Camera> allCamerasIncludingShared = Camera.getAll(randomUser.getUsername(), true, false);
         assertEquals(3, allCamerasIncludingShared.size());
 
-        //Test get camera thumbnail
+        //Test camera thumbnail
         Camera demoCamera = Camera.getById("evercam-remembrance-camera", true);
-        byte[] thumbnailData = demoCamera.getThumbnailData();
-        Assert.assertTrue(thumbnailData.length > 100);
+        String thumbnailUrl = demoCamera.getThumbnailUrl();
+        assertEquals("https://media.evercam.io/v1/cameras/evercam-remembrance-camera/thumbnail?api_id=" +
+                apiKeyPair.getApiId() + "&api_key=" + apiKeyPair.getApiKey(), thumbnailUrl);
 
+        //Delete the user after testing
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        assertTrue(User.delete(randomUser.getUsername()));
         API.setUserKeyPair(null, null);
+
+        //API.URL = TestURL.URL;
     }
 
     @Test

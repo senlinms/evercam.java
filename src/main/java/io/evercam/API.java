@@ -14,7 +14,9 @@ import java.util.Map;
 
 public abstract class API {
     public static String VERSION = "v1";
+    public static String MEDIA_VERSION = "v1";
     public static final String PRODUCTION_URL = "https://api.evercam.io/" + VERSION + "/";
+    public static final String MEDIA_URL = "https://media.evercam.io/" + MEDIA_VERSION + "/";
     public static String URL = PRODUCTION_URL;
     public static final String AWS_ASSETS_URL = "http://evercam-public-assets.s3.amazonaws.com/";
 

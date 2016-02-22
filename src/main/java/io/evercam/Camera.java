@@ -24,6 +24,7 @@ import java.util.Map;
 
 public class Camera extends EvercamObject {
     static String URL = API.URL + "cameras";
+    static String MEDIA_URL = API.MEDIA_URL + "cameras";
 
     Camera(JSONObject cameraJSONObject) {
         this.jsonObject = cameraJSONObject;
@@ -413,11 +414,11 @@ public class Camera extends EvercamObject {
      *
      * @throws EvercamException
      */
-    public String getId() throws EvercamException {
+    public String getId() {
         try {
             return jsonObject.getString("id");
         } catch (JSONException e) {
-            throw new EvercamException(e);
+            return "";
         }
     }
 
@@ -898,25 +899,16 @@ public class Camera extends EvercamObject {
     }
 
     /**
-     * Return byte thumbnail(150x150 preview of camera view) data associated with this camera.
-     *
-     * @throws EvercamException if no thumbnails associated with this camera
-     */
-    public byte[] getThumbnailData() throws EvercamException {
-        try {
-            String thumbnailString = jsonObject.getString("thumbnail");
-            String base64ImageString = Snapshot.getBase64DataStringFrom(thumbnailString);
-            return Snapshot.getDataFrom(base64ImageString);
-        } catch (JSONException e) {
-            throw new EvercamException("No thumbnails associated with this camera.");
-        }
-    }
-
-    /**
-     * Return a URL of latest snapshot thumbnail
+     * Return the URL of latest snapshot thumbnail
      */
     public String getThumbnailUrl() {
-        return jsonObject.getString("thumbnail_url");
+        final String THUMBNAIL_URL = MEDIA_URL + '/' + getId() + "/thumbnail";
+        if(API.hasUserKeyPair()) {
+            String apiKey = API.getUserKeyPair()[0];
+            String apiId = API.getUserKeyPair()[1];
+            return THUMBNAIL_URL + "?api_id=" + apiId + "&api_key=" + apiKey;
+        }
+        return THUMBNAIL_URL;
     }
 
     /**
@@ -969,8 +961,8 @@ public class Camera extends EvercamObject {
             map.put("cam_username", cameraUsername);
             map.put("cam_password", cameraPassword);
 
-            String MEDIA_URL = (URL + "/test").replace("api", "media");
-            HttpResponse<JsonNode> httpResponse = Unirest.post(MEDIA_URL).fields(map).asJson();
+            String URL = (API.MEDIA_URL + "test");
+            HttpResponse<JsonNode> httpResponse = Unirest.post(URL).fields(map).asJson();
             int statusCode = httpResponse.getStatus();
             if (statusCode == CODE_OK) {
                 return new Snapshot(httpResponse.getBody().getObject());
