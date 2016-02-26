@@ -16,11 +16,12 @@ public class CameraDetail {
     String audioUrl;
     String h264Url;
     String internalHost;
-    int internalHttpPort;
-    int internalRtspPort;
+    // Initial port values are all 0 so that if it assigned as null, then clear the stored port value
+    Integer internalHttpPort = 0;
+    Integer internalRtspPort = 0;
     String externalHost;
-    int externalHttpPort;
-    int externalRtspPort;
+    Integer externalHttpPort = 0;
+    Integer externalRtspPort = 0;
     String cameraUsername;
     String cameraPassword;
     Float locationLng;

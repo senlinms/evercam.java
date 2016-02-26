@@ -771,19 +771,27 @@ public class Camera extends EvercamObject {
         if (cameraDetail.internalHost != null) {
             cameraJSONObject.put("internal_host", cameraDetail.internalHost);
         }
-        if (cameraDetail.internalHttpPort != 0) {
+        if (cameraDetail.internalHttpPort == null) {
+            cameraJSONObject.put("internal_http_port", "");
+        } else if (cameraDetail.internalHttpPort != 0) {
             cameraJSONObject.put("internal_http_port", cameraDetail.internalHttpPort);
         }
-        if (cameraDetail.internalRtspPort != 0) {
+        if (cameraDetail.internalRtspPort == null) {
+            cameraJSONObject.put("internal_rtsp_port", "");
+        } else if (cameraDetail.internalRtspPort != 0) {
             cameraJSONObject.put("internal_rtsp_port", cameraDetail.internalRtspPort);
         }
         if (cameraDetail.externalHost != null) {
             cameraJSONObject.put("external_host", cameraDetail.externalHost);
         }
-        if (cameraDetail.externalHttpPort != 0) {
+        if (cameraDetail.externalHttpPort == null) {
+            cameraJSONObject.put("external_http_port", "");
+        } else if (cameraDetail.externalHttpPort != 0) {
             cameraJSONObject.put("external_http_port", cameraDetail.externalHttpPort);
         }
-        if (cameraDetail.externalRtspPort != 0) {
+        if (cameraDetail.externalRtspPort == null) {
+            cameraJSONObject.put("external_rtsp_port", "");
+        } else if (cameraDetail.externalRtspPort != 0) {
             cameraJSONObject.put("external_rtsp_port", cameraDetail.externalRtspPort);
         }
         if (cameraDetail.jpgUrl != null) {

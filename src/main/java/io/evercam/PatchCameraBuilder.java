@@ -15,11 +15,11 @@ public class PatchCameraBuilder {
     String mpegUrl;
     String audioUrl;
     String internalHost;
-    int internalHttpPort;
-    int internalRtspPort;
+    Integer internalHttpPort = 0;
+    Integer internalRtspPort = 0;
     String externalHost;
-    int externalHttpPort;
-    int externalRtspPort;
+    Integer externalHttpPort = 0;
+    Integer externalRtspPort = 0;
     String cameraUsername;
     String cameraPassword;
     String locationLng;
@@ -89,12 +89,12 @@ public class PatchCameraBuilder {
         return this;
     }
 
-    public PatchCameraBuilder setInternalHttpPort(int internalHttpPort) {
+    public PatchCameraBuilder setInternalHttpPort(Integer internalHttpPort) {
         this.internalHttpPort = internalHttpPort;
         return this;
     }
 
-    public PatchCameraBuilder setInternalRtspPort(int internalRtspPort) {
+    public PatchCameraBuilder setInternalRtspPort(Integer internalRtspPort) {
         this.internalRtspPort = internalRtspPort;
         return this;
     }
@@ -104,12 +104,12 @@ public class PatchCameraBuilder {
         return this;
     }
 
-    public PatchCameraBuilder setExternalHttpPort(int externalHttpPort) {
+    public PatchCameraBuilder setExternalHttpPort(Integer externalHttpPort) {
         this.externalHttpPort = externalHttpPort;
         return this;
     }
 
-    public PatchCameraBuilder setExternalRtspPort(int externalRtspPort) {
+    public PatchCameraBuilder setExternalRtspPort(Integer externalRtspPort) {
         this.externalRtspPort = externalRtspPort;
         return this;
     }
