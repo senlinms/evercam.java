@@ -33,20 +33,16 @@ public class Snapshot extends EvercamObject {
             try {
                 HttpResponse<JsonNode> response;
                 if (notes == null) {
-                    response = Unirest.post(URL + '/' + cameraId + "/recordings/snapshots").fields(API.userKeyPairMap()).asJson();
+                    response = Unirest.post(URL + '/' + cameraId + "/recordings/snapshots").fields(API.userKeyPairMap())
+                            .field("with_data", true).asJson();
                 } else {
-                    response = Unirest.post(URL + '/' + cameraId + "/recordings/snapshots").fields(API.userKeyPairMap()).field("notes", notes).asJson();
+                    response = Unirest.post(URL + '/' + cameraId + "/recordings/snapshots").fields(API.userKeyPairMap())
+                            .field("notes", notes).field("with_data", true).asJson();
                 }
 
-                if (response.getStatus() == CODE_CREATE) {
-                    JSONObject snapshotJsonObject = response.getBody().getObject().getJSONArray("snapshots").getJSONObject(0);
+                if (response.getStatus() == CODE_OK) {
+                    JSONObject snapshotJsonObject = response.getBody().getObject();
                     snapshot = new Snapshot(snapshotJsonObject);
-                } else if (response.getStatus() == CODE_NOT_FOUND) {
-                    throw new EvercamException("camera does not exist");
-                } else if (response.getStatus() == CODE_ERROR) {
-                    throw new EvercamException("camera is offline");
-                } else if (response.getStatus() == CODE_SERVER_ERROR) {
-                    throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
                 } else {
                     ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
                     throw new EvercamException(errorResponse.getMessage());

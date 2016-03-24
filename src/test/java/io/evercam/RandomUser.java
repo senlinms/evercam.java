@@ -1,5 +1,6 @@
 package io.evercam;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class RandomUser {
@@ -52,7 +53,7 @@ public class RandomUser {
     private String email;
 
     public RandomUser() throws EvercamException {
-        String randomUsername = randomUUID();
+        String randomUsername = randomUsername();
         String randomEmail = randomEmail();
         String randomPassword = randomUUID();
         this.username = randomUsername;
@@ -127,11 +128,17 @@ public class RandomUser {
     }
 
     public static String randomEmail() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(40000) + 10000;
+        return "ld+" + randomNumber + "@evercam.io";
+    }
+
+    public static String randomUsername() {
         String randomUuid = randomUUID();
-        char[] emailChars = randomUuid.toCharArray();
-        emailChars[8] = '@';
-        emailChars[15] = '.';
-        return String.valueOf(emailChars);
+        while (Character.isDigit(randomUuid.charAt(0))) {
+            randomUuid.replace(String.valueOf(randomUuid.charAt(0)), "");
+        }
+        return randomUuid;
     }
 
     public User getUser() {

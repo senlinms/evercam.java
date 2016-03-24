@@ -57,6 +57,9 @@ public class CameraSnapshotTest {
 
     @Test
     public void testStoreSnapshotAndGetLatest() throws EvercamException {
+        //TODO: Use the testing server / remove the commented code
+        //API.resetUrl();
+
         final String SNAPSHOT_NOTE = "Java Wrapper";
         RandomUser randomUser = new RandomUser();
         Camera camera = randomUser.addRealCamera();
@@ -75,6 +78,14 @@ public class CameraSnapshotTest {
         Snapshot snapshotWithoutData = Snapshot.getLatest(camera.getId(), false);
         assertNull(snapshotWithoutData.getCompleteData());
         assertNull(snapshotWithoutData.getBase64DataString());
+
+        //Delete the user after testing
+        API.setUserKeyPair(apiKeyPair.getApiKey(), apiKeyPair.getApiId());
+        assertTrue(User.delete(randomUser.getUsername()));
+
+        API.setUserKeyPair(null, null);
+
+        //API.URL = TestURL.URL;
     }
 
     @AfterClass

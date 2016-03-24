@@ -229,7 +229,7 @@ public class Camera extends EvercamObject {
      * @return the stream of camera live image
      * @throws EvercamException
      */
-    public static InputStream getSnapshotByCameraId(String cameraId) throws EvercamException {
+    public static InputStream getLiveSnapshot(String cameraId) throws EvercamException {
         InputStream inputStream;
         if (API.hasUserKeyPair()) {
             try {
@@ -712,8 +712,8 @@ public class Camera extends EvercamObject {
      * @return the stream of camera live image
      * @throws EvercamException
      */
-    public InputStream getSnapshotFromEvercam() throws EvercamException {
-        return getSnapshotByCameraId(getId());
+    public InputStream getLiveSnapshot() throws EvercamException {
+        return getLiveSnapshot(getId());
     }
 
     /**
