@@ -63,7 +63,6 @@ public class CameraShareTest {
     public void testGetAndPatchCameraShare() throws EvercamException {
         //TODO: Use the testing server / remove the commented code
         //API.resetUrl();
-
         //Create camera owner and add a camera
         RandomUser owner = new RandomUser();
         ApiKeyPair ownerKeyPair = API.requestUserKeyPairFromEvercam(owner.getUsername(), owner.getPassword());
@@ -97,6 +96,11 @@ public class CameraShareTest {
         assertEquals(sharedUser1.getUser().getFullName(), share.getFullName());
         assertTrue(share.getRights().canEdit());
         assertEquals("private", share.getKind());
+        //Test get owner details from camera share
+        CameraShareOwner shareOwner = share.getOwner();
+        assertEquals(owner.getUsername(), shareOwner.getUsername());
+        assertEquals(owner.getEmail(), shareOwner.getEmail());
+        assertEquals(owner.getFullName(), shareOwner.getFullName());
 
         //Test for patch camera share
         CameraShare patchedShare = CameraShare.patch(ownedCamera.getId(), sharedUser1.getUsername(), Right.READ_ONLY);

@@ -156,4 +156,8 @@ public class RandomUser {
     public String getEmail() {
         return email;
     }
+
+    public String getFullName() {
+        return user.getFullName();
+    }
 }

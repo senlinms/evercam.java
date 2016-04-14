@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class CameraShare extends EvercamObject implements CameraShareInterface {
     static String URL = API.URL + "cameras";
+    private CameraShareOwner owner = null;
 
     CameraShare(JSONObject shareJSONObject) {
         this.jsonObject = shareJSONObject;
@@ -46,8 +47,9 @@ public class CameraShare extends EvercamObject implements CameraShareInterface {
                         .header("accept", "application/json").fields(fieldsMap).asJson();
                 if (response.getStatus() == CODE_CREATE) {
                     try {
-                        JSONObject jsonObject = response.getBody().getObject().getJSONArray("shares").getJSONObject(0);
-                        cameraShare = new CameraShare(jsonObject);
+                        JSONObject responseJsonObject = response.getBody().getObject();
+                        JSONObject sharesJsonObject = responseJsonObject.getJSONArray("shares").getJSONObject(0);
+                        cameraShare = new CameraShare(sharesJsonObject);
                     } catch (JSONException e) {
                         JSONObject jsonObject = response.getBody().getObject().getJSONArray("share_requests")
                                 .getJSONObject(0);
@@ -176,10 +178,18 @@ public class CameraShare extends EvercamObject implements CameraShareInterface {
                 HttpResponse<JsonNode> response = Unirest.get(url).queryString(API.userKeyPairMap()).header("accept",
                         "application/json").asJson();
                 if (response.getStatus() == CODE_OK) {
-                    JSONArray sharesJSONArray = response.getBody().getObject().getJSONArray("shares");
+                    JSONObject responseJsonObject = response.getBody().getObject();
+                    JSONArray sharesJSONArray = responseJsonObject.getJSONArray("shares");
+                    CameraShareOwner owner = null;
+                    if(responseJsonObject.has("owner")) {
+                        JSONObject ownerJsonObject = responseJsonObject.getJSONObject("owner");
+                        owner = new CameraShareOwner(ownerJsonObject);
+                    }
                     for (int count = 0; count < sharesJSONArray.length(); count++) {
                         JSONObject shareJSONObject = sharesJSONArray.getJSONObject(count);
-                        cameraShares.add(new CameraShare(shareJSONObject));
+                        CameraShare cameraShare = new CameraShare(shareJSONObject);
+                        cameraShare.setOwner(owner);
+                        cameraShares.add(cameraShare);
                     }
                 } else if (response.getStatus() == CODE_SERVER_ERROR) {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
@@ -263,6 +273,17 @@ public class CameraShare extends EvercamObject implements CameraShareInterface {
     public Right getRights() {
         String rightsString = jsonObject.getString("rights");
         return new Right(rightsString);
+    }
+
+    public void setOwner(CameraShareOwner owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * Owner details for the shared camera
+     */
+    public CameraShareOwner getOwner() {
+        return owner;
     }
 
     @Override
