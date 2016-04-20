@@ -133,6 +133,42 @@ public class CameraShareRequest extends EvercamObject implements CameraShareInte
     }
 
     /**
+     * Resend an existing camera share request for a given camera.
+     *
+     * @param cameraId 	The unique identifier for a camera.
+     * @param email Email address of the user to share the camera with.
+     * @return true if the share request resent successfully
+     * @throws EvercamException
+     */
+    public static boolean resend(String cameraId, String email) throws EvercamException {
+        if (API.hasUserKeyPair()) {
+            if (email == null) {
+                throw new NullPointerException("User id can not be null");
+            }
+            if (cameraId == null) {
+                throw new NullPointerException("Camera id can not be null");
+            }
+            try {
+                Map<String, Object> fieldsMap = API.userKeyPairMap();
+                fieldsMap.put("email", email);
+                HttpResponse<JsonNode> response = Unirest.post(getUrl(cameraId))
+                        .fields(fieldsMap).asJson();
+                int statusCode = response.getStatus();
+                if (statusCode == CODE_CREATE) {
+                    return true;
+                } else {
+                    ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                    throw new EvercamException(errorResponse.getMessage());
+                }
+            } catch (UnirestException e) {
+                throw new EvercamException(e);
+            }
+        } else {
+            throw new EvercamException(EvercamException.MSG_USER_API_KEY_REQUIRED);
+        }
+    }
+
+    /**
      * @return Unique identifier for a camera share request
      */
     public String getId() {

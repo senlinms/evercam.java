@@ -48,7 +48,8 @@ public class CameraShareRequestTest {
                 Right.READ_ONLY);
         assertEquals(Right.READ_ONLY, patchedShareRequest.getRights().toString());
 
-        //Test delete/revoke share request
+        //Test resend/delete/revoke share request
+        assertTrue(CameraShareRequest.resend(ownedCamera.getId(), TEST_SHARER_EMAIL));
         assertTrue(CameraShareRequest.delete(ownedCamera.getId(), TEST_SHARER_EMAIL));
         ArrayList<CameraShareRequest> shareRequestListAfterDelete = CameraShareRequest.get(ownedCamera.getId(),
                 CameraShareRequest.STATUS_PENDING);
