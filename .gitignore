@@ -14,8 +14,7 @@ dependency-reduced-pom.xml
 *.iml
 
 #Local tests
-TestForReal.java
-LocalConstants.java
+#LocalConstants.java
 
 # Mac OS
 .DS_Store

@@ -113,6 +113,10 @@
         </plugins>
     </build>
 
+    <!-- Disable DocLint that checks missing doc tags. TODO: Add the missing tags and re-enable this -->
+    <properties>
+        <additionalparam>-Xdoclint:none</additionalparam>
+    </properties>
 
     <dependencies>
         <dependency>
