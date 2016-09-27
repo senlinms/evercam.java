@@ -3,6 +3,8 @@ package io.evercam;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 
@@ -33,7 +35,7 @@ public class PTZHome implements PTZControl {
         if (API.hasUserKeyPair()) {
             try {
                 HttpResponse<InputStream> response = Unirest.post(homeUrl).queryString(API.userKeyPairMap()).asBinary();
-                if (response.getStatus() == EvercamObject.CODE_CREATE) {
+                if (response.getStatus() == EvercamObject.CODE_CREATE || response.getStatus() == 200) {
                     return true;
                 } else {
                     throw new PTZException("Home move error with response code: " + response.getStatus());

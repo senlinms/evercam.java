@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
+
 
 public class User extends EvercamObject {
 
@@ -141,15 +143,31 @@ public class User extends EvercamObject {
 
         try {
             HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(userMap).asJson();
-            if (response.getStatus() == CODE_CREATE) {
+            if (response.getStatus() == CODE_CREATE || response.getStatus() == CODE_OK) {
                 JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
                 user = new User(userJSONObject);
             } else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN) {
                 throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
             } else {
                 //The HTTP error code could be 400, 409 etc.
-                ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
-                throw new EvercamException(errorResponse.getMessage());
+                try {
+                    Iterator keyIterator = response.getBody().getArray().getJSONObject(0).optJSONObject("message").keys();
+                    String key = null;
+                    while(keyIterator.hasNext()){
+                        key = (String)keyIterator.next();
+                    }
+                    String errorMessageString = response.getBody().getArray().getJSONObject(0).optJSONObject("message").getJSONArray(key).getString(0);
+                    if (errorMessageString != null || !errorMessageString.isEmpty()){
+                        ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                        throw new EvercamException(errorMessageString);
+                    }else {
+                        ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                        throw new EvercamException(errorResponse.getMessage());
+                        
+                    }
+                }catch (JSONException e){
+                    throw new EvercamException("Something went wrong. Please try again.");
+                }
             }
         } catch (JSONException e) {
             throw new EvercamException(e);

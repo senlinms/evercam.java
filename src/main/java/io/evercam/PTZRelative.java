@@ -54,7 +54,7 @@ public class PTZRelative implements PTZControl {
                         .field("left", left).field("right", right).field("up", up).field("down", down)
                         .field("zoom", zoom).asBinary();
 
-                if (response.getStatus() == EvercamObject.CODE_CREATE) {
+                if (response.getStatus() == EvercamObject.CODE_CREATE || response.getStatus() == 200) {
                     return true;
                 } else {
                     throw new PTZException("Relative move error with response code: " + response.getStatus());

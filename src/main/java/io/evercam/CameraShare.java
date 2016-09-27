@@ -45,7 +45,7 @@ public class CameraShare extends EvercamObject implements CameraShareInterface {
             try {
                 HttpResponse<JsonNode> response = Unirest.post(URL + '/' + cameraId + "/shares")
                         .header("accept", "application/json").fields(fieldsMap).asJson();
-                if (response.getStatus() == CODE_CREATE) {
+                if (response.getStatus() == CODE_CREATE || response.getStatus() == CODE_OK) {
                     try {
                         JSONObject responseJsonObject = response.getBody().getObject();
                         JSONObject sharesJsonObject = responseJsonObject.getJSONArray("shares").getJSONObject(0);
@@ -185,11 +185,19 @@ public class CameraShare extends EvercamObject implements CameraShareInterface {
                         JSONObject ownerJsonObject = responseJsonObject.getJSONObject("owner");
                         owner = new CameraShareOwner(ownerJsonObject);
                     }
-                    for (int count = 0; count < sharesJSONArray.length(); count++) {
-                        JSONObject shareJSONObject = sharesJSONArray.getJSONObject(count);
+
+                    if (sharesJSONArray.length() == 0){
+                        JSONObject shareJSONObject = new JSONObject();
                         CameraShare cameraShare = new CameraShare(shareJSONObject);
                         cameraShare.setOwner(owner);
                         cameraShares.add(cameraShare);
+                    }else{
+                        for (int count = 0; count < sharesJSONArray.length(); count++) {
+                            JSONObject shareJSONObject = sharesJSONArray.getJSONObject(count);
+                            CameraShare cameraShare = new CameraShare(shareJSONObject);
+                            cameraShare.setOwner(owner);
+                            cameraShares.add(cameraShare);
+                        }
                     }
                 } else if (response.getStatus() == CODE_SERVER_ERROR) {
                     throw new EvercamException(EvercamException.MSG_SERVER_ERROR);
