@@ -7,6 +7,8 @@ public class LocalConstants {
     public static int HTTP_PORT = 80;
     public static int RTSP_PORT = 554;
     public static String SNAPSHOT_ENDING = "/Streaming/Channels/1/Picture";
+    public static String CAMERA_EXID = "";
+    public static String VENDOR_ID = "";
 
     public static final String EVERCAM_USERNAME = "dummyname";
     public static final String TEST_API_KEY = "key";

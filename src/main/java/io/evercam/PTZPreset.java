@@ -72,7 +72,7 @@ public class PTZPreset extends EvercamObject {
             final String URL_CREATE = PTZPresetControl.getPresetsUrl(cameraId) + "/create/" + presetName;
             try {
                 HttpResponse<JsonNode> response = Unirest.post(URL_CREATE).queryString(API.userKeyPairMap()).asJson();
-                if (response.getStatus() == EvercamObject.CODE_CREATE) {
+                if (response.getStatus() == EvercamObject.CODE_CREATE || response.getStatus() == CODE_OK) {
                     return response.getBody().getObject().getString("PresetToken");
                 } else {
                     ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());

@@ -3,15 +3,18 @@ package io.evercam;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.Iterator;
 
 import java.util.ArrayList;
 
 class ErrorResponse extends EvercamObject {
     ErrorResponse(JSONObject jsonObject) {
+
         this.jsonObject = jsonObject;
     }
 
     ErrorResponse(String jsonObjectString) {
+
         this.jsonObject = new JSONObject(jsonObjectString);
     }
 
@@ -28,7 +31,14 @@ class ErrorResponse extends EvercamObject {
      */
     protected String getMessage() {
         try {
-            return jsonObject.getString("message");
+            Iterator keyIterator = jsonObject.getJSONObject("message").keys();
+            String key = null;
+            while(keyIterator.hasNext()){
+                key = (String)keyIterator.next();
+            }
+            String errorMessageString =  jsonObject.getJSONObject("message").getJSONArray(key).getString(0);
+            return  errorMessageString;
+//            return jsonObject.getString("message");
         } catch (JSONException e) {
             return "";
         }

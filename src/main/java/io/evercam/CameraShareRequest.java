@@ -154,7 +154,7 @@ public class CameraShareRequest extends EvercamObject implements CameraShareInte
                 HttpResponse<JsonNode> response = Unirest.post(getUrl(cameraId))
                         .fields(fieldsMap).asJson();
                 int statusCode = response.getStatus();
-                if (statusCode == CODE_CREATE) {
+                if (statusCode == CODE_CREATE || statusCode == CODE_OK) {
                     return true;
                 } else {
                     ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());

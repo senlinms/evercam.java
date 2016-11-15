@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
+
 
 public class User extends EvercamObject {
 
@@ -133,6 +135,7 @@ public class User extends EvercamObject {
         userMap.put("lastname", userDetail.getLastname());
         userMap.put("email", userDetail.getEmail());
         userMap.put("username", userDetail.getUsername());
+        userMap.put("token", userDetail.getAndroidtoken());
         if (userDetail.hasCountryCode()) {
             userMap.put("country", userDetail.getCountryCode());
         }
@@ -141,7 +144,7 @@ public class User extends EvercamObject {
 
         try {
             HttpResponse<JsonNode> response = Unirest.post(URL).header("accept", "application/json").fields(userMap).asJson();
-            if (response.getStatus() == CODE_CREATE) {
+            if (response.getStatus() == CODE_CREATE || response.getStatus() == CODE_OK) {
                 JSONObject userJSONObject = response.getBody().getObject().getJSONArray("users").getJSONObject(0);
                 user = new User(userJSONObject);
             } else if (response.getStatus() == CODE_UNAUTHORISED || response.getStatus() == CODE_FORBIDDEN) {

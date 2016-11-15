@@ -4,6 +4,8 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PTZPresetControl implements PTZControl {
     private final String cameraId;
@@ -29,7 +31,7 @@ public class PTZPresetControl implements PTZControl {
         else {
             try {
                 HttpResponse<JsonNode> response = Unirest.post(presetMoveUrl).queryString(API.userKeyPairMap()).asJson();
-                if (response.getStatus() == EvercamObject.CODE_CREATE) {
+                if (response.getStatus() == EvercamObject.CODE_CREATE || response.getStatus() == 200) {
                     return true;
                 } else {
                     ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());

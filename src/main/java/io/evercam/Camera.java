@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
 
 
 public class Camera extends EvercamObject {
@@ -57,7 +58,7 @@ public class Camera extends EvercamObject {
                 } else if (statusCode == CODE_ERROR) {
                     ErrorResponse errorResponse = new ErrorResponse(result);
                     throw new EvercamException(errorResponse.getProperErrorMessage());
-                } else if (statusCode == CODE_CREATE) {
+                } else if (statusCode == CODE_CREATE || statusCode == CODE_OK) {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
                     camera = new Camera(jsonObject);
@@ -147,9 +148,32 @@ public class Camera extends EvercamObject {
                 if (statusCode == CODE_UNAUTHORISED || statusCode == CODE_FORBIDDEN) {
                     throw new EvercamException(EvercamException.MSG_INVALID_AUTH);
                 } else if (statusCode == CODE_ERROR) {
-                    ErrorResponse errorResponse = new ErrorResponse(result);
-                    String message = errorResponse.getMessage();
-                    throw new EvercamException(message);
+                    try {
+                        ErrorResponse errorResponse = new ErrorResponse(result);
+                        String message = errorResponse.getMessage();
+                        throw new EvercamException(message);
+
+     /*                   JsonNode resultJsonObj = new JsonNode(result);
+                        Iterator keyIterator = resultJsonObj.getArray().getJSONObject(0).optJSONObject("message").keys();
+                        String key = null;
+                        while(keyIterator.hasNext()){
+                            key = (String)keyIterator.next();
+                        }
+                        String errorMessageString = resultJsonObj.getArray().getJSONObject(0).optJSONObject("message").getJSONArray(key).getString(0);
+                        if (errorMessageString != null || !errorMessageString.isEmpty()){
+//                            ErrorResponse errorResponse = new ErrorResponse(result.getBody().getObject());
+                            throw new EvercamException(errorMessageString);
+                        }else {
+                            ErrorResponse errorResponse = new ErrorResponse(result);
+                            String message = errorResponse.getMessage();
+                            throw new EvercamException(message);
+                        }*/
+                    }catch (JSONException e){
+                        throw new EvercamException("Something went wrong. Please try again.");
+                    }
+//                    ErrorResponse errorResponse = new ErrorResponse(result);
+//                    String message = errorResponse.getMessage();
+//                    throw new EvercamException(message);
                 } else if (statusCode == CODE_OK) {
                     JsonNode jsonNode = new JsonNode(result);
                     JSONObject jsonObject = jsonNode.getObject().getJSONArray("cameras").getJSONObject(0);
@@ -961,25 +985,35 @@ public class Camera extends EvercamObject {
      * @throws EvercamException
      */
     public static Snapshot testSnapshot(String externalUrl, String jpgUrl, String cameraUsername, String
-            cameraPassword) throws EvercamException {
+            cameraPassword, String vendor_id, String camera_exId) throws EvercamException {
         try {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("external_url", externalUrl);
             map.put("jpg_url", jpgUrl);
             map.put("cam_username", cameraUsername);
             map.put("cam_password", cameraPassword);
+            map.put("vendor_id",vendor_id);
+            map.put("camera_exid",camera_exId);
 
             String URL = (MEDIA_URL + "/test");
             HttpResponse<JsonNode> httpResponse = Unirest.post(URL).fields(map).asJson();
             int statusCode = httpResponse.getStatus();
             if (statusCode == CODE_OK) {
                 return new Snapshot(httpResponse.getBody().getObject());
+            } else{
+                String message = httpResponse.getBody().getObject().getString("message");
+                throw new EvercamException(message);
+                /*
+                JSONObject object = ((JsonNode)httpResponse.getBody()).getObject();
+                ErrorResponse errorResponse = new ErrorResponse(object);
+                String message = errorResponse.getMessage();
+                throw new EvercamException(message);
+                */
             }
         } catch (JSONException e) {
             throw new EvercamException(e);
         } catch (UnirestException e) {
             throw new EvercamException(e);
         }
-        return null;
     }
 }
