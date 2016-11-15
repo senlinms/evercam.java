@@ -985,7 +985,7 @@ public class Camera extends EvercamObject {
      * @throws EvercamException
      */
     public static Snapshot testSnapshot(String externalUrl, String jpgUrl, String cameraUsername, String
-            cameraPassword, String vendor_id) throws EvercamException {
+            cameraPassword, String vendor_id, String camera_exId) throws EvercamException {
         try {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("external_url", externalUrl);
@@ -993,23 +993,27 @@ public class Camera extends EvercamObject {
             map.put("cam_username", cameraUsername);
             map.put("cam_password", cameraPassword);
             map.put("vendor_id",vendor_id);
+            map.put("camera_exid",camera_exId);
 
             String URL = (MEDIA_URL + "/test");
             HttpResponse<JsonNode> httpResponse = Unirest.post(URL).fields(map).asJson();
             int statusCode = httpResponse.getStatus();
             if (statusCode == CODE_OK) {
                 return new Snapshot(httpResponse.getBody().getObject());
-            }else{
+            } else{
+                String message = httpResponse.getBody().getObject().getString("message");
+                throw new EvercamException(message);
+                /*
                 JSONObject object = ((JsonNode)httpResponse.getBody()).getObject();
                 ErrorResponse errorResponse = new ErrorResponse(object);
                 String message = errorResponse.getMessage();
                 throw new EvercamException(message);
+                */
             }
         } catch (JSONException e) {
             throw new EvercamException(e);
         } catch (UnirestException e) {
             throw new EvercamException(e);
         }
-//        return null;
     }
 }

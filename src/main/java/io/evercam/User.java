@@ -135,6 +135,7 @@ public class User extends EvercamObject {
         userMap.put("lastname", userDetail.getLastname());
         userMap.put("email", userDetail.getEmail());
         userMap.put("username", userDetail.getUsername());
+        userMap.put("token", userDetail.getAndroidtoken());
         if (userDetail.hasCountryCode()) {
             userMap.put("country", userDetail.getCountryCode());
         }
@@ -150,24 +151,8 @@ public class User extends EvercamObject {
                 throw new EvercamException(EvercamException.MSG_INVALID_USER_KEY);
             } else {
                 //The HTTP error code could be 400, 409 etc.
-                try {
-                    Iterator keyIterator = response.getBody().getArray().getJSONObject(0).optJSONObject("message").keys();
-                    String key = null;
-                    while(keyIterator.hasNext()){
-                        key = (String)keyIterator.next();
-                    }
-                    String errorMessageString = response.getBody().getArray().getJSONObject(0).optJSONObject("message").getJSONArray(key).getString(0);
-                    if (errorMessageString != null || !errorMessageString.isEmpty()){
-                        ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
-                        throw new EvercamException(errorMessageString);
-                    }else {
-                        ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
-                        throw new EvercamException(errorResponse.getMessage());
-                        
-                    }
-                }catch (JSONException e){
-                    throw new EvercamException("Something went wrong. Please try again.");
-                }
+                ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
+                throw new EvercamException(errorResponse.getMessage());
             }
         } catch (JSONException e) {
             throw new EvercamException(e);

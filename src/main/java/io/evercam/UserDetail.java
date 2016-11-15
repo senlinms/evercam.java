@@ -6,6 +6,7 @@ public class UserDetail {
     private String username;
     private String email;
     private String password;
+    private String androidtoken;
     private String countrycode = "";
 
     public String getFirstname() throws EvercamException {
@@ -43,6 +44,13 @@ public class UserDetail {
         return email;
     }
 
+    public  String getAndroidtoken() throws  EvercamException{
+        if (androidtoken == null) {
+            throw new EvercamException("token is missing");
+        }
+        return androidtoken;
+    }
+
     public String getCountryCode() {
         return countrycode;
     }
@@ -50,6 +58,8 @@ public class UserDetail {
     public boolean hasCountryCode() {
         return !getCountryCode().isEmpty();
     }
+
+    public void setAndroidtoken(String androidtoken){this.androidtoken = androidtoken;}
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;

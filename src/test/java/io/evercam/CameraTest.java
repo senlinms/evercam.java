@@ -259,7 +259,7 @@ public class CameraTest {
         API.resetUrl();
         String URL = "http://" + LocalConstants.IP + ":" + LocalConstants.HTTP_PORT;
         String ENDING = LocalConstants.SNAPSHOT_ENDING;
-        Snapshot snapshot = Camera.testSnapshot(URL, ENDING, LocalConstants.USERNAME, LocalConstants.PASSWORD);
+        Snapshot snapshot = Camera.testSnapshot(URL, ENDING, LocalConstants.USERNAME, LocalConstants.PASSWORD, LocalConstants.VENDOR_ID, LocalConstants.CAMERA_EXID);
         assertNotNull(snapshot);
         Assert.assertTrue(snapshot.getData().length > 0);
         API.URL = TestURL.URL;

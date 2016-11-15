@@ -64,7 +64,7 @@ public class Model extends EvercamObject {
     public static ArrayList<Model> getAllByVendorId(String vendorId) throws EvercamException {
         ArrayList<Model> modelList = new ArrayList<Model>();
 
-        ModelsWithPaging modelsWithPaging = getByVendorIdWithPaging(vendorId, 100, 0);
+        ModelsWithPaging modelsWithPaging = getByVendorIdWithPaging(vendorId, 500, 0);
         modelList.addAll(modelsWithPaging.getModelsList());
         int pages = modelsWithPaging.getTotalPages();
         if (pages > 0) {
@@ -73,6 +73,7 @@ public class Model extends EvercamObject {
                 modelList.addAll(modelsWithPagingLoop.getModelsList());
             }
         }
+
         return modelList;
     }
 
