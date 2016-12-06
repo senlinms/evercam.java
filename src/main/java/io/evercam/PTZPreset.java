@@ -69,10 +69,10 @@ public class PTZPreset extends EvercamObject {
     public static String create(String cameraId, String presetName) throws PTZException {
         if (!API.hasUserKeyPair()) throw new PTZException(EvercamException.MSG_USER_API_KEY_REQUIRED);
         else {
-            final String URL_CREATE = PTZPresetControl.getPresetsUrl(cameraId) + "/create/" + presetName;
+            final String URL_CREATE = PTZPresetControl.getPresetsUrl(cameraId) + "/create";
             try {
-                HttpResponse<JsonNode> response = Unirest.post(URL_CREATE).queryString(API.userKeyPairMap()).asJson();
-                if (response.getStatus() == EvercamObject.CODE_CREATE || response.getStatus() == CODE_OK) {
+                HttpResponse<JsonNode> response = Unirest.post(URL_CREATE).queryString(API.userKeyPairMap()).field("preset_name",presetName).asJson();
+                if (response.getStatus() == CODE_CREATE || response.getStatus() == CODE_OK) {
                     return response.getBody().getObject().getString("PresetToken");
                 } else {
                     ErrorResponse errorResponse = new ErrorResponse(response.getBody().getObject());
