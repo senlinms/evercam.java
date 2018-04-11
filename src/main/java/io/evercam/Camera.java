@@ -327,6 +327,24 @@ public class Camera extends EvercamObject {
         }
     }
 
+    public double getLat() throws EvercamException {
+        if (jsonObject.isNull("location")) {
+            return 0.0;
+        } else {
+            JSONObject locationJsonObject = getJsonObjectByString("location");
+            return (float) locationJsonObject.getDouble("lat");
+        }
+    }
+
+    public double getLng() throws EvercamException {
+        if (jsonObject.isNull("location")) {
+            return 0.0;
+        } else {
+            JSONObject locationJsonObject = getJsonObjectByString("location");
+            return (float) locationJsonObject.getDouble("lng");
+        }
+    }
+
     /**
      * Return external host name of the camera, return an empty string if
      * the host name does not exist.

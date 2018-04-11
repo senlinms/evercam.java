@@ -101,7 +101,7 @@ class External extends BaseCameraObject {
     }
 }
 
-class Location extends EvercamObject {
+ class Location extends EvercamObject {
     Location(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
     }

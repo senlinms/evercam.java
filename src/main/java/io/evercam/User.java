@@ -78,6 +78,10 @@ public class User extends EvercamObject {
         return getFirstName() + " " + getLastName();
     }
 
+    public String get_intercom_hmac_android(){
+        return jsonObject.getString("intercom_hmac_android");
+    }
+
     /**
      * Return unique Evercam username of the user.
      *
